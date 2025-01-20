@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19.1)
 
-project(Glaurung CUDA CXX)
+project(Ancalagon CUDA CXX)
 
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CXX_STANDARD 17)
@@ -10,13 +10,13 @@ add_subdirectory(external/argumentum)
 include_directories(${PROJECT_SOURCE_DIR}/headers 
                     ${PROJECT_SOURCE_DIR}/external/argumentum/include)
 
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cu
-                  ${PROJECT_SOURCE_DIR}/src/*.cpp)
+file(GLOB sources ${PROJECT_SOURCE_DIR}/sources/*.cu
+                  ${PROJECT_SOURCE_DIR}/sources/*.cpp)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/headers/*.h)
 
-add_executable(Glaurung main.cu ${headers} ${sources})
+add_executable(Ancalagon ${headers} ${sources})
 
-target_link_libraries(Glaurung gmp gmpxx Argumentum::argumentum)
+target_link_libraries(Ancalagon gmp gmpxx Argumentum::argumentum)
 
-set_target_properties(Glaurung PROPERTIES
+set_target_properties(Ancalagon PROPERTIES
         CUDA_SEPARABLE_COMPILATION ON)

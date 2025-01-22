@@ -4,19 +4,13 @@
 #include <string>
 #include <chrono>
 #include <argumentum/argparse.h>
-#include "cpu.h"
-#include "gpu.h"
-#include "chinese_remainder_theorem.h"
 
 class Run
 {
 private:
-    int const prime_n = 14;
-    int n;
-    int J_sum;
-    int J_ferr;
-    float P_plus;
-    bool spin_glass_read;
+    int linearSize;
+    long long int lineaarLength;
+    bool sell_read;
     std::string read_pass;
 public:
     void run(int argc, char* argv[]);

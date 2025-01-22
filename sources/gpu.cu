@@ -13,7 +13,7 @@ __global__ void unifingSquare(int rightLayer, Cell *left, int leftSize, Cell *ri
             result[j].M = left[i].M + right[j].M;
             for(int bound = 0; bound < 1 + rightLayer * 3; bound++)
             {
-                result[j].E = left[i].E + right[j].E + JMap[];
+                result[j].E = left[i].E + right[j].E + JMap[i];
             }
             result[j].G = left[i].G;
         }

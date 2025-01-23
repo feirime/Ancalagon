@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include "adapterGPU.h"
 #include "gpu.h"
 
 __global__ void unifingSquare(int rightLayer, Cell *left, int leftSize, Cell *right, int rightSize, Cell *result, float *JMap) 
@@ -18,4 +19,16 @@ __global__ void unifingSquare(int rightLayer, Cell *left, int leftSize, Cell *ri
             result[j].G = left[i].G;
         }
     }
+}
+
+void testAdapter()
+{
+    printf("test CPU\n");
+    test<<<1, 1>>>();
+    cudaDeviceSynchronize();
+}
+
+__global__ void test()
+{
+    printf("test GPU\n");
 }

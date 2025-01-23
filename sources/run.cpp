@@ -3,6 +3,7 @@
 void Run::run(int argc, char* argv[]) 
 {
     arguments(argc, argv);
+    testAdapter();
 }
 
 int Run::arguments(int argc, char* argv[])
@@ -10,7 +11,7 @@ int Run::arguments(int argc, char* argv[])
     auto parser = argumentum::argument_parser{};
     auto params = parser.params();
     parser.config().program(argv[0]).description("Program for calculation density of states");
-    params.add_parameter(linearSize, "-n", "--number").nargs(1).required().metavar("N").help("numbers of spins in one dimension");
+    params.add_parameter(linearSize, "-n", "--linearSize").nargs(1).required().metavar("N").help("numbers of spins in one dimension");
     params.add_parameter(sell_read, "-r", "--read").absent(false).nargs(0).metavar("Read").help("Read J from file");
     params.add_parameter(read_pass, "--readpass").absent("data/cell_read").nargs(0).metavar("Read")
                                                  .help("Read J from file");

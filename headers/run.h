@@ -4,6 +4,7 @@
 #include <string>
 #include <chrono>
 #include <argumentum/argparse.h>
+#include "adapterGPU.h"
 
 class Run
 {

@@ -21,7 +21,7 @@ __global__ void unifingSquare(int rightLayer, Cell *left, int leftSize, Cell *ri
     }
 }
 
-void testAdapter()
+void adapterGPU()
 {
     printf("test CPU\n");
     test<<<1, 1>>>();

@@ -3,9 +3,8 @@
 
 #include "latticeFactory.h"
 
-
-void testAdapterGPU();
-void latticeConstructor(long long int *G, float *E, int *M);
-void latticeDestructor(long long int *G, float *E, int *M);
+void latticeConstructorAdapter(long long int *&G, float *&E, int *&M);
+void latticeDestructorAdapter(long long int *&G, float *&E, int *&M);
+void calculateAdapter(long long int *&G, float *&E, int *&M);
 
 #endif

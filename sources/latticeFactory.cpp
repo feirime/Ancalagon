@@ -1,4 +1,4 @@
-#include <latticeFactory.h>
+#include "latticeFactory.h"
 
 Lattice* LatticeFactory::createLattice(std::string latticeType) 
 {
@@ -14,10 +14,21 @@ Lattice* LatticeFactory::createLattice(std::string latticeType)
 
 Lattice::~Lattice() 
 {
-    latticeDestructor(G, E, M);
+    latticeDestructorAdapter(G, E, M);
 }
 
 void LatticeSquare::createLattice() 
 {
-    latticeConstructor(G, E, M);
+    latticeConstructorAdapter(G, E, M);
 };
+
+void LatticeSquare::calculate()
+{
+    if(E != nullptr && G != nullptr && M != nullptr)
+    {
+        calculateAdapter(G, E, M);
+    }
+}
+
+void LatticeSquare::print()
+{}

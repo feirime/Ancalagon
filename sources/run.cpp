@@ -3,7 +3,6 @@
 void Run::run(int argc, char* argv[]) 
 {
     arguments(argc, argv);
-    testAdapterGPU();
     Lattice* lattice = LatticeFactory::createLattice(latticeType);
     lattice->createLattice();
     lattice->calculate();

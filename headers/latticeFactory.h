@@ -22,6 +22,8 @@ class LatticeSquare : public Lattice
 {
 public:
     void createLattice();
+    void calculate();
+    void print();
 };
 
 class LatticeFactory

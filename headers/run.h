@@ -22,7 +22,6 @@ private:
 public:
     void run(int argc, char* argv[]);
     void arguments(int argc, char* argv[]);
-    void out();
 };
 
 #endif

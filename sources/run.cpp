@@ -6,6 +6,8 @@ void Run::run(int argc, char* argv[])
     testAdapterGPU();
     Lattice* lattice = LatticeFactory::createLattice(latticeType);
     lattice->createLattice();
+    lattice->calculate();
+    lattice->print();
     delete lattice;
 }
 
@@ -24,6 +26,3 @@ void Run::arguments(int argc, char* argv[])
         std::exit( 1 );
     lineaarLength = 1 << linearSize;
 }
-
-void Run::out()
-{}

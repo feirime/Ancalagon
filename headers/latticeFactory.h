@@ -4,7 +4,6 @@
 #include <string>
 #include "adapterGPU.h"
 
-
 class Lattice
 {
 protected:

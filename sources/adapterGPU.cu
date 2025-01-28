@@ -4,26 +4,30 @@
 
 void latticeConstructorAdapter(long long int *&G, float *&E, int *&M)
 {
-    printf("G = %p, E = %p, M = %p\n", G, E, M);
     cudaMallocManaged(&G, sizeof(G));
     cudaMallocManaged(&E, sizeof(E));
     cudaMallocManaged(&M, sizeof(M));
-    printf("G = %p, E = %p, M = %p\n", G, E, M);
 }
 
 void latticeDestructorAdapter(long long int *&G, float *&E, int *&M)
 {
     if(G != nullptr)
         cudaFree(G);
+        printf("free G\n");
     if(E != nullptr)
         cudaFree(E);
+        printf("free E\n");
     if(M != nullptr)
         cudaFree(M);
+        printf("free M\n");
 }
 
 void calculateAdapter(long long int *&G, float *&E, int *&M)
 {
-    printf("test CPU\n");
-    test<<<1, 1>>>();
+    cudaDeviceProp dev{};
+    cudaGetDeviceProperties(&dev, 0);
+    static size_t block_dim = 512;
+    static size_t grid_dim = get_SP_cores(dev);
+    std::cout << "sp_cores: " << get_SP_cores(dev) << "\n";
     cudaDeviceSynchronize();
 }

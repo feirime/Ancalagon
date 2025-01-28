@@ -15,6 +15,7 @@ class Run
 private:
     int linearSize;
     long long int lineaarLength;
+    std::string device;
     bool lattice_read;
     std::string read_pass;
     std::string latticeType;

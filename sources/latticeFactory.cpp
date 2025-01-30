@@ -1,28 +1,36 @@
 #include "latticeFactory.h"
 
-Lattice* LatticeFactory::createLattice(std::string latticeType) 
+Lattice* LatticeFactory::createLattice(std::string device) 
 {
-    if (latticeType == "square") 
+    if (device == "GPU") 
     {
-        return new LatticeSquare();
+        return new LatticeGPU();
+    }
+    else if (device == "CPU") 
+    {
+        return new LatticeCPU();
+    }
+    else if (device == "gibrid") 
+    {
+        return new LatticeGibrid();
     }
     else 
     {
-        return nullptr;
+        std::exit(1);
     }
 }
 
-Lattice::~Lattice() 
+LatticeGPU::~LatticeGPU() 
 {
-    latticeDestructorAdapter(G, E, M);
+    latticeDestructorAdapter(G, E, M, x, y, mx, my);
 }
 
-void LatticeSquare::createLattice() 
+void LatticeGPU::createLattice(int linearSize) 
 {
-    latticeConstructorAdapter(G, E, M);
+    latticeConstructorAdapter(G, E, M, x, y, mx, my, linearSize);
 };
 
-void LatticeSquare::calculate()
+void LatticeGPU::calculate()
 {
     if(E != nullptr && G != nullptr && M != nullptr)
     {
@@ -30,5 +38,5 @@ void LatticeSquare::calculate()
     }
 }
 
-void LatticeSquare::print()
+void Lattice::print()
 {}

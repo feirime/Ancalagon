@@ -10,19 +10,37 @@ protected:
     long long int *G = nullptr;
     float *E = nullptr;
     int *M = nullptr;
+    float *x = nullptr;
+    float *y = nullptr;
+    float *mx = nullptr;
+    float *my = nullptr;
 public:
-    virtual void createLattice(){};
+    virtual void createLattice(int linearSize){};
     virtual void calculate(){};
-    virtual void print(){};
-    virtual ~Lattice();
+    void print();
+    virtual ~Lattice(){};
 };
 
-class LatticeSquare : public Lattice
+class LatticeGPU : public Lattice
 {
 public:
-    void createLattice();
+    void createLattice(int linearSize);
     void calculate();
-    void print();
+    ~LatticeGPU();
+};
+
+class LatticeCPU : public Lattice
+{
+public:
+    void createLattice(int linearSize){};
+    void calculate(){};
+};
+
+class LatticeGibrid : public Lattice
+{
+public:
+    void createLattice(int linearSize){};
+    void calculate(){};
 };
 
 class LatticeFactory

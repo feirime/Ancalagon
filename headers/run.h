@@ -18,7 +18,7 @@ private:
     std::string device;
     bool lattice_read;
     std::string read_pass;
-    std::string latticeType;
+    //std::string latticeType;
     LatticeFactory *lattice;
 public:
     void run(int argc, char* argv[]);

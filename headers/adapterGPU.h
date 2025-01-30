@@ -3,8 +3,9 @@
 
 #include "latticeFactory.h"
 
-void latticeConstructorAdapter(long long int *&G, float *&E, int *&M, float *&x, float *&y, float *&mx, float *&my, int linearSize);
+void latticeConstructorDOSAdapter(long long int *&G, float *&E, int *&M);
+void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int size);
 void latticeDestructorAdapter(long long int *&G, float *&E, int *&M, float *&x, float *&y, float *&mx, float *&my);
-void calculateAdapter(long long int *&G, float *&E, int *&M);
+void calculateAdapter(long long int *&G, float *&E, int *&M, float *&x, float *&y, float *&mx, float *&my);
 
 #endif

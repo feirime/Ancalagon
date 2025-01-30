@@ -17,12 +17,15 @@ private:
     long long int lineaarLength;
     std::string device;
     bool lattice_read;
-    std::string read_pass;
+    std::string readPass;
+    std::string *fileName = nullptr;
     //std::string latticeType;
     LatticeFactory *lattice;
 public:
     void run(int argc, char* argv[]);
+    void readIterator();
     void arguments(int argc, char* argv[]);
+    ~Run();
 };
 
 #endif

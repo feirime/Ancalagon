@@ -1,3 +1,6 @@
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include "latticeFactory.h"
 
 Lattice* LatticeFactory::createLattice(std::string device) 
@@ -25,16 +28,32 @@ LatticeGPU::~LatticeGPU()
     latticeDestructorAdapter(G, E, M, x, y, mx, my);
 }
 
-void LatticeGPU::createLattice(int linearSize) 
+void Lattice::read(std::string fileName) 
 {
-    latticeConstructorAdapter(G, E, M, x, y, mx, my, linearSize);
+    std::ifstream file(fileName);
+    if(!file.is_open())
+    {
+        std::cout << "Where is File, Lebovski!?\n";
+        std::exit(1);
+    }
+    std::string contents((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    int count = std::count(contents.begin(), contents.end(), ' ') + std::count(contents.begin(), contents.end(), '\n') + 1;
+    std::cout << count / 4 << '\n';
+}
+
+void generateLattice(int linearSize) 
+{}
+
+void LatticeGPU::createDOS(int linearSize) 
+{
+    latticeConstructorDOSAdapter(G, E, M);
 };
 
 void LatticeGPU::calculate()
 {
     if(E != nullptr && G != nullptr && M != nullptr)
     {
-        calculateAdapter(G, E, M);
+        calculateAdapter(G, E, M, x, y, mx, my);
     }
 }
 

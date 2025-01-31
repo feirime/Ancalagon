@@ -30,15 +30,31 @@ LatticeGPU::~LatticeGPU()
 
 void Lattice::read(std::string fileName) 
 {
-    std::ifstream file(fileName);
-    if(!file.is_open())
+    std::ifstream fileContents(fileName);
+    if(!fileContents.is_open())
     {
         std::cout << "Where is File, Lebovski!?\n";
         std::exit(1);
     }
-    std::string contents((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    std::string contents((std::istreambuf_iterator<char>(fileContents)), std::istreambuf_iterator<char>());
     int count = std::count(contents.begin(), contents.end(), ' ') + std::count(contents.begin(), contents.end(), '\n') + 1;
-    std::cout << count / 4 << '\n';
+    if(count == 0)
+    {
+        std::cout << "File is empty\n";
+        std::exit(1);
+    }
+    fileContents.close();
+    std::ifstream file(fileName);
+    latticeConstructorAdapter(x, y, mx, my, count / 4);
+    double temp = 0;  
+    for(auto i = 0; i < count / 4; i++)
+    {
+        file >> x[i];
+        file >> y[i];
+        file >> mx[i];
+        file >> my[i];
+    }
+    file.close();
 }
 
 void generateLattice(int linearSize) 

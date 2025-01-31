@@ -9,7 +9,7 @@ void latticeConstructorDOSAdapter(long long int *&G, float *&E, int *&M)
     cudaMallocManaged(&M, sizeof(M));
 }
 
-void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int size)
+void latticeConstructorAdapter(double *&x, double *&y, double *&mx, double *&my, int size)
 {
     cudaMallocManaged(&x, size * sizeof(x));
     cudaMallocManaged(&y, size * sizeof(y));
@@ -18,7 +18,7 @@ void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int
 }
 
 
-void latticeDestructorAdapter(long long int *&G, float *&E, int *&M, float *&x, float *&y, float *&mx, float *&my)
+void latticeDestructorAdapter(long long int *&G, float *&E, int *&M, double *&x, double *&y, double *&mx, double *&my)
 {
     if(my != nullptr)
     {
@@ -57,7 +57,7 @@ void latticeDestructorAdapter(long long int *&G, float *&E, int *&M, float *&x, 
     }
 }
 
-void calculateAdapter(long long int *&G, float *&E, int *&M, float *&x, float *&y, float *&mx, float *&my)
+void calculateAdapter(long long int *&G, float *&E, int *&M, double *&x, double *&y, double *&mx, double *&my)
 {
     cudaDeviceProp dev{};
     cudaGetDeviceProperties(&dev, 0);

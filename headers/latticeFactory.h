@@ -10,10 +10,10 @@ protected:
     long long int *G = nullptr;
     float *E = nullptr;
     int *M = nullptr;
-    float *x = nullptr;
-    float *y = nullptr;
-    float *mx = nullptr;
-    float *my = nullptr;
+    double *x = nullptr;
+    double *y = nullptr;
+    double *mx = nullptr;
+    double *my = nullptr;
 public:
     virtual void createDOS(int linearSize){};
     void read(std::string readPass);

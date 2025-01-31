@@ -40,20 +40,20 @@ void latticeDestructorAdapter(long long int *&G, float *&E, int *&M, double *&x,
         cudaFree(x);
         printf("free x\n");
     }
-    if(G != nullptr)
+    if(M != nullptr)
     {
-        cudaFree(G);
-        printf("free G\n");
+        cudaFree(M);
+        printf("free M\n");
     }
     if(E != nullptr)
     {
         cudaFree(E);
         printf("free E\n");
     }
-    if(M != nullptr)
+    if(G != nullptr)
     {
-        cudaFree(M);
-        printf("free M\n");
+        cudaFree(G);
+        printf("free G\n");
     }
 }
 

@@ -8,12 +8,12 @@ void Run::run(int argc, char* argv[])
     if(lattice_read)
     {
         readIterator();
-        lattice->read(fileName[0]); //TODO реализовать итерацию по всем решеткам
+        latticeSize = lattice->read(fileName[0]); //TODO реализовать итерацию по всем решеткам
     }
     else
-        lattice->generateLattice(linearSize);
-    lattice->createDOS(linearSize);
-    lattice->calculate();
+        lattice->generateLattice(latticeSize);
+    lattice->createDOS(latticeSize);
+    lattice->calculate(latticeSize);
     lattice->print();
     delete lattice;
 }
@@ -23,7 +23,7 @@ void Run::arguments(int argc, char* argv[])
     auto parser = argumentum::argument_parser{};
     auto params = parser.params();
     parser.config().program(argv[0]).description("Program for calculation density of states");
-    params.add_parameter(linearSize, "-n", "--linearSize").nargs(1).required().metavar("linearSize").help("numbers of spins in one dimension");
+    params.add_parameter(latticeSize, "-n", "--latticeSize").nargs(1).required().metavar("latticeSize").help("numbers of spins in one dimension");
     //params.add_parameter(latticeType, "-t", "--latticeType").nargs(1).required().metavar("latticeType").help("type of lattice");
     params.add_parameter(lattice_read, "-r", "--read").absent(false).nargs(0).metavar("Read").help("Read J from file");
     params.add_parameter(readPass, "--readpass").absent("data/Read").nargs(1).metavar("Read").help("Read J from file");
@@ -31,7 +31,7 @@ void Run::arguments(int argc, char* argv[])
     auto res = parser.parse_args( argc, argv, 1 );
     if( !res )
         std::exit( 1 );
-    lineaarLength = 1 << linearSize;
+    lineaarLength = 1 << latticeSize;
 }
 
 void Run::readIterator()

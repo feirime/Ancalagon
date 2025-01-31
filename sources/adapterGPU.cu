@@ -17,7 +17,6 @@ void latticeConstructorAdapter(double *&x, double *&y, double *&mx, double *&my,
     cudaMallocManaged(&my, size * sizeof(my));
 }
 
-
 void latticeDestructorAdapter(long long int *&G, float *&E, int *&M, double *&x, double *&y, double *&mx, double *&my)
 {
     if(my != nullptr)
@@ -57,12 +56,21 @@ void latticeDestructorAdapter(long long int *&G, float *&E, int *&M, double *&x,
     }
 }
 
-void calculateAdapter(long long int *&G, float *&E, int *&M, double *&x, double *&y, double *&mx, double *&my)
+void calculateAdapter(long long int *&G, float *&E, int *&M, double *&x, double *&y, double *&mx, double *&my, int latticeSize)
 {
     cudaDeviceProp dev{};
     cudaGetDeviceProperties(&dev, 0);
     static size_t block_dim = 512;
     static size_t grid_dim = get_SP_cores(dev);
     std::cout << "sp_cores: " << get_SP_cores(dev) << "\n";
+    for(auto i = 0; i < latticeSize; i++)
+    {
+        int j = 0;
+        double xPrevious = x[j];
+        while(x[j] == xPrevious)
+        {
+            j++;
+        }
+    }
     cudaDeviceSynchronize();
 }

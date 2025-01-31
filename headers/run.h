@@ -13,7 +13,7 @@
 class Run
 {
 private:
-    int linearSize;
+    int latticeSize;
     long long int lineaarLength;
     std::string device;
     bool lattice_read;

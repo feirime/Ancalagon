@@ -28,7 +28,7 @@ LatticeGPU::~LatticeGPU()
     latticeDestructorAdapter(G, E, M, x, y, mx, my);
 }
 
-void Lattice::read(std::string fileName) 
+int Lattice::read(std::string fileName) 
 {
     std::ifstream fileContents(fileName);
     if(!fileContents.is_open())
@@ -55,21 +55,22 @@ void Lattice::read(std::string fileName)
         file >> my[i];
     }
     file.close();
+    return count / 4;
 }
 
-void generateLattice(int linearSize) 
+void generateLattice(int latticeSize) 
 {}
 
-void LatticeGPU::createDOS(int linearSize) 
+void LatticeGPU::createDOS(int latticeSize) 
 {
     latticeConstructorDOSAdapter(G, E, M);
 };
 
-void LatticeGPU::calculate()
+void LatticeGPU::calculate(int latticeSize)
 {
     if(E != nullptr && G != nullptr && M != nullptr)
     {
-        calculateAdapter(G, E, M, x, y, mx, my);
+        calculateAdapter(G, E, M, x, y, mx, my, latticeSize);
     }
 }
 

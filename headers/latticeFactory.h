@@ -15,10 +15,10 @@ protected:
     double *mx = nullptr;
     double *my = nullptr;
 public:
-    virtual void createDOS(int linearSize){};
-    void read(std::string readPass);
-    void generateLattice(int linearSize){};
-    virtual void calculate(){};
+    virtual void createDOS(int latticeSize){};
+    int read(std::string readPass);
+    void generateLattice(int latticeSize){};
+    virtual void calculate(int latticeSize){};
     void print();
     virtual ~Lattice(){};
 };
@@ -26,23 +26,23 @@ public:
 class LatticeGPU : public Lattice
 {
 public:
-    void createDOS(int linearSize);
-    void calculate();
+    void createDOS(int latticeSize);
+    void calculate(int latticeSize);
     ~LatticeGPU();
 };
 
 class LatticeCPU : public Lattice
 {
 public:
-    void createDOS(int linearSize){};
-    void calculate(){};
+    void createDOS(int latticeSize){};
+    void calculate(int latticeSize){};
 };
 
 class LatticeGibrid : public Lattice
 {
 public:
-    void createDOS(int linearSize){};
-    void calculate(){};
+    void createDOS(int latticeSize){};
+    void calculate(int latticeSize){};
 };
 
 class LatticeFactory

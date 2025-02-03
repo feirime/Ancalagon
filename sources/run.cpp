@@ -13,7 +13,7 @@ void Run::run(int argc, char* argv[])
     else
         lattice->generateLattice(latticeSize);
     lattice->createDOS(latticeSize);
-    lattice->calculate(latticeSize);
+    lattice->calculate(latticeSize, splitSeed);
     lattice->print();
     delete lattice;
 }
@@ -28,6 +28,7 @@ void Run::arguments(int argc, char* argv[])
     params.add_parameter(lattice_read, "-r", "--read").absent(false).nargs(0).metavar("Read").help("Read J from file");
     params.add_parameter(readPass, "--readpass").absent("data/Read").nargs(1).metavar("Read").help("Read J from file");
     params.add_parameter(device, "-d", "--device").absent("CPU").nargs(1).metavar("device").help("Calculate on device");
+    params.add_parameter(splitSeed, "-s", "--splitSeed").absent(0.1).nargs(1).metavar("splitSeed").help("seed of lattice spliting");
     auto res = parser.parse_args( argc, argv, 1 );
     if( !res )
         std::exit( 1 );

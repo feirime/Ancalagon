@@ -66,11 +66,11 @@ void LatticeGPU::createDOS(int latticeSize)
     latticeConstructorDOSAdapter(G, E, M);
 };
 
-void LatticeGPU::calculate(int latticeSize)
+void LatticeGPU::calculate(int latticeSize, float splitSeed)
 {
     if(E != nullptr && G != nullptr && M != nullptr)
     {
-        calculateAdapter(G, E, M, x, y, mx, my, latticeSize);
+        calculateAdapter(G, E, M, x, y, mx, my, latticeSize, splitSeed);
     }
 }
 

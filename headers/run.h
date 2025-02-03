@@ -14,6 +14,7 @@ class Run
 {
 private:
     int latticeSize;
+    float splitSeed;
     long long int lineaarLength;
     std::string device;
     bool lattice_read;

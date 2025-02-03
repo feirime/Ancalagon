@@ -45,12 +45,13 @@ __global__ void test()
         printf("test GPU\n");
 }
 
-void mapMaker(double *x, double *y, double *mx, double *my, int latticeSize, float seed)
+void mapMaker(float *&x, float *&y, float *&mx, float *&my, int latticeSize, float seed)
 {
-    double xMin = *std::min_element(x, x + latticeSize);
-    double xMax = *std::max_element(x, x + latticeSize);
-    double yMin = *std::min_element(y, y + latticeSize);
-    double yMax = *std::max_element(y, y + latticeSize);
+    float xMin = *std::min_element(x, x + latticeSize);
+    float xMax = *std::max_element(x, x + latticeSize);
+    float yMin = *std::min_element(y, y + latticeSize);
+    float yMax = *std::max_element(y, y + latticeSize);
+    std::cout << "xMin: " << xMin << ", xMax: " << xMax << ", yMin: " << yMin << ", yMax: " << yMax << "\n";
 
     for(auto i = 0; i < latticeSize; i++)
     {
@@ -63,7 +64,7 @@ void mapMaker(double *x, double *y, double *mx, double *my, int latticeSize, flo
     }
 }
 
-__global__ void calculate(long long int *G, float *E, int *M, double *x, double *y, double *mx, double *my, int latticeSize)
+__global__ void calculate(long long int *G, float *E, int *M, float *&x, float *&y, float *&mx, float *&my, int latticeSize)
 {
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     

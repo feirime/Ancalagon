@@ -10,15 +10,15 @@ protected:
     long long int *G = nullptr;
     float *E = nullptr;
     int *M = nullptr;
-    double *x = nullptr;
-    double *y = nullptr;
-    double *mx = nullptr;
-    double *my = nullptr;
+    float *x = nullptr;
+    float *y = nullptr;
+    float *mx = nullptr;
+    float *my = nullptr;
 public:
     virtual void createDOS(int latticeSize){};
     int read(std::string readPass);
     void generateLattice(int latticeSize){};
-    virtual void calculate(int latticeSize){};
+    virtual void calculate(int latticeSize, float splitSeed){};
     void print();
     virtual ~Lattice(){};
 };
@@ -27,7 +27,7 @@ class LatticeGPU : public Lattice
 {
 public:
     void createDOS(int latticeSize);
-    void calculate(int latticeSize);
+    void calculate(int latticeSize, float splitSeed);
     ~LatticeGPU();
 };
 
@@ -35,14 +35,14 @@ class LatticeCPU : public Lattice
 {
 public:
     void createDOS(int latticeSize){};
-    void calculate(int latticeSize){};
+    void calculate(int latticeSize, float splitSeed){};
 };
 
 class LatticeGibrid : public Lattice
 {
 public:
     void createDOS(int latticeSize){};
-    void calculate(int latticeSize){};
+    void calculate(int latticeSize, float splitSeed){};
 };
 
 class LatticeFactory

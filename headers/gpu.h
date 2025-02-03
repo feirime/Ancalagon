@@ -4,8 +4,8 @@
 
 int get_SP_cores(cudaDeviceProp devProp);
 __global__ void test();
-void mapMaker(double *x, double *y, double *mx, double *my, int latticeSize);
-__global__ void calculate(long long int *G, float *E, int *M, double *x, double *y, double *mx, double *my, int latticeSize);
+void mapMaker(float *&x, float *&y, float *&mx, float *&my, int latticeSize, float seed);
+__global__ void calculate(long long int *G, float *E, int *M, float *&x, float *&y, float *&mx, float *&my, int latticeSize);
 
 
 #endif

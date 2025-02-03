@@ -9,7 +9,7 @@ void latticeConstructorDOSAdapter(long long int *&G, float *&E, int *&M)
     cudaMallocManaged(&M, sizeof(M));
 }
 
-void latticeConstructorAdapter(double *&x, double *&y, double *&mx, double *&my, int size)
+void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int size)
 {
     cudaMallocManaged(&x, size * sizeof(x));
     cudaMallocManaged(&y, size * sizeof(y));
@@ -17,7 +17,7 @@ void latticeConstructorAdapter(double *&x, double *&y, double *&mx, double *&my,
     cudaMallocManaged(&my, size * sizeof(my));
 }
 
-void latticeDestructorAdapter(long long int *&G, float *&E, int *&M, double *&x, double *&y, double *&mx, double *&my)
+void latticeDestructorAdapter(long long int *&G, float *&E, int *&M, float *&x, float *&y, float *&mx, float *&my)
 {
     if(my != nullptr)
     {
@@ -56,14 +56,14 @@ void latticeDestructorAdapter(long long int *&G, float *&E, int *&M, double *&x,
     }
 }
 
-void calculateAdapter(long long int *&G, float *&E, int *&M, double *&x, double *&y, double *&mx, double *&my, int latticeSize)
+void calculateAdapter(long long int *&G, float *&E, int *&M, float *&x, float *&y, float *&mx, float *&my, int latticeSize, float splitSeed)
 {
     cudaDeviceProp dev{};
     cudaGetDeviceProperties(&dev, 0);
     static size_t block_dim = 512;
     static size_t grid_dim = get_SP_cores(dev);
     std::cout << "sp_cores: " << get_SP_cores(dev) << "\n";
-    mapMaker(x, y, mx, my, latticeSize);
+    mapMaker(x, y, mx, my, latticeSize, splitSeed);
     calculate<<<grid_dim, block_dim>>>(G, E, M, x, y, mx, my, latticeSize);
     cudaDeviceSynchronize();
 }

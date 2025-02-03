@@ -39,10 +39,32 @@ int get_SP_cores(cudaDeviceProp devProp)
     return cores;
 }
 
-
-
 __global__ void test()
 {
     if(threadIdx.x == 0 && blockIdx.x == 0)
         printf("test GPU\n");
+}
+
+void mapMaker(double *x, double *y, double *mx, double *my, int latticeSize, float seed)
+{
+    double xMin = *std::min_element(x, x + latticeSize);
+    double xMax = *std::max_element(x, x + latticeSize);
+    double yMin = *std::min_element(y, y + latticeSize);
+    double yMax = *std::max_element(y, y + latticeSize);
+
+    for(auto i = 0; i < latticeSize; i++)
+    {
+        int j = 0;
+        double xPrevious = x[j];
+        while(x[j] == xPrevious)
+        {
+            j++;
+        }
+    }
+}
+
+__global__ void calculate(long long int *G, float *E, int *M, double *x, double *y, double *mx, double *my, int latticeSize)
+{
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    
 }

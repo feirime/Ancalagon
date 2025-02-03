@@ -63,14 +63,7 @@ void calculateAdapter(long long int *&G, float *&E, int *&M, double *&x, double 
     static size_t block_dim = 512;
     static size_t grid_dim = get_SP_cores(dev);
     std::cout << "sp_cores: " << get_SP_cores(dev) << "\n";
-    for(auto i = 0; i < latticeSize; i++)
-    {
-        int j = 0;
-        double xPrevious = x[j];
-        while(x[j] == xPrevious)
-        {
-            j++;
-        }
-    }
+    mapMaker(x, y, mx, my, latticeSize);
+    calculate<<<grid_dim, block_dim>>>(G, E, M, x, y, mx, my, latticeSize);
     cudaDeviceSynchronize();
 }

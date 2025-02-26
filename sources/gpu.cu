@@ -45,13 +45,13 @@ __global__ void test()
         printf("test GPU\n");
 }
 
-void mapMaker(float *&x, float *&y, float *&mx, float *&my, int latticeSize, float seed)
+void mapMaker(float *x, float *y, float *mx, float *my, int latticeSize, float seed)
 {
     float xMin = *std::min_element(x, x + latticeSize);
     float xMax = *std::max_element(x, x + latticeSize);
     float yMin = *std::min_element(y, y + latticeSize);
     float yMax = *std::max_element(y, y + latticeSize);
-    std::cout << "xMin: " << xMin << ", xMax: " << xMax << ", yMin: " << yMin << ", yMax: " << yMax << "\n";
+    std::cout << "Seed of slit = " << seed << "\n";
 
     for(auto i = 0; i < latticeSize; i++)
     {
@@ -64,8 +64,21 @@ void mapMaker(float *&x, float *&y, float *&mx, float *&my, int latticeSize, flo
     }
 }
 
-__global__ void calculate(long long int *G, float *E, int *M, float *&x, float *&y, float *&mx, float *&my, int latticeSize)
+__global__ void unifing(int borderMainSize, int borderAddSize, float *conections)
 {
-    int i = blockIdx.x * blockDim.x + threadIdx.x;
-    
+    int x = blockIdx.x * blockDim.x + threadIdx.x;
+    int y = blockIdx.y * blockDim.y + threadIdx.y;
+    int mainConfigSize = 1 << borderMainSize;
+    int addConfigSize = 1 << borderAddSize; 
+    for(auto i = x; i < mainConfigSize; i += blockDim.x * gridDim.x)
+    {
+        for(auto j = y; j < addConfigSize; j += blockDim.y * gridDim.y)
+        {
+            for(auto k = 0; k < borderAddSize; k++)
+            {
+                for(auto l = 0; l < conections[k]; l++)
+                {}
+            }
+        }        
+    }
 }

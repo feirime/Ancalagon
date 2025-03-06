@@ -14,13 +14,15 @@ protected:
     float *y = nullptr;
     float *mx = nullptr;
     float *my = nullptr;
+    int latticeSize = 0;
 public:
-    virtual void createDOS(int latticeSize){};
     int read(std::string readPass);
     void generateLattice(int latticeSize){};
+    virtual void latticeMalloc(){};
+    virtual void createDOS(int latticeSize){};
     virtual void calculate(int latticeSize, float splitSeed){};
     void print();
-    virtual ~Lattice(){};
+    virtual ~Lattice();
 };
 
 class LatticeGPU : public Lattice
@@ -34,8 +36,10 @@ public:
 class LatticeCPU : public Lattice
 {
 public:
+    void latticeMalloc();
     void createDOS(int latticeSize){};
     void calculate(int latticeSize, float splitSeed){};
+    ~LatticeCPU();
 };
 
 class LatticeGibrid : public Lattice

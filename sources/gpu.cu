@@ -82,3 +82,5 @@ __global__ void unifing(int borderMainSize, int borderAddSize, float *conections
         }        
     }
 }
+
+

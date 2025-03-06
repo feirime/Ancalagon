@@ -37,7 +37,7 @@ void Run::arguments(int argc, char* argv[])
 
 void Run::readIterator()
 {
-    int numberOfFiles = 0;
+    numberOfFiles = 0;
     for (const auto& entry : std::filesystem::directory_iterator(readPass))
     {
         std::cout << entry.path() << '\n';

@@ -20,6 +20,7 @@ private:
     bool lattice_read;
     std::string readPass;
     std::string *fileName = nullptr;
+    int numberOfFiles;
     //std::string latticeType;
     LatticeFactory *lattice;
 public:

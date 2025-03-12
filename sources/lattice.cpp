@@ -1,8 +1,4 @@
-#include <fstream>
-#include <iostream>
-#include <algorithm>
-#include <regex>
-#include "latticeFactory.h"
+#include "lattice.h"
 
 Lattice* LatticeFactory::createLattice(std::string device) 
 {
@@ -45,11 +41,12 @@ int Lattice::read(std::string fileName)
         std::exit(1);
     }
     latticeSize = count / 4;
+    std::ifstream file(fileName);
     printf("count = %d, latticeSize = %d\n", count, latticeSize);
     fileContents.close();
-    std::ifstream file(fileName);
     latticeMalloc();
-    double temp = 0;  
+    double temp = 0;
+    printf("fileName = %s\n", fileName.c_str());
     for(auto i = 4; i < latticeSize + 1; i++)
     {
         file >> x[i];
@@ -70,42 +67,3 @@ void Lattice::print()
     }
 }
 
-LatticeGPU::~LatticeGPU() 
-{
-    std::cout << "GPU destructor\n";
-    latticeDestructorAdapter(G, E, M, x, y, mx, my);
-}
-
-void LatticeGPU::createDOS(int latticeSize) 
-{
-    latticeConstructorDOSAdapter(G, E, M);
-    latticeConstructorAdapter(x, y, mx, my, latticeSize);
-};
-
-void LatticeGPU::calculate(int latticeSize, float splitSeed)
-{
-    if(E != nullptr && G != nullptr && M != nullptr)
-    {
-        calculateAdapter(G, E, M, x, y, mx, my, latticeSize, splitSeed);
-    }
-}
-
-LatticeCPU::~LatticeCPU() 
-{
-    std::cout << "CPU destructor\n";
-    delete [] G;
-    delete [] E;
-    delete [] M;
-    delete [] x;
-    delete [] y;
-    delete [] mx;
-    delete [] my;
-}
-
-void LatticeCPU::latticeMalloc()
-{
-    x = new float[latticeSize];
-    y = new float[latticeSize];
-    mx = new float[latticeSize];
-    my = new float[latticeSize];
-}

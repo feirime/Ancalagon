@@ -1,6 +1,9 @@
 #ifndef LATTICEFACTORY_H
 #define LATTICEFACTORY_H
-
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <regex>
 #include <string>
 #include "adapterGPU.h"
 
@@ -28,6 +31,7 @@ public:
 class LatticeGPU : public Lattice
 {
 public:
+    void latticeMalloc();
     void createDOS(int latticeSize);
     void calculate(int latticeSize, float splitSeed);
     ~LatticeGPU();
@@ -37,8 +41,8 @@ class LatticeCPU : public Lattice
 {
 public:
     void latticeMalloc();
-    void createDOS(int latticeSize){};
-    void calculate(int latticeSize, float splitSeed){};
+    void createDOS(int latticeSize);
+    void calculate(int latticeSize, float splitSeed);
     ~LatticeCPU();
 };
 

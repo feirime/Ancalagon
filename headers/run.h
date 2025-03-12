@@ -8,12 +8,12 @@
 #include <chrono>
 #include <argumentum/argparse.h>
 #include "adapterGPU.h"
-#include "latticeFactory.h"
+#include "lattice.h"
 
 class Run
 {
 private:
-    int latticeSize;
+    int latticeSize=0;
     float splitSeed;
     long long int lineaarLength;
     std::string device;

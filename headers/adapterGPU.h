@@ -1,7 +1,7 @@
 #ifndef adapterGPU_h
 #define adapterGPU_h
 
-#include "latticeFactory.h"
+#include "lattice.h"
 
 void latticeConstructorDOSAdapter(long long int *&G, float *&E, int *&M);
 void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int size);

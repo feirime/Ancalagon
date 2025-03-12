@@ -20,11 +20,6 @@ Lattice* LatticeFactory::createLattice(std::string device)
     }
 }
 
-Lattice::~Lattice() 
-{
-    std::cout << "Lattice destructor\n";
-}
-
 int Lattice::read(std::string fileName) 
 {
     std::ifstream fileContents(fileName);
@@ -34,20 +29,24 @@ int Lattice::read(std::string fileName)
         std::exit(1);
     }
     std::string contents((std::istreambuf_iterator<char>(fileContents)), std::istreambuf_iterator<char>());
-    int count = std::count(contents.begin(), contents.end(), ' ') + std::count(contents.begin(), contents.end(), '\n') + 1;
+    int count = std::count(contents.begin(), contents.end(), ' ') + std::count(contents.begin(), contents.end(), '\t') + std::count(contents.begin(), contents.end(), '\n');
     if(count == 0)
     {
         std::cout << "File is empty\n";
         std::exit(1);
     }
-    latticeSize = count / 4;
+    latticeSize = (count - 4) / 4;
     std::ifstream file(fileName);
     printf("count = %d, latticeSize = %d\n", count, latticeSize);
     fileContents.close();
     latticeMalloc();
     double temp = 0;
-    printf("fileName = %s\n", fileName.c_str());
-    for(auto i = 4; i < latticeSize + 1; i++)
+    for(auto i = 0; i < 4; i++)
+    {
+        float temp = 0;
+        file >> temp;
+    }
+    for(auto i = 0; i < latticeSize; i++)
     {
         file >> x[i];
         file >> y[i];
@@ -67,3 +66,7 @@ void Lattice::print()
     }
 }
 
+Lattice::~Lattice() 
+{
+    std::cout << "Lattice destructor\n";
+}

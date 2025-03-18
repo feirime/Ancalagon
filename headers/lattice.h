@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <regex>
 #include <string>
+#include <math.h>
 #include "adapterGPU.h"
 
 class Lattice

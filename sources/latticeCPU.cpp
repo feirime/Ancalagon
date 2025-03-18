@@ -18,9 +18,27 @@ void LatticeCPU::createDOS(int latticeSize)
 
 void LatticeCPU::calculate(int latticeSize, float splitSeed)
 {
-    //E[] += ((mx[] * my[]) / () - ) //!?
-}
+    int lienarSize = (int)sqrt((float)latticeSize)
+    for(auto i = 0; i < linearSize; i++)
+    {
+        
+    }
 
+    double r, Xij, Yij;
+    int i = index / matrix_linear_size;
+    int j = index % matrix_linear_size;
+    if (index < matrix_linear_size * matrix_linear_size)
+    {
+        if (i < j)
+        {
+            Xij = x[i] - x[j];
+            Yij = y[i] - y[j];
+            r = sqrt((double)(Xij * Xij + Yij * Yij));
+
+            matrix[index] = ((mx[i] * mx[j] + my[i] * my[j]) / (r * r * r) - 3. * (mx[i] * Xij + my[i] * Yij) * (mx[j] * Xij + my[j] * Yij) / (r * r * r * r * r));
+        }
+    }
+}
 LatticeCPU::~LatticeCPU() 
 {
     std::cout << "CPU destructor\n";

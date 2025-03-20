@@ -27,12 +27,15 @@ protected:
     float *connectedSpinsMx = nullptr;
     float *connectedSpinsMy = nullptr;
     int latticeSize = 0;
+    float iteractionRadius = 0;
+    float splitSeed = 0;
 public:
     int read(std::string readPass);
     void generateLattice(){};
+    void initializeLattice(float iteractionRadius, float splitSeed);
     virtual void latticeMalloc(){};
-    virtual void createDOS(){};
-    virtual void calculate(float splitSeed){};
+    virtual void dosMalloc(){};
+    virtual void calculate(){};
     void print();
     virtual ~Lattice();
 };
@@ -41,8 +44,8 @@ class LatticeGPU : public Lattice
 {
 public:
     void latticeMalloc();
-    void createDOS();
-    void calculate(float splitSeed);
+    void dosMalloc();
+    void calculate();
     ~LatticeGPU();
 };
 
@@ -50,18 +53,18 @@ class LatticeCPU : public Lattice
 {
 public:
     void latticeMalloc();
-    void createDOS();
+    void dosMalloc();
     unsigned int mainMapMaker();
     unsigned int connectedMapMaker();
-    void calculate(float splitSeed);
+    void calculate();
     ~LatticeCPU();
 };
 
 class LatticeGibrid : public Lattice
 {
 public:
-    void createDOS(){};
-    void calculate(float splitSeed){};
+    void dosMalloc(){};
+    void calculate(){};
 };
 
 class LatticeFactory

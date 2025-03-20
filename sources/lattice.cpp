@@ -57,6 +57,12 @@ int Lattice::read(std::string fileName)
     return latticeSize;
 }
 
+void Lattice::initializeLattice(float iteractionRadius, float splitSeed)
+{
+    this->iteractionRadius = iteractionRadius;
+    this->splitSeed = splitSeed;
+}
+
 void Lattice::print()
 {
     std::cout << "x: " << "y " << "mx " << "my " << '\n';

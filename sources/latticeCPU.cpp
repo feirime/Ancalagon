@@ -16,7 +16,7 @@ void LatticeCPU::latticeMalloc()
     connectedSpinsMy = new float[latticeSize];
 }
 
-void LatticeCPU::createDOS()
+void LatticeCPU::dosMalloc()
 {
     G = new long long int[latticeSize];
     E = new float[latticeSize];
@@ -25,12 +25,16 @@ void LatticeCPU::createDOS()
 }
 
 unsigned int LatticeCPU::mainMapMaker()
-{}
+{
+    return 0;
+}
 
 unsigned int LatticeCPU::connectedMapMaker()
-{}
+{
+    return 0;
+}
 
-void LatticeCPU::calculate(float splitSeed)
+void LatticeCPU::calculate()
 {
     int linearSize = (int)sqrt((float)latticeSize);
     auto mainLayerSize = mainMapMaker();

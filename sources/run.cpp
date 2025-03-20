@@ -11,9 +11,9 @@ void Run::run(int argc, char* argv[])
         latticeSize = lattice->read(fileName[0]); //TODO реализовать итерацию по всем решеткам
     }
     else
-        lattice->generateLattice(latticeSize);
-    lattice->createDOS(latticeSize);
-    lattice->calculate(latticeSize, splitSeed);
+        lattice->generateLattice();
+    lattice->createDOS();
+    lattice->calculate(splitSeed);
     lattice->print();
     delete lattice;
 }

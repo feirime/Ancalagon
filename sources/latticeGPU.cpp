@@ -5,13 +5,13 @@ void LatticeGPU::latticeMalloc()
     latticeConstructorAdapter(x, y, mx, my, latticeSize);
 }
 
-void LatticeGPU::createDOS(int latticeSize) 
+void LatticeGPU::createDOS() 
 {
     latticeConstructorDOSAdapter(G, E, M);
     latticeConstructorAdapter(x, y, mx, my, latticeSize);
 };
 
-void LatticeGPU::calculate(int latticeSize, float splitSeed)
+void LatticeGPU::calculate(float splitSeed)
 {
     if(E != nullptr && G != nullptr && M != nullptr)
     {

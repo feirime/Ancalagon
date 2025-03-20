@@ -21,10 +21,10 @@ protected:
     int latticeSize = 0;
 public:
     int read(std::string readPass);
-    void generateLattice(int latticeSize){};
+    void generateLattice(){};
     virtual void latticeMalloc(){};
-    virtual void createDOS(int latticeSize){};
-    virtual void calculate(int latticeSize, float splitSeed){};
+    virtual void createDOS(){};
+    virtual void calculate(float splitSeed){};
     void print();
     virtual ~Lattice();
 };
@@ -33,8 +33,8 @@ class LatticeGPU : public Lattice
 {
 public:
     void latticeMalloc();
-    void createDOS(int latticeSize);
-    void calculate(int latticeSize, float splitSeed);
+    void createDOS();
+    void calculate(float splitSeed);
     ~LatticeGPU();
 };
 
@@ -42,16 +42,18 @@ class LatticeCPU : public Lattice
 {
 public:
     void latticeMalloc();
-    void createDOS(int latticeSize);
-    void calculate(int latticeSize, float splitSeed);
+    void createDOS();
+    void mainMapMaker();
+    void connectedMapMaker();
+    void calculate(float splitSeed);
     ~LatticeCPU();
 };
 
 class LatticeGibrid : public Lattice
 {
 public:
-    void createDOS(int latticeSize){};
-    void calculate(int latticeSize, float splitSeed){};
+    void createDOS(){};
+    void calculate(float splitSeed){};
 };
 
 class LatticeFactory

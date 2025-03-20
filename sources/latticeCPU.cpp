@@ -6,6 +6,14 @@ void LatticeCPU::latticeMalloc()
     y = new float[latticeSize];
     mx = new float[latticeSize];
     my = new float[latticeSize];
+    mainLayerX = new float[latticeSize];
+    mainLayerY = new float[latticeSize];
+    mainLayerMx = new float[latticeSize];
+    mainLayerMy = new float[latticeSize];
+    connectedSpinsX = new float[latticeSize];
+    connectedSpinsY = new float[latticeSize];
+    connectedSpinsMx = new float[latticeSize];
+    connectedSpinsMy = new float[latticeSize];
 }
 
 void LatticeCPU::createDOS()
@@ -16,24 +24,28 @@ void LatticeCPU::createDOS()
     //!?
 }
 
-void LatticeCPU::mainMapMaker()
+unsigned int LatticeCPU::mainMapMaker()
+{}
+
+unsigned int LatticeCPU::connectedMapMaker()
 {}
 
 void LatticeCPU::calculate(float splitSeed)
 {
-    //int linearSize = (int)sqrt((float)latticeSize);
-    //for(auto i = 0; i < mainLayerSize; i++)
-    //{
-    //    connectedMapMaker();
-    //    for(auto j = 0; j < connectedSpinsSize; j++)
-    //    {
-    //        float xij = mainLayer.x[i] - connectedSpins.x[j];
-    //        float yij = mainLayer.y[i] - connectedSpins.y[j];
-    //        float r = sqrt(xij * xij + yij * yij);
-    //        E[j + i * connectedSpins] = (mainLayer.mx[i] * connectedSpins.mx[j] + mainLayer.my[i] * connectedSpins.my[j]) / (pow(r, 3)) 
-    //                                  - 3 * (mainLayer.mx[i] * xij + mainLayer.my[i] * yij) * (connectedSpins.mx[j] * xij + connectedSpins.my[j] * yij) / (pow(r, 5));
-    //    }
-    //}
+    int linearSize = (int)sqrt((float)latticeSize);
+    auto mainLayerSize = mainMapMaker();
+    for(auto i = 0; i < mainLayerSize; i++)
+    {
+        auto connectedSpinsSize = connectedMapMaker();
+        for(auto j = 0; j < connectedSpinsSize; j++)
+        {
+            float xij = mainLayerX[i] - connectedSpinsX[j];
+            float yij = mainLayerY[i] - connectedSpinsY[j];
+            float r = sqrt(xij * xij + yij * yij);
+            E[j + i * connectedSpinsSize] = (mainLayerMx[i] * connectedSpinsMx[j] + mainLayerMy[i] * connectedSpinsMy[j]) / (pow(r, 3)) 
+                                      - 3 * (mainLayerMx[i] * xij + mainLayerMy[i] * yij) * (connectedSpinsMx[j] * xij + connectedSpinsMy[j] * yij) / (pow(r, 5));
+        }
+    }
     //double r, Xij, Yij;
     //int i = index / matrix_linear_size;
     //int j = index % matrix_linear_size;

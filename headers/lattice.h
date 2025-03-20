@@ -18,6 +18,14 @@ protected:
     float *y = nullptr;
     float *mx = nullptr;
     float *my = nullptr;
+    float *mainLayerX = nullptr;
+    float *mainLayerY = nullptr;
+    float *mainLayerMx = nullptr;
+    float *mainLayerMy = nullptr;
+    float *connectedSpinsX = nullptr;
+    float *connectedSpinsY = nullptr;
+    float *connectedSpinsMx = nullptr;
+    float *connectedSpinsMy = nullptr;
     int latticeSize = 0;
 public:
     int read(std::string readPass);
@@ -43,8 +51,8 @@ class LatticeCPU : public Lattice
 public:
     void latticeMalloc();
     void createDOS();
-    void mainMapMaker();
-    void connectedMapMaker();
+    unsigned int mainMapMaker();
+    unsigned int connectedMapMaker();
     void calculate(float splitSeed);
     ~LatticeCPU();
 };

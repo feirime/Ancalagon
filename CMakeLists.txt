@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.19.1)
 
 project(Ancalagon CUDA CXX)
 
-set(CMAKE_CUDA_STANDARD 17)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CUDA_STANDARD 20)
+set(CMAKE_CXX_STANDARD 20)
 set(ARGUMENTUM_BUILD_STATIC_LIBS ON)
 
 add_subdirectory(external/argumentum)

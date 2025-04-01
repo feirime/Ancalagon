@@ -48,22 +48,11 @@ void LatticeCPU::calculate()
             float r = sqrt(xij * xij + yij * yij);
             E[j + i * connectedSpinsSize] = (mainLayerMx[i] * connectedSpinsMx[j] + mainLayerMy[i] * connectedSpinsMy[j]) / (pow(r, 3)) 
                                       - 3 * (mainLayerMx[i] * xij + mainLayerMy[i] * yij) * (connectedSpinsMx[j] * xij + connectedSpinsMy[j] * yij) / (pow(r, 5));
+            //M[j + i * connectedSpinsSize] = mainLayerM[i] + connectedSpinsM[j];
         }
     }
-    //double r, Xij, Yij;
-    //int i = index / matrix_linear_size;
-    //int j = index % matrix_linear_size;
-    //if (index < matrix_linear_size * matrix_linear_size)
-    //{
-    //    if (i < j)
-    //    {
-    //        Xij = x[i] - x[j];
-    //        Yij = y[i] - y[j];
-    //        r = sqrt((double)(Xij * Xij + Yij * Yij));
-    //        matrix[index] = ((mx[i] * mx[j] + my[i] * my[j]) / (r * r * r) - 3. * (mx[i] * Xij + my[i] * Yij) * (mx[j] * Xij + my[j] * Yij) / (r * r * r * r * r));
-    //    }
-    //}
 }
+
 LatticeCPU::~LatticeCPU() 
 {
     std::cout << "CPU destructor\n";
@@ -74,4 +63,12 @@ LatticeCPU::~LatticeCPU()
     delete [] y;
     delete [] mx;
     delete [] my;
+    delete [] mainLayerX;
+    delete [] mainLayerY;
+    delete [] mainLayerMx;
+    delete [] mainLayerMy;
+    delete [] connectedSpinsX;
+    delete [] connectedSpinsY;
+    delete [] connectedSpinsMx;
+    delete [] connectedSpinsMy;
 }

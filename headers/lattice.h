@@ -33,9 +33,9 @@ public:
     int read(std::string readPass);
     void generateLattice(){};
     void initializeLattice(float iteractionRadius, float splitSeed);
-    virtual void latticeMalloc(){};
-    virtual void dosMalloc(){};
-    virtual void calculate(){};
+    virtual void latticeMalloc() = 0;
+    virtual void dosMalloc() = 0;
+    virtual void calculate() = 0;
     void print();
     virtual ~Lattice();
 };
@@ -63,6 +63,7 @@ public:
 class LatticeGibrid : public Lattice
 {
 public:
+    void latticeMalloc(){};
     void dosMalloc(){};
     void calculate(){};
 };

@@ -6,6 +6,9 @@ void LatticeCPU::latticeMalloc()
     y = new float[latticeSize];
     mx = new float[latticeSize];
     my = new float[latticeSize];
+    
+    
+    //!?
     mainLayerX = new float[latticeSize];
     mainLayerY = new float[latticeSize];
     mainLayerMx = new float[latticeSize];

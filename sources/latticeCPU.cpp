@@ -17,36 +17,45 @@ void LatticeCPU::latticeMalloc()
 }
 
 void LatticeCPU::dosMalloc()
-{
-    G = new long long int[latticeSize];
-    E = new float[latticeSize];
-    M = new int[latticeSize];
-    //!?
+{   
+    int evenSize = 0;
+    int oddSize = 0;
+    if(layer % 2)
+    {
+        evenSize = mainLayerSize;
+        oddSize = resultLayerSize;
+    }
+    else
+    {
+        evenSize = resultLayerSize;
+        oddSize = mainLayerSize;
+    }
+    Geven = new long long int[evenSize];
+    Eeven = new float[evenSize];
+    Meven = new int[evenSize];
+    Godd = new long long int[oddSize];
+    Eodd = new float[oddSize];
+    Modd = new int[oddSize];
+    Gadd = new long long int[connectedSpinsSize];
+    Eadd = new float[connectedSpinsSize];
+    Madd = new int[connectedSpinsSize];
 }
 
-unsigned int LatticeCPU::mainMapMaker()
+void LatticeCPU::addCalculate()
 {
-    return 0;
-}
-
-unsigned int LatticeCPU::connectedMapMaker()
-{
-    return 0;
+    
 }
 
 void LatticeCPU::calculate()
 {
-    int linearSize = (int)sqrt((float)latticeSize);
-    auto mainLayerSize = mainMapMaker();
     for(auto i = 0; i < mainLayerSize; i++)
     {
-        auto connectedSpinsSize = connectedMapMaker();
         for(auto j = 0; j < connectedSpinsSize; j++)
         {
             float xij = mainLayerX[i] - connectedSpinsX[j];
             float yij = mainLayerY[i] - connectedSpinsY[j];
             float r = sqrt(xij * xij + yij * yij);
-            E[j + i * connectedSpinsSize] = (mainLayerMx[i] * connectedSpinsMx[j] + mainLayerMy[i] * connectedSpinsMy[j]) / (pow(r, 3)) 
+            Eeven[j + i * connectedSpinsSize] = (mainLayerMx[i] * connectedSpinsMx[j] + mainLayerMy[i] * connectedSpinsMy[j]) / (pow(r, 3)) 
                                       - 3 * (mainLayerMx[i] * xij + mainLayerMy[i] * yij) * (connectedSpinsMx[j] * xij + connectedSpinsMy[j] * yij) / (pow(r, 5));
             //M[j + i * connectedSpinsSize] = mainLayerM[i] + connectedSpinsM[j];
         }
@@ -56,9 +65,15 @@ void LatticeCPU::calculate()
 LatticeCPU::~LatticeCPU() 
 {
     std::cout << "CPU destructor\n";
-    delete [] G;
-    delete [] E;
-    delete [] M;
+    delete [] Geven;
+    delete [] Eeven;
+    delete [] Meven;
+    delete [] Godd;
+    delete [] Eodd;
+    delete [] Modd;
+    delete [] Gadd;
+    delete [] Eadd;
+    delete [] Madd;
     delete [] x;
     delete [] y;
     delete [] mx;

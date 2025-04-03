@@ -2,11 +2,11 @@
 #include "gpu.h"
 #include <iostream>
 
-void latticeConstructorDOSAdapter(long long int *&G, float *&E, int *&M)
+void latticeConstructorDOSAdapter(long long int *&G, float *&E, int *&M, int size)
 {
-    cudaMallocManaged(&G, sizeof(G));
-    cudaMallocManaged(&E, sizeof(E));
-    cudaMallocManaged(&M, sizeof(M));
+    cudaMallocManaged(&G, size * sizeof(G));
+    cudaMallocManaged(&E, size * sizeof(E));
+    cudaMallocManaged(&M, size * sizeof(M));
 }
 
 void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int size)
@@ -17,7 +17,8 @@ void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int
     cudaMallocManaged(&my, size * sizeof(my));
 }
 
-void latticeDestructorAdapter(long long int *&G, float *&E, int *&M, float *&x, float *&y, float *&mx, float *&my)
+void latticeDestructorAdapter(long long int *&Geven, float *&Eeven, int *&Meven, 
+    long long int *&Godd, float *&Eodd, int *&Modd,  float *&x, float *&y, float *&mx, float *&my)
 {
     if(my != nullptr)
     {
@@ -39,20 +40,35 @@ void latticeDestructorAdapter(long long int *&G, float *&E, int *&M, float *&x, 
         cudaFree(x);
         printf("free x\n");
     }
-    if(M != nullptr)
+    if(Meven != nullptr)
     {
-        cudaFree(M);
-        printf("free M\n");
+        cudaFree(Meven);
+        printf("free Meven\n");
     }
-    if(E != nullptr)
+    if(Eeven != nullptr)
     {
-        cudaFree(E);
-        printf("free E\n");
+        cudaFree(Eeven);
+        printf("free Eeven\n");
     }
-    if(G != nullptr)
+    if(Geven != nullptr)
     {
-        cudaFree(G);
-        printf("free G\n");
+        cudaFree(Geven);
+        printf("free Geven\n");
+    }
+    if(Modd != nullptr)
+    {
+        cudaFree(Modd);
+        printf("free Modd\n");
+    }
+    if(Eodd != nullptr)
+    {
+        cudaFree(Eodd);
+        printf("free Eodd\n");
+    }
+    if(Godd != nullptr)
+    {
+        cudaFree(Godd);
+        printf("free Godd\n");
     }
 }
 

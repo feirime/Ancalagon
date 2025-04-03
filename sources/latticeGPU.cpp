@@ -5,22 +5,21 @@ void LatticeGPU::latticeMalloc()
     latticeConstructorAdapter(x, y, mx, my, latticeSize);
 }
 
-void LatticeGPU::dosMalloc() 
+void LatticeGPU::dosMalloc()
 {
-    latticeConstructorDOSAdapter(G, E, M);
-    latticeConstructorAdapter(x, y, mx, my, latticeSize);
-};
+    latticeConstructorDOSAdapter(Geven, Eeven, Meven, 0);
+    latticeConstructorDOSAdapter(Godd, Eodd, Modd, 0);
+    latticeConstructorDOSAdapter(Gadd, Eadd, Madd, 0);
+}
+
+void LatticeGPU::addCalculate()
+{}
 
 void LatticeGPU::calculate()
-{
-    if(E != nullptr && G != nullptr && M != nullptr)
-    {
-        calculateAdapter(G, E, M, x, y, mx, my, latticeSize, splitSeed);
-    }
-}
+{}
 
 LatticeGPU::~LatticeGPU()
 {
     std::cout << "GPU destructor\n";
-    latticeDestructorAdapter(G, E, M, x, y, mx, my);
+    latticeDestructorAdapter(Geven, Eeven, Meven, Godd, Eodd, Modd, x, y, mx, my);
 }

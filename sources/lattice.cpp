@@ -61,6 +61,37 @@ void Lattice::initializeLattice(float iteractionRadius, float splitSeed)
 {
     this->iteractionRadius = iteractionRadius;
     this->splitSeed = splitSeed;
+    latticeLinearSize = (int)sqrt((float)latticeSize);
+    layer = 0;
+    layers = latticeLinearSize / splitSeed;
+}
+
+void Lattice::addConfigure()
+{
+    layer++;
+    mainLayerSize = mainMapMaker();
+    connectedSpinsSize = connectedMapMaker();
+}
+
+void Lattice::compress()
+{}
+
+unsigned int Lattice::mainMapMaker()
+{
+    return 0;
+}
+
+unsigned int Lattice::connectedMapMaker()
+{
+    return 0;
+}
+
+bool Lattice::isEnd()
+{
+    if(layer == layers)
+        return true;
+    else
+        return false;
 }
 
 void Lattice::print()

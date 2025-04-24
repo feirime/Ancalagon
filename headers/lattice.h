@@ -38,19 +38,20 @@ protected:
     float splitSeed = 0;
     int layer = 0;
     int layers = 0;
-    long long int layerMainSize = 0; //колличество спинов в крайнем слое
-    long long int layerResultSize = 0; //колличество спинов в результирующем слое
-    long long int layerConnectedSize = 0; //колличество спинов в присоединяемом слое
+    size_t layerMainSize = 0; //колличество спинов в крайнем слое
+    size_t layerResultSize = 0; //колличество спинов в результирующем слое
+    size_t layerConnectedSize = 0; //колличество спинов в присоединяемом слое
 public:
     int read(std::string readPass);
     void generateLattice(){};
     void initializeLattice(float iteractionRadius, float splitSeed);
     void addConfigure();
     void compress();
-    unsigned int mapMakerMain();
-    unsigned int mapMakerConnected();
+    unsigned int mapMakerEven();
+    unsigned int mapMakerOdd();
     virtual void latticeMalloc() = 0;
-    virtual void latticeLayerMalloc() = 0;
+    virtual void latticeEvenMalloc() = 0;
+    virtual void latticeOddMalloc() = 0;
     virtual void dosMalloc() = 0;
     virtual void addCalculate() = 0;
     virtual void calculate() = 0;
@@ -63,7 +64,8 @@ class LatticeGPU : public Lattice
 {
 public:
     void latticeMalloc();
-    void latticeLayerMalloc(){};
+    virtual void latticeEvenMalloc(){};
+    virtual void latticeOddMalloc(){};
     void dosMalloc();
     void calculate();
     void addCalculate();
@@ -74,7 +76,8 @@ class LatticeCPU : public Lattice
 {
 public:
     void latticeMalloc();
-    void latticeLayerMalloc();
+    virtual void latticeEvenMalloc();
+    virtual void latticeOddMalloc();
     void dosMalloc();
     void addCalculate();
     void calculate();
@@ -85,7 +88,8 @@ class LatticeGibrid : public Lattice
 {
 public:
     void latticeMalloc(){};
-    void latticeLayerMalloc(){};
+    virtual void latticeEvenMalloc(){};
+    virtual void latticeOddMalloc(){};
     void dosMalloc(){};
     void addCalculate(){};
     void calculate(){};

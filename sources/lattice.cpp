@@ -1,4 +1,5 @@
 #include "lattice.h"
+#include <algorithm>
 
 Lattice* LatticeFactory::createLattice(std::string device) 
 {
@@ -69,19 +70,39 @@ void Lattice::initializeLattice(float iteractionRadius, float splitSeed)
 void Lattice::addConfigure()
 {
     layer++;
-    layerMainSize = mapMakerMain();
-    layerConnectedSize = mapMakerConnected();
+    if(layer % 2)
+    {
+        layerMainSize = mapMakerEven();
+        layerConnectedSize = mapMakerOdd();
+    }
+    else
+    {
+        layerMainSize = mapMakerOdd();
+        layerConnectedSize = mapMakerEven();
+    }
 }
 
 void Lattice::compress()
 {}
 
-unsigned int Lattice::mapMakerMain()
+unsigned int Lattice::mapMakerEven()
 {
-    return 0;
+    float minX = *std::min_element(x, x + latticeSize);
+    float maxX = *std::max_element(x, x + latticeSize);
+    float minY = *std::min_element(y, y + latticeSize);
+    float maxY = *std::max_element(y, y + latticeSize);
+    size_t mainSize = 0;
+    for(auto i = 0; i < latticeSize; i++)
+        if(x[i] > layer * splitSeed && x[i] < (layer + 1) * splitSeed) 
+            mainSize++;
+    
+    for(auto i = 0; i < latticeSize; i++)
+        if(x[i] > layer * splitSeed && x[i] < (layer + 1) * splitSeed)
+        
+    return mainSize;
 }
 
-unsigned int Lattice::mapMakerConnected()
+unsigned int Lattice::mapMakerOdd()
 {
     return 0;
 }

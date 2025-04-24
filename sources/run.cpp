@@ -13,15 +13,14 @@ void Run::run(int argc, char* argv[])
     else
         lattice->generateLattice();
     lattice->initializeLattice(iteractionRadius, splitSeed);
+    lattice->addConfigure();
     lattice->dosMalloc();
-    lattice->latticeLayerMalloc();
     lattice->calculate();
     lattice->compress();
     while(!lattice->isEnd())
     {
         lattice->addConfigure();
         lattice->dosMalloc();
-        lattice->latticeLayerMalloc();
         lattice->addCalculate();
         lattice->calculate();
         lattice->compress();

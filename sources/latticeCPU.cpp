@@ -8,24 +8,26 @@ void LatticeCPU::latticeMalloc()
     my = new float[latticeSize];
 }
 
-void LatticeCPU::latticeLayerMalloc()
+void LatticeCPU::latticeEvenMalloc()
 {
-    int evenSize = 0;
-    int oddSize = 0;
+    size_t evenSize = 0;
     if(layer % 2)
-    {
         evenSize = layerMainSize;
-        oddSize = layerConnectedSize;
-    }
     else
-    {
         evenSize = layerConnectedSize;
-        oddSize = layerMainSize;
-    }
     xEven = new float[evenSize];
     yEven = new float[evenSize];
     mxEven = new float[evenSize];
     myEven = new float[evenSize];
+}
+
+void LatticeCPU::latticeOddMalloc()
+{
+    size_t oddSize = 0;
+    if(layer % 2)
+        oddSize = layerConnectedSize;
+    else
+        oddSize = layerMainSize;
     xOdd = new float[oddSize];
     yOdd = new float[oddSize];
     mxOdd = new float[oddSize];
@@ -34,8 +36,8 @@ void LatticeCPU::latticeLayerMalloc()
 
 void LatticeCPU::dosMalloc()
 {
-    int evenSize = 0;
-    int oddSize = 0;
+    size_t evenSize = 0;
+    size_t oddSize = 0;
     if(layer % 2)
     {
         evenSize = layerMainSize;

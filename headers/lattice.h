@@ -24,32 +24,33 @@ protected:
     float *y = nullptr;
     float *mx = nullptr;
     float *my = nullptr;
-    float *mainLayerX = nullptr;
-    float *mainLayerY = nullptr;
-    float *mainLayerMx = nullptr;
-    float *mainLayerMy = nullptr;
-    float *connectedSpinsX = nullptr;
-    float *connectedSpinsY = nullptr;
-    float *connectedSpinsMx = nullptr;
-    float *connectedSpinsMy = nullptr;
+    float *xEven = nullptr;
+    float *yEven = nullptr;
+    float *mxEven = nullptr;
+    float *myEven = nullptr;
+    float *xOdd = nullptr;
+    float *yOdd = nullptr;
+    float *mxOdd = nullptr;
+    float *myOdd = nullptr;
     int latticeSize = 0;
     int latticeLinearSize = 0;
     float iteractionRadius = 0;
     float splitSeed = 0;
     int layer = 0;
     int layers = 0;
-    long long int mainLayerSize = 0;
-    long long int resultLayerSize = 0;
-    long long int connectedSpinsSize = 0;
+    long long int layerMainSize = 0; //колличество спинов в крайнем слое
+    long long int layerResultSize = 0; //колличество спинов в результирующем слое
+    long long int layerConnectedSize = 0; //колличество спинов в присоединяемом слое
 public:
     int read(std::string readPass);
     void generateLattice(){};
     void initializeLattice(float iteractionRadius, float splitSeed);
     void addConfigure();
     void compress();
-    unsigned int mainMapMaker();
-    unsigned int connectedMapMaker();
+    unsigned int mapMakerMain();
+    unsigned int mapMakerConnected();
     virtual void latticeMalloc() = 0;
+    virtual void latticeLayerMalloc() = 0;
     virtual void dosMalloc() = 0;
     virtual void addCalculate() = 0;
     virtual void calculate() = 0;
@@ -62,6 +63,7 @@ class LatticeGPU : public Lattice
 {
 public:
     void latticeMalloc();
+    void latticeLayerMalloc(){};
     void dosMalloc();
     void calculate();
     void addCalculate();
@@ -72,6 +74,7 @@ class LatticeCPU : public Lattice
 {
 public:
     void latticeMalloc();
+    void latticeLayerMalloc();
     void dosMalloc();
     void addCalculate();
     void calculate();
@@ -82,6 +85,7 @@ class LatticeGibrid : public Lattice
 {
 public:
     void latticeMalloc(){};
+    void latticeLayerMalloc(){};
     void dosMalloc(){};
     void addCalculate(){};
     void calculate(){};

@@ -69,19 +69,19 @@ void Lattice::initializeLattice(float iteractionRadius, float splitSeed)
 void Lattice::addConfigure()
 {
     layer++;
-    mainLayerSize = mainMapMaker();
-    connectedSpinsSize = connectedMapMaker();
+    layerMainSize = mapMakerMain();
+    layerConnectedSize = mapMakerConnected();
 }
 
 void Lattice::compress()
 {}
 
-unsigned int Lattice::mainMapMaker()
+unsigned int Lattice::mapMakerMain()
 {
     return 0;
 }
 
-unsigned int Lattice::connectedMapMaker()
+unsigned int Lattice::mapMakerConnected()
 {
     return 0;
 }

@@ -17,8 +17,8 @@ void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int
     cudaMallocManaged(&my, size * sizeof(my));
 }
 
-void latticeDestructorAdapter(long long int *&Geven, float *&Eeven, int *&Meven, 
-    long long int *&Godd, float *&Eodd, int *&Modd,  float *&x, float *&y, float *&mx, float *&my)
+void latticeDestructorAdapter(long long int *&Gmain, float *&Emain, int *&Mmain, 
+    long long int *&Gresult, float *&Eresult, int *&Mresult,  float *&x, float *&y, float *&mx, float *&my)
 {
     if(my != nullptr)
     {
@@ -40,35 +40,35 @@ void latticeDestructorAdapter(long long int *&Geven, float *&Eeven, int *&Meven,
         cudaFree(x);
         printf("free x\n");
     }
-    if(Meven != nullptr)
+    if(Mmain != nullptr)
     {
-        cudaFree(Meven);
-        printf("free Meven\n");
+        cudaFree(Mmain);
+        printf("free Mmain\n");
     }
-    if(Eeven != nullptr)
+    if(Emain != nullptr)
     {
-        cudaFree(Eeven);
-        printf("free Eeven\n");
+        cudaFree(Emain);
+        printf("free Emain\n");
     }
-    if(Geven != nullptr)
+    if(Gmain != nullptr)
     {
-        cudaFree(Geven);
-        printf("free Geven\n");
+        cudaFree(Gmain);
+        printf("free Gmain\n");
     }
-    if(Modd != nullptr)
+    if(Mresult != nullptr)
     {
-        cudaFree(Modd);
-        printf("free Modd\n");
+        cudaFree(Mresult);
+        printf("free Mresult\n");
     }
-    if(Eodd != nullptr)
+    if(Eresult != nullptr)
     {
-        cudaFree(Eodd);
-        printf("free Eodd\n");
+        cudaFree(Eresult);
+        printf("free Eresult\n");
     }
-    if(Godd != nullptr)
+    if(Gresult != nullptr)
     {
-        cudaFree(Godd);
-        printf("free Godd\n");
+        cudaFree(Gresult);
+        printf("free Gresult\n");
     }
 }
 

@@ -8,55 +8,55 @@ void LatticeCPU::latticeMalloc()
     my = new float[latticeSize];
 }
 
-void LatticeCPU::latticeEvenMalloc()
+void LatticeCPU::latticeMainMalloc()
 {
     size_t evenSize = 0;
     if(layer % 2)
         evenSize = layerMainSize;
     else
-        evenSize = layerConnectedSize;
-    xEven = new float[evenSize];
-    yEven = new float[evenSize];
-    mxEven = new float[evenSize];
-    myEven = new float[evenSize];
+        evenSize = layerAddSize;
+    xMain = new float[evenSize];
+    yMain = new float[evenSize];
+    mxMain = new float[evenSize];
+    myMain = new float[evenSize];
 }
 
-void LatticeCPU::latticeOddMalloc()
+void LatticeCPU::latticeAddMalloc()
 {
     size_t oddSize = 0;
     if(layer % 2)
-        oddSize = layerConnectedSize;
+        oddSize = layerAddSize;
     else
         oddSize = layerMainSize;
-    xOdd = new float[oddSize];
-    yOdd = new float[oddSize];
-    mxOdd = new float[oddSize];
-    myOdd = new float[oddSize];
+    xAdd = new float[oddSize];
+    yAdd = new float[oddSize];
+    mxAdd = new float[oddSize];
+    myAdd = new float[oddSize];
 }
 
 void LatticeCPU::dosMalloc()
 {
-    size_t evenSize = 0;
-    size_t oddSize = 0;
-    if(layer % 2)
-    {
-        evenSize = layerMainSize;
-        oddSize = layerResultSize;
-    }
-    else
-    {
-        evenSize = layerResultSize;
-        oddSize = layerMainSize;
-    }
-    Geven = new long long int[evenSize];
-    Eeven = new float[evenSize];
-    Meven = new int[evenSize];
-    Godd = new long long int[oddSize];
-    Eodd = new float[oddSize];
-    Modd = new int[oddSize];
-    Gadd = new long long int[layerConnectedSize];
-    Eadd = new float[layerConnectedSize];
-    Madd = new int[layerConnectedSize];
+    delete[] Gmain;
+    delete[] Emain;
+    delete[] Mmain;
+    Gmain = new long long int[layerMainSize];
+    Emain = new float[layerMainSize];
+    Mmain = new int[layerMainSize];
+    Gmain = std::copy(Gmain, Gmain + layerMainSize, Gresult);
+    Emain = std::copy(Emain, Emain + layerMainSize, Eresult);
+    Mmain = std::copy(Mmain, Mmain + layerMainSize, Mresult);
+    delete[] Gadd;
+    delete[] Eadd;
+    delete[] Madd;
+    delete[] Gresult;
+    delete[] Eresult;
+    delete[] Mresult;
+    Gadd = new long long int[layerAddSize];
+    Eadd = new float[layerAddSize];
+    Madd = new int[layerAddSize];
+    Gresult = new long long int[layerResultSize];
+    Eresult = new float[layerResultSize];
+    Mresult = new int[layerResultSize];
 }
 
 void LatticeCPU::addCalculate()
@@ -68,14 +68,14 @@ void LatticeCPU::calculate()
 {
     for(auto i = 0; i < layerMainSize; i++)
     {
-        for(auto j = 0; j < layerConnectedSize; j++)
+        for(auto j = 0; j < layerAddSize; j++)
         {
-            float xij = xEven[i] - xOdd[j];
-            float yij = yEven[i] - yOdd[j];
+            float xij = xMain[i] - xAdd[j];
+            float yij = yMain[i] - yAdd[j];
             float r = sqrt(xij * xij + yij * yij);
-            Eeven[j + i * layerConnectedSize] = (mxEven[i] * mxOdd[j] + myEven[i] * myOdd[j]) / (pow(r, 3)) 
-                                      - 3 * (mxEven[i] * xij + myEven[i] * yij) * (mxOdd[j] * xij + myOdd[j] * yij) / (pow(r, 5));
-            //M[j + i * layerConnectedSize] = mainLayerM[i] + connectedSpinsM[j];
+            Eresult[j + i * layerAddSize] = (mxMain[i] * mxAdd[j] + myMain[i] * myAdd[j]) / (pow(r, 3)) 
+                                      - 3 * (mxMain[i] * xij + myMain[i] * yij) * (mxAdd[j] * xij + myAdd[j] * yij) / (pow(r, 5));
+            Mresult[j + i * layerAddSize] = Mmain[i] + Madd[j];
         }
     }
 }
@@ -83,12 +83,12 @@ void LatticeCPU::calculate()
 LatticeCPU::~LatticeCPU()
 {
     std::cout << "CPU destructor\n";
-    delete [] Geven;
-    delete [] Eeven;
-    delete [] Meven;
-    delete [] Godd;
-    delete [] Eodd;
-    delete [] Modd;
+    delete [] Gmain;
+    delete [] Emain;
+    delete [] Mmain;
+    delete [] Gresult;
+    delete [] Eresult;
+    delete [] Mresult;
     delete [] Gadd;
     delete [] Eadd;
     delete [] Madd;
@@ -96,12 +96,12 @@ LatticeCPU::~LatticeCPU()
     delete [] y;
     delete [] mx;
     delete [] my;
-    delete [] xEven;
-    delete [] yEven;
-    delete [] mxEven;
-    delete [] myEven;
-    delete [] xOdd;
-    delete [] yOdd;
-    delete [] mxOdd;
-    delete [] myOdd;
+    delete [] xMain;
+    delete [] yMain;
+    delete [] mxMain;
+    delete [] myMain;
+    delete [] xAdd;
+    delete [] yAdd;
+    delete [] mxAdd;
+    delete [] myAdd;
 }

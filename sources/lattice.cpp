@@ -70,22 +70,13 @@ void Lattice::initializeLattice(float iteractionRadius, float splitSeed)
 void Lattice::addConfigure()
 {
     layer++;
-    if(layer % 2)
-    {
-        layerMainSize = mapMakerEven();
-        layerConnectedSize = mapMakerOdd();
-    }
-    else
-    {
-        layerMainSize = mapMakerOdd();
-        layerConnectedSize = mapMakerEven();
-    }
+    mapMaker();
 }
 
 void Lattice::compress()
 {}
 
-unsigned int Lattice::mapMakerEven()
+void Lattice::mapMaker()
 {
     float minX = *std::min_element(x, x + latticeSize);
     float maxX = *std::max_element(x, x + latticeSize);
@@ -97,14 +88,17 @@ unsigned int Lattice::mapMakerEven()
             mainSize++;
     
     for(auto i = 0; i < latticeSize; i++)
+    {
+        size_t j = 0;
         if(x[i] > layer * splitSeed && x[i] < (layer + 1) * splitSeed)
-        
-    return mainSize;
-}
-
-unsigned int Lattice::mapMakerOdd()
-{
-    return 0;
+        {
+            xMain[j] = x[i];
+            yMain[j] = y[i];
+            mxMain[j] = mx[i];
+            myMain[j] = my[i];
+            j++;
+        }
+    }
 }
 
 bool Lattice::isEnd()

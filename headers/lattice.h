@@ -52,8 +52,9 @@ public:
     virtual void latticeMainMalloc() = 0;
     virtual void latticeAddMalloc() = 0;
     virtual void dosMalloc() = 0;
-    virtual void addCalculate() = 0;
-    virtual void calculate() = 0;
+    virtual void calculateMain() = 0;
+    virtual void calculateAdd() = 0;
+    virtual void calculateUnified() = 0;
     void print();
     bool isEnd();
     virtual ~Lattice();
@@ -66,8 +67,9 @@ public:
     virtual void latticeMainMalloc(){};
     virtual void latticeAddMalloc(){};
     void dosMalloc();
-    void calculate();
-    void addCalculate();
+    void calculateMain(){};
+    void calculateAdd();
+    void calculateUnified();
     ~LatticeGPU();
 };
 
@@ -78,8 +80,9 @@ public:
     virtual void latticeMainMalloc();
     virtual void latticeAddMalloc();
     void dosMalloc();
-    void addCalculate();
-    void calculate();
+    void calculateMain();
+    void calculateAdd();
+    void calculateUnified();
     ~LatticeCPU();
 };
 
@@ -90,8 +93,9 @@ public:
     virtual void latticeMainMalloc(){};
     virtual void latticeAddMalloc(){};
     void dosMalloc(){};
-    void addCalculate(){};
-    void calculate(){};
+    void calculateMain(){};
+    void calculateAdd(){};
+    void calculateUnified(){};
     ~LatticeGibrid(){};
 };
 

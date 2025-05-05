@@ -12,10 +12,10 @@ void LatticeGPU::dosMalloc()
     latticeConstructorDOSAdapter(Gadd, Eadd, Madd, 0);
 }
 
-void LatticeGPU::addCalculate()
+void LatticeGPU::calculateAdd()
 {}
 
-void LatticeGPU::calculate()
+void LatticeGPU::calculateUnified()
 {}
 
 LatticeGPU::~LatticeGPU()

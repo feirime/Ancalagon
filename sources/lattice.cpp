@@ -82,11 +82,11 @@ void Lattice::mapMaker()
     float maxX = *std::max_element(x, x + latticeSize);
     float minY = *std::min_element(y, y + latticeSize);
     float maxY = *std::max_element(y, y + latticeSize);
-    size_t mainSize = 0;
+    layerMainSize = 0;
     for(auto i = 0; i < latticeSize; i++)
         if(x[i] > layer * splitSeed && x[i] < (layer + 1) * splitSeed) 
-            mainSize++;
-    
+            layerMainSize++;
+    latticeMainMalloc();
     for(auto i = 0; i < latticeSize; i++)
     {
         size_t j = 0;
@@ -99,6 +99,11 @@ void Lattice::mapMaker()
             j++;
         }
     }
+    layerAddSize = 0;
+    for(auto i = 0; i < latticeSize; i++)
+        if(x[i] > (layer + 1) * splitSeed && x[i] < (layer + 2) * splitSeed) 
+            layerAddSize++;
+    latticeAddMalloc();
 }
 
 bool Lattice::isEnd()

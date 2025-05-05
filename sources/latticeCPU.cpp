@@ -10,28 +10,18 @@ void LatticeCPU::latticeMalloc()
 
 void LatticeCPU::latticeMainMalloc()
 {
-    size_t evenSize = 0;
-    if(layer % 2)
-        evenSize = layerMainSize;
-    else
-        evenSize = layerAddSize;
-    xMain = new float[evenSize];
-    yMain = new float[evenSize];
-    mxMain = new float[evenSize];
-    myMain = new float[evenSize];
+    xMain = new float[layerMainSize];
+    yMain = new float[layerMainSize];
+    mxMain = new float[layerMainSize];
+    myMain = new float[layerMainSize];
 }
 
 void LatticeCPU::latticeAddMalloc()
 {
-    size_t oddSize = 0;
-    if(layer % 2)
-        oddSize = layerAddSize;
-    else
-        oddSize = layerMainSize;
-    xAdd = new float[oddSize];
-    yAdd = new float[oddSize];
-    mxAdd = new float[oddSize];
-    myAdd = new float[oddSize];
+    xAdd = new float[layerAddSize];
+    yAdd = new float[layerAddSize];
+    mxAdd = new float[layerAddSize];
+    myAdd = new float[layerAddSize];
 }
 
 void LatticeCPU::dosMalloc()
@@ -59,12 +49,13 @@ void LatticeCPU::dosMalloc()
     Mresult = new int[layerResultSize];
 }
 
-void LatticeCPU::addCalculate()
-{
-    
-}
+void LatticeCPU::calculateMain()
+{}
 
-void LatticeCPU::calculate()
+void LatticeCPU::calculateAdd()
+{}
+
+void LatticeCPU::calculateUnified()
 {
     for(auto i = 0; i < layerMainSize; i++)
     {

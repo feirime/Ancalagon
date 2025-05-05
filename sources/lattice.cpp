@@ -104,6 +104,7 @@ void Lattice::mapMaker()
         if(x[i] > (layer + 1) * splitSeed && x[i] < (layer + 2) * splitSeed) 
             layerAddSize++;
     latticeAddMalloc();
+    layerResultSize = layerMainSize + layerAddSize;
 }
 
 bool Lattice::isEnd()

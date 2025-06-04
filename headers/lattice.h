@@ -44,7 +44,7 @@ protected:
 public:
     int read(std::string readPass);
     void generateLattice(){};
-    void initializeLattice(float iteractionRadius, float splitSeed);
+    void splitInit(float iteractionRadius, float splitSeed);
     void addConfigure();
     void compress();
     void mapMaker();
@@ -56,6 +56,7 @@ public:
     virtual void calculateAdd() = 0;
     virtual void calculateUnified() = 0;
     void print();
+    bool isStart();
     bool isEnd();
     virtual ~Lattice();
 };

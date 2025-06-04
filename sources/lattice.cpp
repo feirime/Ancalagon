@@ -58,7 +58,7 @@ int Lattice::read(std::string fileName)
     return latticeSize;
 }
 
-void Lattice::initializeLattice(float iteractionRadius, float splitSeed)
+void Lattice::splitInit(float iteractionRadius, float splitSeed)
 {
     this->iteractionRadius = iteractionRadius;
     this->splitSeed = splitSeed;
@@ -105,6 +105,15 @@ void Lattice::mapMaker()
             layerAddSize++;
     latticeAddMalloc();
     layerResultSize = layerMainSize + layerAddSize;
+    dosMalloc();
+}
+
+bool Lattice::isStart()
+{
+    if(layer == 1)
+        return true;
+    else
+        return false;
 }
 
 bool Lattice::isEnd()

@@ -26,22 +26,40 @@ void LatticeCPU::latticeAddMalloc()
 
 void LatticeCPU::dosMalloc()
 {
-    delete[] Gmain;
-    delete[] Emain;
-    delete[] Mmain;
+    if(!isStart())
+    {
+        delete[] Gmain;
+        delete[] Emain;
+        delete[] Mmain;
+    }
     size_t dosMainSize = pow(2, layerMainSize);
     Gmain = new long long int[dosMainSize];
     Emain = new float[dosMainSize];
     Mmain = new int[dosMainSize];
-    Gmain = std::copy(Gmain, Gmain + dosMainSize, Gresult);
-    Emain = std::copy(Emain, Emain + dosMainSize, Eresult);
-    Mmain = std::copy(Mmain, Mmain + dosMainSize, Mresult);
-    delete[] Gadd;
-    delete[] Eadd;
-    delete[] Madd;
-    delete[] Gresult;
-    delete[] Eresult;
-    delete[] Mresult;
+    if(!isStart())
+    {
+        for(auto i = 0; i < dosMainSize; i++)
+        {
+            Gmain[i] = Gresult[i];
+            Emain[i] = Eresult[i];
+            Mmain[i] = Mresult[i];
+        }
+        delete[] Gadd;
+        delete[] Eadd;
+        delete[] Madd;
+        delete[] Gresult;
+        delete[] Eresult;
+        delete[] Mresult;
+    }
+    else
+    {
+        for(auto i = 0; i < dosMainSize; i++)
+        {
+            Gmain[i] = 0;
+            Emain[i] = 0;
+            Mmain[i] = 0;
+        }
+    }
     size_t dosAddSize = pow(2, layerAddSize);
     Gadd = new long long int[dosAddSize];
     Eadd = new float[dosAddSize];

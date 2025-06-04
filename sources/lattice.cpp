@@ -67,14 +67,19 @@ void Lattice::splitInit(float iteractionRadius, float splitSeed)
     layers = latticeLinearSize / splitSeed;
 }
 
-void Lattice::addConfigure()
+void Lattice::layerPlusPlus()
 {
     layer++;
-    mapMaker();
 }
 
 void Lattice::compress()
-{}
+{
+    size_t dosResultSize = pow(2, layerResultSize);
+    for(auto i = 0; i < dosResultSize; i++)
+    {
+        
+    }
+}
 
 void Lattice::mapMaker()
 {
@@ -105,7 +110,7 @@ void Lattice::mapMaker()
             layerAddSize++;
     latticeAddMalloc();
     layerResultSize = layerMainSize + layerAddSize;
-    dosMalloc();
+    dosCopyMalloc();
 }
 
 bool Lattice::isStart()

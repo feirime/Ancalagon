@@ -14,12 +14,15 @@ protected:
     long long int *Gresult = nullptr;
     float *Eresult = nullptr;
     int *Mresult = nullptr;
+    long long int *confResult = nullptr;
     long long int *Gmain = nullptr;
     float *Emain = nullptr;
     int *Mmain = nullptr;
+    long long int *confMain = nullptr;
     long long int *Gadd = nullptr;
     float *Eadd = nullptr;
     int *Madd = nullptr;
+    long long int *confAdd = nullptr;
     float *x = nullptr;
     float *y = nullptr;
     float *mx = nullptr;
@@ -45,13 +48,13 @@ public:
     int read(std::string readPass);
     void generateLattice(){};
     void splitInit(float iteractionRadius, float splitSeed);
-    void addConfigure();
+    void layerPlusPlus();
     void compress();
     void mapMaker();
     virtual void latticeMalloc() = 0;
     virtual void latticeMainMalloc() = 0;
     virtual void latticeAddMalloc() = 0;
-    virtual void dosMalloc() = 0;
+    virtual void dosCopyMalloc() = 0;
     virtual void calculateMain() = 0;
     virtual void calculateAdd() = 0;
     virtual void calculateUnified() = 0;
@@ -67,7 +70,7 @@ public:
     void latticeMalloc();
     virtual void latticeMainMalloc(){};
     virtual void latticeAddMalloc(){};
-    void dosMalloc();
+    void dosCopyMalloc();
     void calculateMain(){};
     void calculateAdd();
     void calculateUnified();
@@ -80,7 +83,7 @@ public:
     void latticeMalloc();
     virtual void latticeMainMalloc();
     virtual void latticeAddMalloc();
-    void dosMalloc();
+    void dosCopyMalloc();
     void calculateMain();
     void calculateAdd();
     void calculateUnified();
@@ -93,7 +96,7 @@ public:
     void latticeMalloc(){};
     virtual void latticeMainMalloc(){};
     virtual void latticeAddMalloc(){};
-    void dosMalloc(){};
+    void dosCopyMalloc(){};
     void calculateMain(){};
     void calculateAdd(){};
     void calculateUnified(){};

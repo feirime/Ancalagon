@@ -24,20 +24,24 @@ void LatticeCPU::latticeAddMalloc()
     myAdd = new float[layerAddSize];
 }
 
-void LatticeCPU::dosMalloc()
+void LatticeCPU::dosCopyMalloc()
 {
     if(!isStart())
     {
         delete[] Gmain;
         delete[] Emain;
         delete[] Mmain;
+        delete[] confMain;
     }
     size_t dosMainSize = pow(2, layerMainSize);
     Gmain = new long long int[dosMainSize];
     Emain = new float[dosMainSize];
     Mmain = new int[dosMainSize];
+    confMain = new long long int[dosMainSize];
+    size_t dosResultSize = 0;
     if(!isStart())
     {
+        dosResultSize = pow(2, layerResultSize);
         for(auto i = 0; i < dosMainSize; i++)
         {
             Gmain[i] = Gresult[i];
@@ -47,12 +51,15 @@ void LatticeCPU::dosMalloc()
         delete[] Gadd;
         delete[] Eadd;
         delete[] Madd;
+        delete[] confAdd;
         delete[] Gresult;
         delete[] Eresult;
         delete[] Mresult;
+        delete[] confResult;
     }
     else
     {
+        dosResultSize = pow(2, layerResultSize);
         for(auto i = 0; i < dosMainSize; i++)
         {
             Gmain[i] = 0;
@@ -64,10 +71,11 @@ void LatticeCPU::dosMalloc()
     Gadd = new long long int[dosAddSize];
     Eadd = new float[dosAddSize];
     Madd = new int[dosAddSize];
-    size_t layerResultSize = pow(2, layerResultSize);
-    Gresult = new long long int[layerResultSize];
-    Eresult = new float[layerResultSize];
-    Mresult = new int[layerResultSize];
+    confAdd = new long long int[dosAddSize];
+    Gresult = new long long int[dosResultSize];
+    Eresult = new float[dosResultSize];
+    Mresult = new int[dosResultSize];
+    confResult = new long long int[dosResultSize];
 }
 
 void LatticeCPU::calculateMain()

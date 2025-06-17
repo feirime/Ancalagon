@@ -13,7 +13,6 @@ void Run::run(int argc, char* argv[])
     else
         lattice->generateLattice();
     lattice->splitInit(iteractionRadius, splitSeed);
-    lattice->layerPlusPlus();
     lattice->mapMaker();
     lattice->calculateMain();
     lattice->calculateAdd();

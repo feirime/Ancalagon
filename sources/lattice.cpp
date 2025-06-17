@@ -72,6 +72,54 @@ void Lattice::layerPlusPlus()
     layer++;
 }
 
+void Lattice::mapMaker()
+{
+    float minX = *std::min_element(x, x + latticeSize);
+    float maxX = *std::max_element(x, x + latticeSize);
+    float minY = *std::min_element(y, y + latticeSize);
+    float maxY = *std::max_element(y, y + latticeSize);
+    float leftX = (maxX - minX) * splitSeed * layer;
+    float rightX = (maxX - minX) * splitSeed * (layer + 1);
+    layerMainSize = 0;
+    for(auto i = 0; i < latticeSize; i++)
+        if(leftX >= x[i] && x[i] < rightX) 
+            layerMainSize++;
+    latticeMainMalloc();
+    for(auto i = 0; i < latticeSize; i++)
+    {
+        size_t j = 0;
+        if(leftX >= x[i] && x[i] < rightX)
+        {
+            xMain[j] = x[i];
+            yMain[j] = y[i];
+            mxMain[j] = mx[i];
+            myMain[j] = my[i];
+            j++;
+        }
+    }
+    leftX = (maxX - minX) * splitSeed * (layer + 1);
+    rightX = (maxX - minX) * splitSeed * (layer + 2);
+    layerAddSize = 0;
+    for(auto i = 0; i < latticeSize; i++)
+        if(leftX >= x[i] && x[i] < rightX) 
+            layerAddSize++;
+    latticeAddMalloc();
+    for(auto i = 0; i < latticeSize; i++)
+    {
+        size_t j = 0;
+        if(leftX >= x[i] && x[i] < rightX)
+        {
+            xAdd[j] = x[i];
+            yAdd[j] = y[i];
+            mxAdd[j] = mx[i];
+            myAdd[j] = my[i];
+            j++;
+        }
+    }
+    layerResultSize = layerMainSize + layerAddSize;
+    dosCopyMalloc();
+}
+
 void Lattice::compress()
 {
     size_t dosResultSize = pow(2, layerResultSize);
@@ -81,41 +129,9 @@ void Lattice::compress()
     }
 }
 
-void Lattice::mapMaker()
-{
-    float minX = *std::min_element(x, x + latticeSize);
-    float maxX = *std::max_element(x, x + latticeSize);
-    float minY = *std::min_element(y, y + latticeSize);
-    float maxY = *std::max_element(y, y + latticeSize);
-    layerMainSize = 0;
-    for(auto i = 0; i < latticeSize; i++)
-        if(x[i] > layer * splitSeed && x[i] < (layer + 1) * splitSeed) 
-            layerMainSize++;
-    latticeMainMalloc();
-    for(auto i = 0; i < latticeSize; i++)
-    {
-        size_t j = 0;
-        if(x[i] > layer * splitSeed && x[i] < (layer + 1) * splitSeed)
-        {
-            xMain[j] = x[i];
-            yMain[j] = y[i];
-            mxMain[j] = mx[i];
-            myMain[j] = my[i];
-            j++;
-        }
-    }
-    layerAddSize = 0;
-    for(auto i = 0; i < latticeSize; i++)
-        if(x[i] > (layer + 1) * splitSeed && x[i] < (layer + 2) * splitSeed) 
-            layerAddSize++;
-    latticeAddMalloc();
-    layerResultSize = layerMainSize + layerAddSize;
-    dosCopyMalloc();
-}
-
 bool Lattice::isStart()
 {
-    if(layer == 1)
+    if(layer == 0)
         return true;
     else
         return false;

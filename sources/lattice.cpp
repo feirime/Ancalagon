@@ -61,8 +61,11 @@ int Lattice::read(std::string fileName)
 void Lattice::splitInit(float iteractionRadius, float splitSeed)
 {
     this->iteractionRadius = iteractionRadius;
-    this->splitSeed = splitSeed;
     latticeLinearSize = (int)sqrt((float)latticeSize);
+    if(splitSeed == 1)
+        this->splitSeed = 1 / latticeLinearSize;
+    else
+        this->splitSeed = splitSeed;
     layer = 0;
     layers = 1 / splitSeed;
     std::cout << "layers = " << layers << '\n';

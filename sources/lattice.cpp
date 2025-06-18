@@ -58,16 +58,18 @@ int Lattice::read(std::string fileName)
     return latticeSize;
 }
 
-void Lattice::splitInit(float iteractionRadius, float splitSeed)
+void Lattice::splitInit(float iteractionRadius, float splitSeed) //здесь насрано!
 {
     this->iteractionRadius = iteractionRadius;
     latticeLinearSize = (int)sqrt((float)latticeSize);
     if(splitSeed == 1)
-        this->splitSeed = 1 / latticeLinearSize;
+    {
+        this->splitSeed = 1.0 / (float)latticeLinearSize;
+    }
     else
         this->splitSeed = splitSeed;
     layer = 0;
-    layers = 1 / splitSeed;
+    layers = (int)(1 / this->splitSeed);
     std::cout << "layers = " << layers << '\n';
 }
 
@@ -121,6 +123,9 @@ void Lattice::mapMaker()
         }
     }
     layerResultSize = layerMainSize + layerAddSize;
+    std::cout << "layerMainSize = " << layerMainSize << '\n';
+    std::cout << "layerAddSize = " << layerAddSize << '\n';
+    std::cout << "layerResultSize = " << layerResultSize << '\n';
     dosCopyMalloc();
 }
 
@@ -129,7 +134,8 @@ void Lattice::compress()
     size_t dosResultSize = pow(2, layerResultSize);
     for(auto i = 0; i < dosResultSize; i++)
     {
-        
+        for(auto j = 0; j < dosResultSize; j++)
+        {}
     }
 }
 
@@ -151,10 +157,13 @@ bool Lattice::isEnd()
 
 void Lattice::print()
 {
-    std::cout << "x: " << "y " << "mx " << "my " << '\n';
-    for(int i = 0; i < latticeSize; i++)
+    size_t dosResultSize = pow(2, layerResultSize);
+    std::cout << "G " << "E " << "M " << '\n';
+    for(int i = 0; i < dosResultSize; i++)
     {
-        std::cout << x[i] << " " << y[i] << " " << mx[i] << " " << my[i] << '\n';
+        if(Gresult[i] == 0)
+            continue;
+        std::cout << Gresult[i] << " " << Eresult[i] << " " << Mresult[i] << '\n';
     }
 }
 

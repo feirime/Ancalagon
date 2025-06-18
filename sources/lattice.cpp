@@ -64,7 +64,8 @@ void Lattice::splitInit(float iteractionRadius, float splitSeed)
     this->splitSeed = splitSeed;
     latticeLinearSize = (int)sqrt((float)latticeSize);
     layer = 0;
-    layers = latticeLinearSize / splitSeed;
+    layers = 1 / splitSeed;
+    std::cout << "layers = " << layers << '\n';
 }
 
 void Lattice::layerPlusPlus()
@@ -139,7 +140,7 @@ bool Lattice::isStart()
 
 bool Lattice::isEnd()
 {
-    if(layer == layers)
+    if(layer == layers - 1)
         return true;
     else
         return false;

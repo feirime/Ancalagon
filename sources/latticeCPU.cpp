@@ -72,6 +72,7 @@ void LatticeCPU::dosCopyMalloc()
     Eadd = new float[dosAddSize];
     Madd = new int[dosAddSize];
     confAdd = new long long int[dosAddSize];
+    std::cout << "dosResultSize: " << dosResultSize << std::endl;
     Gresult = new long long int[dosResultSize];
     Eresult = new float[dosResultSize];
     Mresult = new int[dosResultSize];

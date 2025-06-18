@@ -17,15 +17,15 @@ void Run::run(int argc, char* argv[])
     lattice->calculateMain();
     lattice->calculateAdd();
     lattice->calculateUnified();
-    lattice->compress();
+    //lattice->compress();
     while(!lattice->isEnd())
     {
         lattice->layerPlusPlus();
         lattice->mapMaker();
         lattice->calculateAdd();
         lattice->calculateUnified();
-        lattice->compress();
     }
+    //lattice->compress();
     lattice->print();
     delete lattice;
 }

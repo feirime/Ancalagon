@@ -58,7 +58,7 @@ int Lattice::read(std::string fileName)
     return latticeSize;
 }
 
-void Lattice::splitInit(float iteractionRadius, float splitSeed) //здесь насрано!
+void Lattice::splitInit(float iteractionRadius, float splitSeed)
 {
     this->iteractionRadius = iteractionRadius;
     latticeLinearSize = (int)sqrt((float)latticeSize);

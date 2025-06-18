@@ -80,10 +80,42 @@ void LatticeCPU::dosCopyMalloc()
 }
 
 void LatticeCPU::calculateMain()
-{}
+{
+    for(auto i = 0; i < layerMainSize; i++)
+    {
+        for(auto j = 0; j < layerMainSize; j++)
+        {
+            if(i == j)
+                continue;
+            float xij = xMain[i] - xMain[j];
+            float yij = yMain[i] - yMain[j];
+            float r = sqrt(xij * xij + yij * yij);
+            Emain[i + j * layerMainSize] = (mxMain[i] * mxMain[j] + myMain[i] * myMain[j]) / (pow(r, 3)) 
+                                      - 3 * (mxMain[i] * xij + myMain[i] * yij) 
+                                      * (mxMain[j] * xij + myMain[j] * yij) / (pow(r, 5));
+            Mmain[i + j * layerMainSize] = Mmain[i] + Mmain[j];
+        }
+    }
+}
 
 void LatticeCPU::calculateAdd()
-{}
+{
+    for(auto i = 0; i < layerAddSize; i++)
+    {
+        for(auto j = 0; j < layerAddSize; j++)
+        {
+            if(i == j)
+                continue;
+            float xij = xAdd[i] - xAdd[j];
+            float yij = yAdd[i] - yAdd[j];
+            float r = sqrt(xij * xij + yij * yij);
+            Eadd[i + j * layerAddSize] = (mxAdd[i] * mxAdd[j] + myAdd[i] * myAdd[j]) / (pow(r, 3)) 
+                                      - 3 * (mxAdd[i] * xij + myAdd[i] * yij) 
+                                      * (mxAdd[j] * xij + myAdd[j] * yij) / (pow(r, 5));
+            Madd[i + j * layerAddSize] = Madd[i] + Madd[j];
+        }
+    }
+}
 
 void LatticeCPU::calculateUnified()
 {
@@ -95,7 +127,8 @@ void LatticeCPU::calculateUnified()
             float yij = yMain[i] - yAdd[j];
             float r = sqrt(xij * xij + yij * yij);
             Eresult[j + i * layerAddSize] = (mxMain[i] * mxAdd[j] + myMain[i] * myAdd[j]) / (pow(r, 3)) 
-                                      - 3 * (mxMain[i] * xij + myMain[i] * yij) * (mxAdd[j] * xij + myAdd[j] * yij) / (pow(r, 5));
+                                      - 3 * (mxMain[i] * xij + myMain[i] * yij) 
+                                      * (mxAdd[j] * xij + myAdd[j] * yij) / (pow(r, 5));
             Mresult[j + i * layerAddSize] = Mmain[i] + Madd[j];
         }
     }

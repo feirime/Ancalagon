@@ -81,20 +81,28 @@ void LatticeCPU::dosCopyMalloc()
 
 void LatticeCPU::calculateMain()
 {
-    for(auto i = 0; i < layerMainSize; i++)
+    for(auto conf = 0; conf < pow(2, layerMainSize); conf++)
     {
-        for(auto j = 0; j < layerMainSize; j++)
+        for(auto i = 0; i < layerMainSize; i++)
         {
-            if(i == j)
-                continue;
-            float xij = xMain[i] - xMain[j];
-            float yij = yMain[i] - yMain[j];
-            float r = sqrt(xij * xij + yij * yij);
-            Emain[i + j * layerMainSize] = (mxMain[i] * mxMain[j] + myMain[i] * myMain[j]) / (pow(r, 3)) 
-                                      - 3 * (mxMain[i] * xij + myMain[i] * yij) 
-                                      * (mxMain[j] * xij + myMain[j] * yij) / (pow(r, 5));
-            Mmain[i + j * layerMainSize] = Mmain[i] + Mmain[j];
+            for(auto j = 0; j < layerMainSize; j++)
+            {
+                if(i == j)
+                    continue;
+                float distance = sqrt(pow(xMain[i] - xMain[j], 2) 
+                                + pow(yMain[i] - yMain[j], 2));
+                if(distance > iteractionRadius)
+                    continue;
+                float xij = xMain[i] - xMain[j];
+                float yij = yMain[i] - yMain[j];
+                float r = sqrt(xij * xij + yij * yij);
+                Emain[i + j * layerMainSize] = (mxMain[i] * mxMain[j] + myMain[i] * myMain[j]) / (pow(r, 3)) 
+                                          - 3 * (mxMain[i] * xij + myMain[i] * yij) 
+                                          * (mxMain[j] * xij + myMain[j] * yij) / (pow(r, 5));
+                Mmain[i + j * layerMainSize] = Mmain[i] + Mmain[j];
+            }
         }
+        //Здесь нужен переворот спина
     }
 }
 

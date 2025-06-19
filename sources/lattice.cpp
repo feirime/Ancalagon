@@ -79,55 +79,60 @@ void Lattice::layerPlusPlus()
 }
 
 void Lattice::mapMaker()
-{
-    float minX = *std::min_element(x, x + latticeSize);
-    float maxX = *std::max_element(x, x + latticeSize);
-    float minY = *std::min_element(y, y + latticeSize);
-    float maxY = *std::max_element(y, y + latticeSize);
-    float leftX = (maxX - minX) * splitSeed * layer;
-    float rightX = (maxX - minX) * splitSeed * (layer + 1);
-    layerMainSize = 0;
-    for(auto i = 0; i < latticeSize; i++)
-        if(leftX >= x[i] && x[i] < rightX) 
-            layerMainSize++;
-    latticeMainMalloc();
-    for(auto i = 0; i < latticeSize; i++)
-    {
-        size_t j = 0;
-        if(leftX >= x[i] && x[i] < rightX)
-        {
-            xMain[j] = x[i];
-            yMain[j] = y[i];
-            mxMain[j] = mx[i];
-            myMain[j] = my[i];
-            j++;
-        }
-    }
-    leftX = (maxX - minX) * splitSeed * (layer + 1);
-    rightX = (maxX - minX) * splitSeed * (layer + 2);
-    layerAddSize = 0;
-    for(auto i = 0; i < latticeSize; i++)
-        if(leftX >= x[i] && x[i] < rightX) 
-            layerAddSize++;
-    latticeAddMalloc();
-    for(auto i = 0; i < latticeSize; i++)
-    {
-        size_t j = 0;
-        if(leftX >= x[i] && x[i] < rightX)
-        {
-            xAdd[j] = x[i];
-            yAdd[j] = y[i];
-            mxAdd[j] = mx[i];
-            myAdd[j] = my[i];
-            j++;
-        }
-    }
-    layerResultSize = layerMainSize + layerAddSize;
-    std::cout << "layerMainSize = " << layerMainSize << '\n';
-    std::cout << "layerAddSize = " << layerAddSize << '\n';
-    std::cout << "layerResultSize = " << layerResultSize << '\n';
-    dosCopyMalloc();
-}
+{}
+
+//void Lattice::mapMaker() //теперь здесь насрано!
+//{
+//    float minX = *std::min_element(x, x + latticeSize);
+//    float maxX = *std::max_element(x, x + latticeSize);
+//    float minY = *std::min_element(y, y + latticeSize);
+//    float maxY = *std::max_element(y, y + latticeSize);
+//    float leftX = (maxX - minX) * splitSeed * layer;
+//    float rightX = (maxX - minX) * splitSeed * (layer + 1);
+//    std::cout << "leftXmain = " << leftX << " rightXmain = " << rightX << '\n';
+//    layerMainSize = 0;
+//    for(auto i = 0; i < latticeSize; i++)
+//        if(leftX >= x[i] && x[i] < rightX) 
+//            layerMainSize++;
+//    latticeMainMalloc();
+//    for(auto i = 0; i < latticeSize; i++)
+//    {
+//        size_t j = 0;
+//        if(leftX >= x[i] && x[i] < rightX)
+//        {
+//            xMain[j] = x[i];
+//            yMain[j] = y[i];
+//            mxMain[j] = mx[i];
+//            myMain[j] = my[i];
+//            j++;
+//        }
+//    }
+//    leftX = (maxX - minX) * splitSeed * (layer + 1);
+//    rightX = (maxX - minX) * splitSeed * (layer + 2);
+//    std::cout << "leftXadd = " << leftX << " rightXadd = " << rightX << '\n';
+//    layerAddSize = 0;
+//    for(auto i = 0; i < latticeSize; i++)
+//        if(leftX >= x[i] && x[i] < rightX) 
+//            layerAddSize++;
+//    latticeAddMalloc();
+//    for(auto i = 0; i < latticeSize; i++)
+//    {
+//        size_t j = 0;
+//        if(leftX >= x[i] && x[i] < rightX)
+//        {
+//            xAdd[j] = x[i];
+//            yAdd[j] = y[i];
+//            mxAdd[j] = mx[i];
+//            myAdd[j] = my[i];
+//            j++;
+//        }
+//    }
+//    layerResultSize = layerMainSize + layerAddSize;
+//    std::cout << "layerMainSize = " << layerMainSize << '\n';
+//    std::cout << "layerAddSize = " << layerAddSize << '\n';
+//    std::cout << "layerResultSize = " << layerResultSize << '\n';
+//    dosCopyMalloc();
+//}
 
 void Lattice::compress()
 {

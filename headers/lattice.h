@@ -13,15 +13,15 @@ class Lattice
 protected:
     long long int *Gresult = nullptr;
     float *Eresult = nullptr;
-    int *Mresult = nullptr;
+    float *Mresult = nullptr;
     long long int *confResult = nullptr;
     long long int *Gmain = nullptr;
     float *Emain = nullptr;
-    int *Mmain = nullptr;
+    float *Mmain = nullptr;
     long long int *confMain = nullptr;
     long long int *Gadd = nullptr;
     float *Eadd = nullptr;
-    int *Madd = nullptr;
+    float *Madd = nullptr;
     long long int *confAdd = nullptr;
     float *x = nullptr;
     float *y = nullptr;
@@ -41,6 +41,7 @@ protected:
     float splitSeed = 0;
     int layer = 0;
     int layers = 0;
+    unsigned long long int confs = 0;
     size_t layerMainSize = 0; //колличество спинов в крайнем слое
     size_t layerResultSize = 0; //колличество спинов в результирующем слое
     size_t layerAddSize = 0; //колличество спинов в присоединяемом слое
@@ -58,6 +59,8 @@ public:
     virtual void calculateMain() = 0;
     virtual void calculateAdd() = 0;
     virtual void calculateUnified() = 0;
+    virtual void dosMallocBrutforce(){};
+    virtual void brutforce();
     void print();
     bool isStart();
     bool isEnd();
@@ -87,6 +90,7 @@ public:
     void calculateMain();
     void calculateAdd();
     void calculateUnified();
+    void dosMallocBrutforce();
     ~LatticeCPU();
 };
 

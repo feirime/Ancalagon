@@ -36,7 +36,7 @@ void LatticeCPU::dosCopyMalloc()
     size_t dosMainSize = pow(2, layerMainSize);
     Gmain = new long long int[dosMainSize];
     Emain = new float[dosMainSize];
-    Mmain = new int[dosMainSize];
+    Mmain = new float[dosMainSize];
     confMain = new long long int[dosMainSize];
     size_t dosResultSize = 0;
     if(!isStart())
@@ -70,12 +70,12 @@ void LatticeCPU::dosCopyMalloc()
     size_t dosAddSize = pow(2, layerAddSize);
     Gadd = new long long int[dosAddSize];
     Eadd = new float[dosAddSize];
-    Madd = new int[dosAddSize];
+    Madd = new float[dosAddSize];
     confAdd = new long long int[dosAddSize];
     std::cout << "dosResultSize: " << dosResultSize << std::endl;
     Gresult = new long long int[dosResultSize];
     Eresult = new float[dosResultSize];
-    Mresult = new int[dosResultSize];
+    Mresult = new float[dosResultSize];
     confResult = new long long int[dosResultSize];
 }
 
@@ -140,6 +140,15 @@ void LatticeCPU::calculateUnified()
             Mresult[j + i * layerAddSize] = Mmain[i] + Madd[j];
         }
     }
+}
+
+void LatticeCPU::dosMallocBrutforce()
+{
+    confs = pow(2, latticeSize);
+    layerResultSize = latticeSize;
+    Gresult = new long long int[confs];
+    Eresult = new float[confs];
+    Mresult = new float[confs];
 }
 
 LatticeCPU::~LatticeCPU()

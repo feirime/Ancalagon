@@ -22,6 +22,7 @@ private:
     std::string readPass;
     std::string *fileName = nullptr;
     int numberOfFiles;
+    std::string calcStrategy;
     //std::string latticeType;
     LatticeFactory *lattice;
 public:

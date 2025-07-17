@@ -2,7 +2,7 @@
 #include "gpu.h"
 #include <iostream>
 
-void latticeConstructorDOSAdapter(long long int *&G, float *&E, int *&M, int size)
+void latticeConstructorDOSAdapter(long long int *&G, float *&E, float *&M, int size)
 {
     cudaMallocManaged(&G, size * sizeof(G));
     cudaMallocManaged(&E, size * sizeof(E));
@@ -17,8 +17,8 @@ void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int
     cudaMallocManaged(&my, size * sizeof(my));
 }
 
-void latticeDestructorAdapter(long long int *&Gmain, float *&Emain, int *&Mmain, 
-    long long int *&Gresult, float *&Eresult, int *&Mresult,  float *&x, float *&y, float *&mx, float *&my)
+void latticeDestructorAdapter(long long int *&Gmain, float *&Emain, float *&Mmain, 
+    long long int *&Gresult, float *&Eresult, float *&Mresult,  float *&x, float *&y, float *&mx, float *&my)
 {
     if(my != nullptr)
     {

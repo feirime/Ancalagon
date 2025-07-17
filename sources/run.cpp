@@ -12,20 +12,28 @@ void Run::run(int argc, char* argv[])
     }
     else
         lattice->generateLattice();
-    lattice->splitInit(iteractionRadius, splitSeed);
-    lattice->mapMaker();
-    lattice->calculateMain();
-    lattice->calculateAdd();
-    lattice->calculateUnified();
-    //lattice->compress();
-    while(!lattice->isEnd())
+    if(calcStrategy == "unified")
     {
-        lattice->layerPlusPlus();
+        lattice->splitInit(iteractionRadius, splitSeed);
         lattice->mapMaker();
+        lattice->calculateMain();
         lattice->calculateAdd();
         lattice->calculateUnified();
+        //lattice->compress();
+        while(!lattice->isEnd())
+        {
+            lattice->layerPlusPlus();
+            lattice->mapMaker();
+            lattice->calculateAdd();
+            lattice->calculateUnified();
+        }
+        //lattice->compress();
     }
-    //lattice->compress();
+    if(calcStrategy == "brutforce")
+    {
+        lattice->dosMallocBrutforce();
+        lattice->brutforce();
+    }
     lattice->print();
     delete lattice;
 }
@@ -42,6 +50,7 @@ void Run::arguments(int argc, char* argv[])
     params.add_parameter(device, "-d", "--device").absent("cpu").nargs(1).metavar("device").help("Calculate on device");
     params.add_parameter(splitSeed, "-s", "--splitSeed").absent(1).nargs(1).metavar("splitSeed").help("seed of lattice spliting");
     params.add_parameter(iteractionRadius, "--radius").absent(1).nargs(1).metavar("iteractionRadius").help("radius of iteraction between spins");
+    params.add_parameter(calcStrategy, "--calcStrategy").absent("brutforce").nargs(1).metavar("calcStrategy").help("calculation strategy");
     auto res = parser.parse_args( argc, argv, 1 );
     if( !res )
         std::exit( 1 );

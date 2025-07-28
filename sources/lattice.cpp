@@ -58,7 +58,7 @@ int Lattice::read(std::string fileName)
     return latticeSize;
 }
 
-void Lattice::splitInit(float iteractionRadius, float splitSeed)
+void Lattice::init(float iteractionRadius, float splitSeed)
 {
     this->iteractionRadius = iteractionRadius;
     latticeLinearSize = (int)sqrt((float)latticeSize);
@@ -128,7 +128,7 @@ void Lattice::mapMaker() //теперь здесь насрано!
     std::cout << "layerMainSize = " << layerMainSize << '\n';
     std::cout << "layerAddSize = " << layerAddSize << '\n';
     std::cout << "layerResultSize = " << layerResultSize << '\n';
-    dosCopyMalloc();
+    dosMalloc();
 }
 
 void Lattice::compress()
@@ -136,8 +136,14 @@ void Lattice::compress()
     size_t dosResultSize = pow(2, layerResultSize);
     for(auto i = 0; i < dosResultSize; i++)
     {
-        for(auto j = 0; j < dosResultSize; j++)
-        {}
+        for(auto j = i + 1; j < dosResultSize; j++)
+        {
+            if(Gresult[i] != 0 && Gresult[j] != 0 && abs(Eresult[i] - Eresult[j]) < 1e-6 && abs(Mresult[i] - Mresult[j]) < 1e-6)
+            {
+                Gresult[i] += Gresult[j];
+                Gresult[j] = 0;
+            }
+        }
     }
 }
 
@@ -157,11 +163,13 @@ bool Lattice::isEnd()
         return false;
 }
 
-void Lattice::brutforce() 
+void Lattice::brutforce()
 {
+    printf("Iteraction radius = %f\n", iteractionRadius);
+    float cosin45 = sqrt(2) / 2;
     for(auto conf = 0; conf < confs; conf++)
     {
-        Gresult[conf] = 1;
+        Gresult[conf] = 0;
         Eresult[conf] = 0;
         Mresult[conf] = 0;
         for(auto i = 0; i < latticeSize; i++)
@@ -175,6 +183,12 @@ void Lattice::brutforce()
             }
             for(auto j = i + 1; j < latticeSize; j++)
             {
+                float xij = x[i] - x[j];
+                float yij = y[i] - y[j];
+                float r = sqrt(xij * xij + yij * yij);
+                if(r > iteractionRadius)
+                    continue;
+                Gresult[conf] = 1;
                 float mxj = mx[j];
                 float myj = my[j];
                 if(conf >> j & 1)
@@ -182,13 +196,10 @@ void Lattice::brutforce()
                     mxj *= -1;
                     myj *= -1;
                 }
-                float distanse = sqrt(pow(x[i] - x[j], 2) + pow(y[i] - y[j], 2));
-                float xij = x[i] - x[j];
-                float yij = y[i] - y[j];
-                float r = sqrt(xij * xij + yij * yij);
+                //float distanse = sqrt(pow(x[i] - x[j], 2) + pow(y[i] - y[j], 2));
                 Eresult[conf] += (mxi * mxj + myi * myj) / pow(r, 3) - 3 * (mxi * xij + myi * yij) * (mxj * xij + myj * yij) / pow(r, 5);
             }
-            Mresult[conf] += mxi; //проекция на ось Y
+            Mresult[conf] += mxi * cosin45 + myi * cosin45; //проекция на диагональ XY
         }
     }
 }
@@ -206,7 +217,7 @@ void Lattice::print()
     float eGs = 1e7;
     for(auto i = 0; i < confs; i++)
     {
-        if(Eresult[i] < eGs)
+        if(Eresult[i] < eGs & Gresult[i] != 0)
         {
             eGs = Eresult[i];
         }
@@ -214,7 +225,7 @@ void Lattice::print()
     printf("Egs = %f\n", eGs);
     for(auto i = 0; i < confs; i++)
     {
-        if(Gresult[i] != 0 & abs(Eresult[i] - eGs) < 1e-3)
+        if(Gresult[i] != 0 & abs(Eresult[i] - eGs) < 1e-6)
         {
             std::cout << "G = " << Gresult[i] << ", E = " << Eresult[i] << ", M = " << Mresult[i] << "\n";
         }

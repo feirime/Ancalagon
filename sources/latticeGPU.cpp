@@ -5,7 +5,7 @@ void LatticeGPU::latticeMalloc()
     latticeConstructorAdapter(x, y, mx, my, latticeSize);
 }
 
-void LatticeGPU::dosCopyMalloc()
+void LatticeGPU::dosMalloc()
 {
     latticeConstructorDOSAdapter(Gmain, Emain, Mmain, 0);
     latticeConstructorDOSAdapter(Gresult, Eresult, Mresult, 0);

@@ -24,7 +24,7 @@ void LatticeCPU::latticeAddMalloc()
     myAdd = new float[layerAddSize];
 }
 
-void LatticeCPU::dosCopyMalloc()
+void LatticeCPU::dosMalloc()
 {
     if(!isStart())
     {

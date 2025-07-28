@@ -14,7 +14,7 @@ void Run::run(int argc, char* argv[])
         lattice->generateLattice();
     if(calcStrategy == "unified")
     {
-        lattice->splitInit(iteractionRadius, splitSeed);
+        lattice->init(iteractionRadius, splitSeed);
         lattice->mapMaker();
         lattice->calculateMain();
         lattice->calculateAdd();
@@ -31,8 +31,10 @@ void Run::run(int argc, char* argv[])
     }
     if(calcStrategy == "brutforce")
     {
+        lattice->init(iteractionRadius, splitSeed);
         lattice->dosMallocBrutforce();
         lattice->brutforce();
+        lattice->compress();
     }
     lattice->print();
     delete lattice;
@@ -49,7 +51,7 @@ void Run::arguments(int argc, char* argv[])
     params.add_parameter(readPass, "--readpass").absent("data/Read").nargs(1).metavar("Read").help("Read J from file");
     params.add_parameter(device, "-d", "--device").absent("cpu").nargs(1).metavar("device").help("Calculate on device");
     params.add_parameter(splitSeed, "-s", "--splitSeed").absent(1).nargs(1).metavar("splitSeed").help("seed of lattice spliting");
-    params.add_parameter(iteractionRadius, "--radius").absent(1).nargs(1).metavar("iteractionRadius").help("radius of iteraction between spins");
+    params.add_parameter(iteractionRadius, "--radius").absent(2).nargs(1).metavar("iteractionRadius").help("radius of iteraction between spins");
     params.add_parameter(calcStrategy, "--calcStrategy").absent("brutforce").nargs(1).metavar("calcStrategy").help("calculation strategy");
     auto res = parser.parse_args( argc, argv, 1 );
     if( !res )

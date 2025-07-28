@@ -1,0 +1,56 @@
+#ifndef RED_AND_BLACK_TREE_H
+#define RED_AND_BLACK_TREE_H
+
+#include <memory>
+
+// Цвет узла: RED или BLACK
+enum class Color { RED, BLACK };
+
+// Узел дерева, хранящий пару (энергия, частота)
+struct Node {
+    double energy;       // ключ - энергия
+    int frequency;      // значение - частота повторения
+    Color color;        // цвет узла
+    std::shared_ptr<Node> left, right, parent; // указатели
+    
+    // Конструктор
+    Node(double e, int f) : energy(e), frequency(f), 
+                           color(Color::RED), 
+                           left(nullptr), right(nullptr), parent(nullptr) {}
+};
+
+class RBTree {
+private:
+    std::shared_ptr<Node> root;
+    std::shared_ptr<Node> nil; // специальный листовой узел
+
+    // Вспомогательные функции
+    void leftRotate(std::shared_ptr<Node> x);
+    void rightRotate(std::shared_ptr<Node> y);
+    void fixInsert(std::shared_ptr<Node> k);
+    void fixDelete(std::shared_ptr<Node> x);
+    void transplant(std::shared_ptr<Node> u, std::shared_ptr<Node> v);
+    std::shared_ptr<Node> minimum(std::shared_ptr<Node> node);
+    void printHelper(std::shared_ptr<Node> root, std::string indent, bool last);
+
+public:
+    RBTree() {
+        nil = std::make_shared<Node>(0, 0);
+        nil->color = Color::BLACK;
+        root = nil;
+    }
+    
+    // Вставка пары (энергия, частота)
+    void insert(double energy, int frequency);
+    
+    // Удаление узла по энергии
+    void deleteNode(double energy);
+    
+    // Поиск частоты по энергии
+    int search(double energy);
+    
+    // Вывод дерева
+    void printTree();
+};
+
+#endif

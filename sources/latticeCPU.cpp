@@ -192,11 +192,11 @@ void LatticeCPU::calculateUnified()
 
 void LatticeCPU::dosMallocBrutforce()
 {
-    confs = pow(2, latticeSize);
+    dosResultSize = pow(2, latticeSize);
     layerResultSize = latticeSize;
-    Gresult = new long long int[confs];
-    Eresult = new float[confs];
-    Mresult = new float[confs];
+    Gresult = new long long int[dosResultSize];
+    Eresult = new float[dosResultSize];
+    Mresult = new float[dosResultSize];
 }
 
 LatticeCPU::~LatticeCPU()

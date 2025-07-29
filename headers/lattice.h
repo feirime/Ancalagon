@@ -42,10 +42,10 @@ protected:
     float splitSeed = 0;
     int layer = 0;
     int layers = 0;
-    unsigned long long int confs = 0;
-    size_t layerMainSize = 0; //колличество спинов в крайнем слое
     size_t layerResultSize = 0; //колличество спинов в результирующем слое
+    size_t layerMainSize = 0; //колличество спинов в крайнем слое
     size_t layerAddSize = 0; //колличество спинов в присоединяемом слое
+    size_t dosResultSize = 0;
 public:
     int read(std::string readPass);
     void generateLattice(){};

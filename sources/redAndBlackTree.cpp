@@ -373,20 +373,20 @@ size_t RBTree::sizeRecurCalc(std::shared_ptr<Node> node)
     return 1 + sizeRecurCalc(node->left) + sizeRecurCalc(node->right);
 }
 
-size_t RBTree::toArrays(float *energies, int *degeneracies) 
+size_t RBTree::toArrays(long long *degeneracies, float *energies) 
 {
     size_t idx = 0;
-    inOrderToArrays(root, energies, degeneracies, idx);
+    inOrderToArrays(root, degeneracies, energies, idx);
     return idx;
 }
 
-void RBTree::inOrderToArrays(std::shared_ptr<Node> node, float *energies, int *degeneracies, size_t &idx) 
+void RBTree::inOrderToArrays(std::shared_ptr<Node> node, long long *degeneracies, float *energies, size_t &idx) 
 {
     if (node == nil) 
         return;
-    inOrderToArrays(node->left, energies, degeneracies, idx);
+    inOrderToArrays(node->left, degeneracies, energies, idx);
     energies[idx] = node->energy;
     degeneracies[idx] = node->degeneracy;
     idx++;
-    inOrderToArrays(node->right, energies, degeneracies, idx);
+    inOrderToArrays(node->right, degeneracies, energies, idx);
 }

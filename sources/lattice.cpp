@@ -150,16 +150,16 @@ void Lattice::compress()
 void Lattice::compressRBTree()
 {
     RBTree tree;
-    size_t dosResultSize = pow(2, layerResultSize);
+    dosResultSize = pow(2, layerResultSize);
     for(auto i = 0; i < dosResultSize; i++)
     {
         if(Gresult[i] != 0)
             tree.insert(Gresult[i], Eresult[i]);
     }
     dosDeleteResult();
-    size_t treeSize = tree.size();
-    dosMallocResult(treeSize);
-    //нужно вытащить пары из дерева
+    dosResultSize = tree.size();
+    dosMallocResult(dosResultSize);
+    tree.toArrays(Gresult, Eresult);
 }
 
 bool Lattice::isStart()
@@ -182,7 +182,7 @@ void Lattice::brutforce()
 {
     printf("Iteraction radius = %f\n", iteractionRadius);
     float cosin45 = sqrt(2) / 2;
-    for(auto conf = 0; conf < confs; conf++)
+    for(auto conf = 0; conf < dosResultSize; conf++)
     {
         Gresult[conf] = 0;
         Eresult[conf] = 0;
@@ -221,7 +221,6 @@ void Lattice::brutforce()
 
 void Lattice::print()
 {
-    size_t dosResultSize = pow(2, layerResultSize);
     //std::cout << "G " << "E " << "M " << '\n';
     //for(int i = 0; i < dosResultSize; i++)
     //{
@@ -230,7 +229,7 @@ void Lattice::print()
     //    std::cout << Gresult[i] << " " << Eresult[i] << " " << Mresult[i] << '\n';
     //}
     float eGs = 1e7;
-    for(auto i = 0; i < confs; i++)
+    for(auto i = 0; i < dosResultSize; i++)
     {
         if(Eresult[i] < eGs & Gresult[i] != 0)
         {
@@ -238,7 +237,7 @@ void Lattice::print()
         }
     }
     printf("Egs = %f\n", eGs);
-    for(auto i = 0; i < confs; i++)
+    for(auto i = 0; i < dosResultSize; i++)
     {
         if(Gresult[i] != 0 & abs(Eresult[i] - eGs) < 1e-6)
         {

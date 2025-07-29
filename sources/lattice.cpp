@@ -147,6 +147,21 @@ void Lattice::compress()
     }
 }
 
+void Lattice::compressRBTree()
+{
+    RBTree tree;
+    size_t dosResultSize = pow(2, layerResultSize);
+    for(auto i = 0; i < dosResultSize; i++)
+    {
+        if(Gresult[i] != 0)
+            tree.insert(Gresult[i], Eresult[i]);
+    }
+    dosDeleteResult();
+    size_t treeSize = tree.size();
+    dosMallocResult(treeSize);
+    //нужно вытащить пары из дерева
+}
+
 bool Lattice::isStart()
 {
     if(layer == 0)

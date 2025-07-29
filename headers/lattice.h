@@ -7,6 +7,7 @@
 #include <string>
 #include <math.h>
 #include "adapterGPU.h"
+#include "redAndBlackTree.h"
 
 class Lattice
 {
@@ -51,11 +52,18 @@ public:
     void init(float iteractionRadius, float splitSeed);
     void layerPlusPlus();
     void compress();
+    void compressRBTree();
     void mapMaker();
     virtual void latticeMalloc() = 0;
     virtual void latticeMainMalloc() = 0;
     virtual void latticeAddMalloc() = 0;
     virtual void dosMalloc() = 0;
+    virtual void dosMallocResult(size_t size)=0;
+    virtual void dosMallocMain(size_t size)=0;
+    virtual void dosMallocAdd(size_t size)=0;
+    virtual void dosDeleteResult() = 0;
+    virtual void dosDeleteMain() = 0;
+    virtual void dosDeleteAdd() = 0;
     virtual void calculateMain() = 0;
     virtual void calculateAdd() = 0;
     virtual void calculateUnified() = 0;
@@ -74,6 +82,12 @@ public:
     virtual void latticeMainMalloc(){};
     virtual void latticeAddMalloc(){};
     void dosMalloc();
+    void dosMallocResult(size_t size){};
+    void dosMallocMain(size_t size){};
+    void dosMallocAdd(size_t size){};
+    void dosDeleteResult(){};
+    void dosDeleteMain(){};
+    void dosDeleteAdd(){};
     void calculateMain(){};
     void calculateAdd();
     void calculateUnified();
@@ -87,6 +101,12 @@ public:
     virtual void latticeMainMalloc();
     virtual void latticeAddMalloc();
     void dosMalloc();
+    void dosMallocResult(size_t size);
+    void dosMallocMain(size_t size);
+    void dosMallocAdd(size_t size);
+    void dosDeleteResult();
+    void dosDeleteMain();
+    void dosDeleteAdd();
     void calculateMain();
     void calculateAdd();
     void calculateUnified();
@@ -101,6 +121,12 @@ public:
     virtual void latticeMainMalloc(){};
     virtual void latticeAddMalloc(){};
     void dosMalloc(){};
+    void dosMallocResult(size_t size){};
+    void dosMallocMain(size_t size){};
+    void dosMallocAdd(size_t size){};
+    void dosDeleteResult(){};
+    void dosDeleteMain(){};
+    void dosDeleteAdd(){};
     void calculateMain(){};
     void calculateAdd(){};
     void calculateUnified(){};

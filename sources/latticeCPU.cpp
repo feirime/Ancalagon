@@ -79,6 +79,54 @@ void LatticeCPU::dosMalloc()
     confResult = new long long int[dosResultSize];
 }
 
+void LatticeCPU::dosMallocResult(size_t size)
+{
+    Gresult = new long long int[size];
+    Eresult = new float[size];
+    Mresult = new float[size];
+    confResult = new long long int[size];
+}
+
+void LatticeCPU::dosMallocMain(size_t size)
+{
+    Gmain = new long long int[size];
+    Emain = new float[size];
+    Mmain = new float[size];
+    confMain = new long long int[size];
+}
+
+void LatticeCPU::dosMallocAdd(size_t size)
+{
+    Gadd = new long long int[size];
+    Eadd = new float[size];
+    Madd = new float[size];
+    confAdd = new long long int[size];
+}
+
+void LatticeCPU::dosDeleteResult()
+{
+    delete[] Gresult;
+    delete[] Eresult;
+    delete[] Mresult;
+    delete[] confResult;
+}
+
+void LatticeCPU::dosDeleteMain()
+{
+    delete[] Gmain;
+    delete[] Emain;
+    delete[] Mmain;
+    delete[] confMain;
+}
+
+void LatticeCPU::dosDeleteAdd()
+{
+    delete[] Gadd;
+    delete[] Eadd;
+    delete[] Madd;
+    delete[] confAdd;
+}
+
 void LatticeCPU::calculateMain()
 {
     for(auto conf = 0; conf < pow(2, layerMainSize); conf++)

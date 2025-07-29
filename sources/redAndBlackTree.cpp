@@ -2,21 +2,28 @@
 #include <iostream>
 
 // Левый поворот
-void RBTree::leftRotate(std::shared_ptr<Node> x) {
+void RBTree::leftRotate(std::shared_ptr<Node> x) 
+{
     std::shared_ptr<Node> y = x->right;
     x->right = y->left;
     
-    if (y->left != nil) {
+    if (y->left != nil) 
+    {
         y->left->parent = x;
     }
     
     y->parent = x->parent;
     
-    if (x->parent == nil) {
+    if (x->parent == nil) 
+    {
         root = y;
-    } else if (x == x->parent->left) {
+    } 
+    else if (x == x->parent->left) 
+    {
         x->parent->left = y;
-    } else {
+    } 
+    else 
+    {
         x->parent->right = y;
     }
     
@@ -25,21 +32,28 @@ void RBTree::leftRotate(std::shared_ptr<Node> x) {
 }
 
 // Правый поворот
-void RBTree::rightRotate(std::shared_ptr<Node> y) {
+void RBTree::rightRotate(std::shared_ptr<Node> y) 
+{
     std::shared_ptr<Node> x = y->left;
     y->left = x->right;
     
-    if (x->right != nil) {
+    if (x->right != nil) 
+    {
         x->right->parent = y;
     }
     
     x->parent = y->parent;
     
-    if (y->parent == nil) {
+    if (y->parent == nil) 
+    {
         root = x;
-    } else if (y == y->parent->right) {
+    } 
+    else if (y == y->parent->right) 
+    {
         y->parent->right = x;
-    } else {
+    } 
+    else 
+    {
         y->parent->left = x;
     }
     
@@ -48,18 +62,25 @@ void RBTree::rightRotate(std::shared_ptr<Node> y) {
 }
 
 // Балансировка после вставки
-void RBTree::fixInsert(std::shared_ptr<Node> k) {
+void RBTree::fixInsert(std::shared_ptr<Node> k) 
+{
     std::shared_ptr<Node> u;
-    while (k->parent->color == Color::RED) {
-        if (k->parent == k->parent->parent->right) {
+    while (k->parent->color == Color::RED) 
+    {
+        if (k->parent == k->parent->parent->right) 
+        {
             u = k->parent->parent->left;
-            if (u->color == Color::RED) {
+            if (u->color == Color::RED) 
+            {
                 u->color = Color::BLACK;
                 k->parent->color = Color::BLACK;
                 k->parent->parent->color = Color::RED;
                 k = k->parent->parent;
-            } else {
-                if (k == k->parent->left) {
+            } 
+            else 
+            {
+                if (k == k->parent->left) 
+                {
                     k = k->parent;
                     rightRotate(k);
                 }
@@ -67,15 +88,20 @@ void RBTree::fixInsert(std::shared_ptr<Node> k) {
                 k->parent->parent->color = Color::RED;
                 leftRotate(k->parent->parent);
             }
-        } else {
+        } 
+        else 
+        {
             u = k->parent->parent->right;
-            if (u->color == Color::RED) {
+            if (u->color == Color::RED) 
+            {
                 u->color = Color::BLACK;
                 k->parent->color = Color::BLACK;
                 k->parent->parent->color = Color::RED;
                 k = k->parent->parent;
-            } else {
-                if (k == k->parent->right) {
+            } else 
+            {
+                if (k == k->parent->right) 
+                {
                     k = k->parent;
                     leftRotate(k);
                 }
@@ -90,7 +116,8 @@ void RBTree::fixInsert(std::shared_ptr<Node> k) {
 }
 
 // Вставка нового узла
-void RBTree::insert(double energy, int degeneracy) {
+void RBTree::insert(int degeneracy, double energy) 
+{
     std::shared_ptr<Node> node = std::make_shared<Node>(energy, degeneracy);
     node->parent = nil;
     node->left = nil;
@@ -99,13 +126,19 @@ void RBTree::insert(double energy, int degeneracy) {
     std::shared_ptr<Node> y = nil;
     std::shared_ptr<Node> x = root;
     
-    while (x != nil) {
+    while (x != nil) 
+    {
         y = x;
-        if (node->energy < x->energy) {
+        if (node->energy < x->energy) 
+        {
             x = x->left;
-        } else if (node->energy > x->energy) {
+        } 
+        else if (node->energy > x->energy) 
+        {
             x = x->right;
-        } else {
+        } 
+        else 
+        {
             // Если энергия уже существует, увеличиваем частоту
             x->degeneracy += degeneracy;
             return;
@@ -113,20 +146,27 @@ void RBTree::insert(double energy, int degeneracy) {
     }
     
     node->parent = y;
-    if (y == nil) {
+    if (y == nil) 
+    {
         root = node;
-    } else if (node->energy < y->energy) {
+    } 
+    else if (node->energy < y->energy) 
+    {
         y->left = node;
-    } else {
+    } 
+    else 
+    {
         y->right = node;
     }
     
-    if (node->parent == nil) {
+    if (node->parent == nil) 
+    {
         node->color = Color::BLACK;
         return;
     }
     
-    if (node->parent->parent == nil) {
+    if (node->parent->parent == nil) 
+    {
         return;
     }
     
@@ -134,14 +174,21 @@ void RBTree::insert(double energy, int degeneracy) {
 }
 
 // Поиск частоты по энергии
-int RBTree::search(double energy) {
+int RBTree::search(double energy) 
+{
     std::shared_ptr<Node> current = root;
-    while (current != nil) {
-        if (energy < current->energy) {
+    while (current != nil) 
+    {
+        if (energy < current->energy) 
+        {
             current = current->left;
-        } else if (energy > current->energy) {
+        } 
+        else if (energy > current->energy) 
+        {
             current = current->right;
-        } else {
+        } 
+        else 
+        {
             return current->degeneracy;
         }
     }
@@ -149,41 +196,57 @@ int RBTree::search(double energy) {
 }
 
 // Вспомогательные функции для удаления
-void RBTree::transplant(std::shared_ptr<Node> u, std::shared_ptr<Node> v) {
-    if (u->parent == nil) {
+void RBTree::transplant(std::shared_ptr<Node> u, std::shared_ptr<Node> v) 
+{
+    if (u->parent == nil) 
+    {
         root = v;
-    } else if (u == u->parent->left) {
+    } 
+    else if (u == u->parent->left) 
+    {
         u->parent->left = v;
-    } else {
+    } 
+    else 
+    {
         u->parent->right = v;
     }
     v->parent = u->parent;
 }
 
-std::shared_ptr<Node> RBTree::minimum(std::shared_ptr<Node> node) {
-    while (node->left != nil) {
+std::shared_ptr<Node> RBTree::minimum(std::shared_ptr<Node> node) 
+{
+    while (node->left != nil) 
+    {
         node = node->left;
     }
     return node;
 }
 
-void RBTree::fixDelete(std::shared_ptr<Node> x) {
+void RBTree::fixDelete(std::shared_ptr<Node> x) 
+{
     std::shared_ptr<Node> s;
-    while (x != root && x->color == Color::BLACK) {
-        if (x == x->parent->left) {
+    while (x != root && x->color == Color::BLACK) 
+    {
+        if (x == x->parent->left) 
+        {
             s = x->parent->right;
-            if (s->color == Color::RED) {
+            if (s->color == Color::RED) 
+            {
                 s->color = Color::BLACK;
                 x->parent->color = Color::RED;
                 leftRotate(x->parent);
                 s = x->parent->right;
             }
             
-            if (s->left->color == Color::BLACK && s->right->color == Color::BLACK) {
+            if (s->left->color == Color::BLACK && s->right->color == Color::BLACK) 
+            {
                 s->color = Color::RED;
                 x = x->parent;
-            } else {
-                if (s->right->color == Color::BLACK) {
+            } 
+            else 
+            {
+                if (s->right->color == Color::BLACK) 
+                {
                     s->left->color = Color::BLACK;
                     s->color = Color::RED;
                     rightRotate(s);
@@ -195,20 +258,27 @@ void RBTree::fixDelete(std::shared_ptr<Node> x) {
                 leftRotate(x->parent);
                 x = root;
             }
-        } else {
+        } 
+        else 
+        {
             s = x->parent->left;
-            if (s->color == Color::RED) {
+            if (s->color == Color::RED) 
+            {
                 s->color = Color::BLACK;
                 x->parent->color = Color::RED;
                 rightRotate(x->parent);
                 s = x->parent->left;
             }
             
-            if (s->right->color == Color::BLACK && s->left->color == Color::BLACK) {
+            if (s->right->color == Color::BLACK && s->left->color == Color::BLACK) 
+            {
                 s->color = Color::RED;
                 x = x->parent;
-            } else {
-                if (s->left->color == Color::BLACK) {
+            } 
+            else 
+            {
+                if (s->left->color == Color::BLACK) 
+                {
                     s->right->color = Color::BLACK;
                     s->color = Color::RED;
                     leftRotate(s);
@@ -226,19 +296,23 @@ void RBTree::fixDelete(std::shared_ptr<Node> x) {
 }
 
 // Удаление узла по энергии
-void RBTree::deleteNode(double energy) {
+void RBTree::deleteNode(double energy) 
+{
     std::shared_ptr<Node> z = root;
     std::shared_ptr<Node> x, y;
     
     // Поиск узла для удаления
-    while (z != nil) {
-        if (z->energy == energy) {
+    while (z != nil) 
+    {
+        if (z->energy == energy) 
+        {
             break;
         }
         z = (energy < z->energy) ? z->left : z->right;
     }
     
-    if (z == nil) {
+    if (z == nil) 
+    {
         std::cout << "Энергия не найдена в дереве" << '\n';
         return;
     }
@@ -246,20 +320,28 @@ void RBTree::deleteNode(double energy) {
     y = z;
     Color y_original_color = y->color;
     
-    if (z->left == nil) {
+    if (z->left == nil) 
+    {
         x = z->right;
         transplant(z, z->right);
-    } else if (z->right == nil) {
+    } 
+    else if (z->right == nil) 
+    {
         x = z->left;
         transplant(z, z->left);
-    } else {
+    } 
+    else 
+    {
         y = minimum(z->right);
         y_original_color = y->color;
         x = y->right;
         
-        if (y->parent == z) {
+        if (y->parent == z) 
+        {
             x->parent = y;
-        } else {
+        } 
+        else 
+        {
             transplant(y, y->right);
             y->right = z->right;
             y->right->parent = y;
@@ -271,19 +353,22 @@ void RBTree::deleteNode(double energy) {
         y->color = z->color;
     }
     
-    if (y_original_color == Color::BLACK) {
+    if (y_original_color == Color::BLACK) 
+    {
         fixDelete(x);
     }
 }
 
-int RBTree::sizeRecurCalc(std::shared_ptr<Node> node) {
-    if (node == nil) {
+size_t RBTree::sizeRecurCalc(std::shared_ptr<Node> node) 
+{
+    if (node == nil) 
+    {
         return 0;
     }
     return 1 + sizeRecurCalc(node->left) + sizeRecurCalc(node->right);
 }
 
-int RBTree::size()
+size_t RBTree::size()
 {
     return sizeRecurCalc(root);
 }

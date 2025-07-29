@@ -90,8 +90,8 @@ void RBTree::fixInsert(std::shared_ptr<Node> k) {
 }
 
 // Вставка нового узла
-void RBTree::insert(double energy, int frequency) {
-    std::shared_ptr<Node> node = std::make_shared<Node>(energy, frequency);
+void RBTree::insert(double energy, int degeneracy) {
+    std::shared_ptr<Node> node = std::make_shared<Node>(energy, degeneracy);
     node->parent = nil;
     node->left = nil;
     node->right = nil;
@@ -107,7 +107,7 @@ void RBTree::insert(double energy, int frequency) {
             x = x->right;
         } else {
             // Если энергия уже существует, увеличиваем частоту
-            x->frequency += frequency;
+            x->degeneracy += degeneracy;
             return;
         }
     }
@@ -142,7 +142,7 @@ int RBTree::search(double energy) {
         } else if (energy > current->energy) {
             current = current->right;
         } else {
-            return current->frequency;
+            return current->degeneracy;
         }
     }
     return 0; // не найдено
@@ -276,27 +276,14 @@ void RBTree::deleteNode(double energy) {
     }
 }
 
-// Вывод дерева
-void RBTree::printHelper(std::shared_ptr<Node> root, std::string indent, bool last) {
-    if (root != nil) {
-        std::cout << indent;
-        if (last) {
-            std::cout << "R----";
-            indent += "     ";
-        } else {
-            std::cout << "L----";
-            indent += "|    ";
-        }
-        
-        std::string sColor = (root->color == Color::RED) ? "RED" : "BLACK";
-        std::cout << root->energy << "(" << root->frequency << ")" << "[" << sColor << "]" << '\n';
-        printHelper(root->left, indent, false);
-        printHelper(root->right, indent, true);
+int RBTree::sizeRecurCalc(std::shared_ptr<Node> node) {
+    if (node == nil) {
+        return 0;
     }
+    return 1 + sizeRecurCalc(node->left) + sizeRecurCalc(node->right);
 }
 
-void RBTree::printTree() {
-    if (root) {
-        printHelper(root, "", true);
-    }
+int RBTree::size()
+{
+    return sizeRecurCalc(root);
 }

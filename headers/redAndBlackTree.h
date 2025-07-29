@@ -9,12 +9,12 @@ enum class Color { RED, BLACK };
 // Узел дерева, хранящий пару (энергия, частота)
 struct Node {
     double energy;       // ключ - энергия
-    int frequency;      // значение - частота повторения
+    int degeneracy;      // значение - вырождение
     Color color;        // цвет узла
     std::shared_ptr<Node> left, right, parent; // указатели
     
     // Конструктор
-    Node(double e, int f) : energy(e), frequency(f), 
+    Node(double e, int f) : energy(e), degeneracy(f), 
                            color(Color::RED), 
                            left(nullptr), right(nullptr), parent(nullptr) {}
 };
@@ -31,7 +31,7 @@ private:
     void fixDelete(std::shared_ptr<Node> x);
     void transplant(std::shared_ptr<Node> u, std::shared_ptr<Node> v);
     std::shared_ptr<Node> minimum(std::shared_ptr<Node> node);
-    void printHelper(std::shared_ptr<Node> root, std::string indent, bool last);
+    int sizeRecurCalc(std::shared_ptr<Node> node);
 
 public:
     RBTree() {
@@ -41,16 +41,15 @@ public:
     }
     
     // Вставка пары (энергия, частота)
-    void insert(double energy, int frequency);
+    void insert(double energy, int degeneracy);
     
     // Удаление узла по энергии
     void deleteNode(double energy);
     
     // Поиск частоты по энергии
     int search(double energy);
-    
-    // Вывод дерева
-    void printTree();
+
+    int RBTree::size();
 };
 
 #endif

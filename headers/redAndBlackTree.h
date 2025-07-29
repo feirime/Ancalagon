@@ -28,6 +28,7 @@ private:
     void transplant(std::shared_ptr<Node> u, std::shared_ptr<Node> v);
     std::shared_ptr<Node> minimum(std::shared_ptr<Node> node);
     size_t sizeRecurCalc(std::shared_ptr<Node> node);
+    void inOrderToArrays(std::shared_ptr<Node> node, float *energies, int *degeneracies, size_t &idx);
 public:
     RBTree() {
         nil = std::make_shared<Node>(0, 0);
@@ -38,6 +39,7 @@ public:
     void deleteNode(double energy);
     int search(double energy);
     size_t size();
+    size_t toArrays(float *energies, int *degeneracies);
 };
 
 #endif

@@ -359,6 +359,11 @@ void RBTree::deleteNode(double energy)
     }
 }
 
+size_t RBTree::size()
+{
+    return sizeRecurCalc(root);
+}
+
 size_t RBTree::sizeRecurCalc(std::shared_ptr<Node> node) 
 {
     if (node == nil) 
@@ -368,7 +373,20 @@ size_t RBTree::sizeRecurCalc(std::shared_ptr<Node> node)
     return 1 + sizeRecurCalc(node->left) + sizeRecurCalc(node->right);
 }
 
-size_t RBTree::size()
+size_t RBTree::toArrays(float *energies, int *degeneracies) 
 {
-    return sizeRecurCalc(root);
+    size_t idx = 0;
+    inOrderToArrays(root, energies, degeneracies, idx);
+    return idx;
+}
+
+void RBTree::inOrderToArrays(std::shared_ptr<Node> node, float *energies, int *degeneracies, size_t &idx) 
+{
+    if (node == nil) 
+        return;
+    inOrderToArrays(node->left, energies, degeneracies, idx);
+    energies[idx] = node->energy;
+    degeneracies[idx] = node->degeneracy;
+    idx++;
+    inOrderToArrays(node->right, energies, degeneracies, idx);
 }

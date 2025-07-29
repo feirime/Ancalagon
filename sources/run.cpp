@@ -1,3 +1,4 @@
+#include <chrono>
 #include "run.h"
 
 void Run::run(int argc, char* argv[]) 
@@ -12,6 +13,7 @@ void Run::run(int argc, char* argv[])
     }
     else
         lattice->generateLattice();
+    auto start_time = std::chrono::high_resolution_clock::now();
     if(calcStrategy == "unified")
     {
         lattice->init(iteractionRadius, splitSeed);
@@ -36,6 +38,14 @@ void Run::run(int argc, char* argv[])
         lattice->brutforce();
         lattice->compress();
     }
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    int hours = elapsed_time.count() / 3600000;
+    int minutes = (elapsed_time.count() % 3600000) / 60000;
+    int seconds = (elapsed_time.count() % 60000) / 1000;
+    int milliseconds = elapsed_time.count() % 1000;
+    std::cout << "Elapsed time: " << hours << " hours, " << minutes << " minutes, " 
+              << seconds << " seconds, " << milliseconds << " milliseconds" << std::endl;
     lattice->print();
     delete lattice;
 }

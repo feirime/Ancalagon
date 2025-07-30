@@ -2,7 +2,7 @@
 #include "gpu.h"
 #include <iostream>
 
-void latticeConstructorDOSAdapter(long long int *&G, float *&E, float *&M, int size)
+void latticeConstructorDOSAdapter(unsigned long long int *&G, float *&E, float *&M, int size)
 {
     cudaMallocManaged(&G, size * sizeof(G));
     cudaMallocManaged(&E, size * sizeof(E));
@@ -17,8 +17,8 @@ void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int
     cudaMallocManaged(&my, size * sizeof(my));
 }
 
-void latticeDestructorAdapter(long long int *&Gmain, float *&Emain, float *&Mmain, 
-    long long int *&Gresult, float *&Eresult, float *&Mresult,  float *&x, float *&y, float *&mx, float *&my)
+void latticeDestructorAdapter(unsigned long long int *&Gmain, float *&Emain, float *&Mmain, 
+    unsigned long long int *&Gresult, float *&Eresult, float *&Mresult,  float *&x, float *&y, float *&mx, float *&my)
 {
     if(my != nullptr)
     {
@@ -72,7 +72,8 @@ void latticeDestructorAdapter(long long int *&Gmain, float *&Emain, float *&Mmai
     }
 }
 
-void calculateAdapter(long long int *&G, float *&E, int *&M, float *&x, float *&y, float *&mx, float *&my, int latticeSize, float splitSeed)
+void calculateAdapter(unsigned long long int *&G, float *&E, int *&M,
+     float *&x, float *&y, float *&mx, float *&my, int latticeSize, float splitSeed)
 {
     cudaDeviceProp dev{};
     cudaGetDeviceProperties(&dev, 0);

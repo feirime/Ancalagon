@@ -16,7 +16,7 @@ void Run::run(int argc, char* argv[])
     auto start_time = std::chrono::high_resolution_clock::now();
     if(calcStrategy == "unified")
     {
-        lattice->init(iteractionRadius, splitSeed);
+        lattice->init(iteractionRadius, accuracy, splitSeed);
         lattice->mapMaker();
         lattice->calculateMain();
         lattice->calculateAdd();
@@ -33,7 +33,7 @@ void Run::run(int argc, char* argv[])
     }
     if(calcStrategy == "brutforce")
     {
-        lattice->init(iteractionRadius, splitSeed);
+        lattice->init(iteractionRadius, accuracy, splitSeed);
         lattice->dosMallocBrutforce();
         lattice->brutforce();
         lattice->compressRBTree();
@@ -62,11 +62,11 @@ void Run::arguments(int argc, char* argv[])
     params.add_parameter(device, "-d", "--device").absent("cpu").nargs(1).metavar("device").help("Calculate on device");
     params.add_parameter(splitSeed, "-s", "--splitSeed").absent(1).nargs(1).metavar("splitSeed").help("seed of lattice spliting");
     params.add_parameter(iteractionRadius, "--radius").absent(2).nargs(1).metavar("iteractionRadius").help("radius of iteraction between spins");
+    params.add_parameter(accuracy, "--accuracy").absent(1e-6).nargs(1).metavar("accuracy").help("accuracy of comparison E and M");
     params.add_parameter(calcStrategy, "--calcStrategy").absent("brutforce").nargs(1).metavar("calcStrategy").help("calculation strategy");
     auto res = parser.parse_args( argc, argv, 1 );
     if( !res )
         std::exit( 1 );
-    lineaarLength = 1 << latticeSize;
 }
 
 void Run::readIterator()

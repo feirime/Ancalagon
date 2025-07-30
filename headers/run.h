@@ -16,7 +16,7 @@ private:
     int latticeSize=0;
     float splitSeed;
     float iteractionRadius;
-    long long int lineaarLength;
+    float accuracy;
     std::string device;
     bool lattice_read;
     std::string readPass;

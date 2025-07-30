@@ -34,7 +34,7 @@ void LatticeCPU::dosMalloc()
         delete[] confMain;
     }
     size_t dosMainSize = pow(2, layerMainSize);
-    Gmain = new long long int[dosMainSize];
+    Gmain = new unsigned long long int[dosMainSize];
     Emain = new float[dosMainSize];
     Mmain = new float[dosMainSize];
     confMain = new long long int[dosMainSize];
@@ -68,12 +68,12 @@ void LatticeCPU::dosMalloc()
         }
     }
     size_t dosAddSize = pow(2, layerAddSize);
-    Gadd = new long long int[dosAddSize];
+    Gadd = new unsigned long long int[dosAddSize];
     Eadd = new float[dosAddSize];
     Madd = new float[dosAddSize];
     confAdd = new long long int[dosAddSize];
     std::cout << "dosResultSize: " << dosResultSize << std::endl;
-    Gresult = new long long int[dosResultSize];
+    Gresult = new unsigned long long int[dosResultSize];
     Eresult = new float[dosResultSize];
     Mresult = new float[dosResultSize];
     confResult = new long long int[dosResultSize];
@@ -81,7 +81,7 @@ void LatticeCPU::dosMalloc()
 
 void LatticeCPU::dosMallocResult(size_t size)
 {
-    Gresult = new long long int[size];
+    Gresult = new unsigned long long int[size];
     Eresult = new float[size];
     Mresult = new float[size];
     confResult = new long long int[size];
@@ -89,7 +89,7 @@ void LatticeCPU::dosMallocResult(size_t size)
 
 void LatticeCPU::dosMallocMain(size_t size)
 {
-    Gmain = new long long int[size];
+    Gmain = new unsigned long long int[size];
     Emain = new float[size];
     Mmain = new float[size];
     confMain = new long long int[size];
@@ -97,7 +97,7 @@ void LatticeCPU::dosMallocMain(size_t size)
 
 void LatticeCPU::dosMallocAdd(size_t size)
 {
-    Gadd = new long long int[size];
+    Gadd = new unsigned long long int[size];
     Eadd = new float[size];
     Madd = new float[size];
     confAdd = new long long int[size];
@@ -194,7 +194,7 @@ void LatticeCPU::dosMallocBrutforce()
 {
     dosResultSize = pow(2, latticeSize);
     layerResultSize = latticeSize;
-    Gresult = new long long int[dosResultSize];
+    Gresult = new unsigned long long int[dosResultSize];
     Eresult = new float[dosResultSize];
     Mresult = new float[dosResultSize];
 }

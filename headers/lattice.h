@@ -8,19 +8,20 @@
 #include <math.h>
 #include "adapterGPU.h"
 #include "redAndBlackTree.h"
+#include "redAndBlackTreeSE.h"
 
 class Lattice
 {
 protected:
-    long long int *Gresult = nullptr;
+    unsigned long long int *Gresult = nullptr;
     float *Eresult = nullptr;
     float *Mresult = nullptr;
     long long int *confResult = nullptr;
-    long long int *Gmain = nullptr;
+    unsigned long long int *Gmain = nullptr;
     float *Emain = nullptr;
     float *Mmain = nullptr;
     long long int *confMain = nullptr;
-    long long int *Gadd = nullptr;
+    unsigned long long int *Gadd = nullptr;
     float *Eadd = nullptr;
     float *Madd = nullptr;
     long long int *confAdd = nullptr;
@@ -39,6 +40,7 @@ protected:
     int latticeSize = 0;
     int latticeLinearSize = 0;
     float iteractionRadius = 0;
+    float accuracy = 0;
     float splitSeed = 0;
     int layer = 0;
     int layers = 0;
@@ -49,7 +51,7 @@ protected:
 public:
     int read(std::string readPass);
     void generateLattice(){};
-    void init(float iteractionRadius, float splitSeed);
+    void init(float iteractionRadius, float accuracy, float splitSeed);
     void layerPlusPlus();
     void compress();
     void compressRBTree();

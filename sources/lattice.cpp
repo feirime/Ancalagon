@@ -58,9 +58,10 @@ int Lattice::read(std::string fileName)
     return latticeSize;
 }
 
-void Lattice::init(float iteractionRadius, float splitSeed)
+void Lattice::init(float iteractionRadius, float accuracy, float splitSeed)
 {
     this->iteractionRadius = iteractionRadius;
+    this->accuracy = accuracy;
     latticeLinearSize = (int)sqrt((float)latticeSize);
     if(splitSeed == 1)
     {
@@ -149,17 +150,18 @@ void Lattice::compress()
 
 void Lattice::compressRBTree()
 {
-    RBTree tree;
+    RBTreeSE tree(accuracy);
     dosResultSize = pow(2, layerResultSize);
     for(auto i = 0; i < dosResultSize; i++)
     {
         if(Gresult[i] != 0)
-            tree.insert(Gresult[i], Eresult[i]);
+            tree.insert(Gresult[i], Eresult[i], Mresult[i]);
     }
     dosDeleteResult();
     dosResultSize = tree.size();
+    std::cout << "dosResultSize = " << dosResultSize << '\n';
     dosMallocResult(dosResultSize);
-    tree.toArrays(Gresult, Eresult);
+    tree.toArrays(Gresult, Eresult, Mresult);
 }
 
 bool Lattice::isStart()

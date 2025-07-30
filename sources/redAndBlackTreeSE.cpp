@@ -1,15 +1,15 @@
 #include "redAndBlackTreeSE.h"
 
-bool RBTreeSE::isLess(const std::pair<double, int>& key1, const std::pair<double, int>& key2) const 
+bool RBTreeSE::isLess(const std::pair<float, float>& key1, const std::pair<float, float>& key2) const 
     {
         if (key1.first != key2.first)
             return key1.first < key2.first;
         return key1.second < key2.second;
     }
 
-bool RBTreeSE::isEqual(const std::pair<double, int>& key1, const std::pair<double, int>& key2) const 
+bool RBTreeSE::isEqual(const std::pair<float, float>& key1, const std::pair<float, float>& key2) const 
 {
-    return key1.first == key2.first && key1.second == key2.second;
+    return abs(key1.first - key2.first) < accuracy && abs(key1.second - key2.second) < accuracy;
 }
 
 void RBTreeSE::leftRotate(std::shared_ptr<NodeSE> x) 
@@ -222,17 +222,40 @@ void RBTreeSE::fixDelete(std::shared_ptr<NodeSE> x)
     x->color = ColorSE::BLACK;
 }
 
-RBTreeSE::RBTreeSE() 
+size_t RBTreeSE::sizeRecurCalc(std::shared_ptr<NodeSE> node) 
+{
+    if (node == nil) 
+    {
+        return 0;
+    }
+    return 1 + sizeRecurCalc(node->left) + sizeRecurCalc(node->right);
+}
+
+void RBTreeSE::inOrderToArrays(std::shared_ptr<NodeSE> node, unsigned long long *degeneracies, 
+    float *energies, float *spins, size_t &idx) 
+{
+    if (node == nil) 
+        return;
+    inOrderToArrays(node->left, degeneracies, energies, spins, idx);
+    energies[idx] = node->energy;
+    degeneracies[idx] = node->degeneration;
+    idx++;
+    inOrderToArrays(node->right, degeneracies, energies, spins, idx);
+}
+
+//---------------------------------------------Public---------------------------------------------
+
+RBTreeSE::RBTreeSE(float accuracy) 
 {
     nil = std::make_shared<NodeSE>(0, 0, 0);
     nil->color = ColorSE::BLACK;
     root = nil;
 }
 
-void RBTreeSE::insert(double energy, int spin, int degradation) 
+void RBTreeSE::insert(unsigned long long degeneration, float energy, float spin) 
 {
     auto key = std::make_pair(energy, spin);
-    std::shared_ptr<NodeSE> node = std::make_shared<NodeSE>(energy, spin, degradation);
+    std::shared_ptr<NodeSE> node = std::make_shared<NodeSE>(energy, spin, degeneration);
     node->parent = nil;
     node->left = nil;
     node->right = nil;
@@ -252,7 +275,7 @@ void RBTreeSE::insert(double energy, int spin, int degradation)
         else if (isEqual(key, currentKey)) 
         {
             // Если ключ уже существует, увеличиваем частоту
-            x->degradation += degradation;
+            x->degeneration += degeneration;
             return;
         } 
         else 
@@ -288,7 +311,7 @@ void RBTreeSE::insert(double energy, int spin, int degradation)
     fixInsert(node);
 }
 
-void RBTreeSE::deleteNode(double energy, int spin) 
+void RBTreeSE::deleteNode(float energy, float spin) 
 {
     auto key = std::make_pair(energy, spin);
     std::shared_ptr<NodeSE> z = root;
@@ -353,7 +376,7 @@ void RBTreeSE::deleteNode(double energy, int spin)
     }
 }
 
-int RBTreeSE::search(double energy, int spin) 
+int RBTreeSE::search(float energy, float spin) 
 {
     auto key = std::make_pair(energy, spin);
     std::shared_ptr<NodeSE> current = root;
@@ -364,7 +387,7 @@ int RBTreeSE::search(double energy, int spin)
         
         if (isEqual(key, currentKey)) 
         {
-            return current->degradation;
+            return current->degeneration;
         } 
         else if (isLess(key, currentKey)) 
         {
@@ -376,4 +399,16 @@ int RBTreeSE::search(double energy, int spin)
         }
     }
     return 0; // не найдено
+}
+
+size_t RBTreeSE::size()
+{
+    return sizeRecurCalc(root);
+}
+
+size_t RBTreeSE::toArrays(unsigned long long *degeneracies, float *energies, float *spins) 
+{
+    size_t idx = 0;
+    inOrderToArrays(root, degeneracies, energies, spins, idx);
+    return idx;
 }

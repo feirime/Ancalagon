@@ -30,11 +30,7 @@ private:
     size_t sizeRecurCalc(std::shared_ptr<Node> node);
     void inOrderToArrays(std::shared_ptr<Node> node, long long *degeneracies, float *energies, size_t &idx);
 public:
-    RBTree() {
-        nil = std::make_shared<Node>(0, 0);
-        nil->color = Color::BLACK;
-        root = nil;
-    }
+    RBTree();
     void insert(int degeneracy, double energy);
     void deleteNode(double energy);
     int search(double energy);

@@ -115,6 +115,12 @@ void RBTree::fixInsert(std::shared_ptr<Node> k)
     root->color = Color::BLACK;
 }
 
+RBTree::RBTree() 
+{
+    nil = std::make_shared<Node>(0, 0);
+    nil->color = Color::BLACK;
+    root = nil;
+}
 // Вставка нового узла
 void RBTree::insert(int degeneracy, double energy) 
 {

@@ -247,6 +247,7 @@ void RBTreeSE::inOrderToArrays(std::shared_ptr<NodeSE> node, unsigned long long 
 
 RBTreeSE::RBTreeSE(float accuracy) 
 {
+    this->accuracy = accuracy;
     nil = std::make_shared<NodeSE>(0, 0, 0);
     nil->color = ColorSE::BLACK;
     root = nil;

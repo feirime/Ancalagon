@@ -55,6 +55,7 @@ public:
     void layerPlusPlus();
     void compress();
     void compressRBTree();
+    void compressRBTreeSE();
     void mapMaker();
     virtual void latticeMalloc() = 0;
     virtual void latticeMainMalloc() = 0;

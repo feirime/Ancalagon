@@ -122,7 +122,7 @@ RBTree::RBTree()
     root = nil;
 }
 // Вставка нового узла
-void RBTree::insert(int degeneracy, double energy) 
+void RBTree::insert(unsigned long long int degeneracy, float energy) 
 {
     std::shared_ptr<Node> node = std::make_shared<Node>(energy, degeneracy);
     node->parent = nil;
@@ -180,7 +180,7 @@ void RBTree::insert(int degeneracy, double energy)
 }
 
 // Поиск частоты по энергии
-int RBTree::search(double energy) 
+int RBTree::search(float energy) 
 {
     std::shared_ptr<Node> current = root;
     while (current != nil) 
@@ -302,7 +302,7 @@ void RBTree::fixDelete(std::shared_ptr<Node> x)
 }
 
 // Удаление узла по энергии
-void RBTree::deleteNode(double energy) 
+void RBTree::deleteNode(float energy) 
 {
     std::shared_ptr<Node> z = root;
     std::shared_ptr<Node> x, y;
@@ -379,14 +379,15 @@ size_t RBTree::sizeRecurCalc(std::shared_ptr<Node> node)
     return 1 + sizeRecurCalc(node->left) + sizeRecurCalc(node->right);
 }
 
-size_t RBTree::toArrays(long long *degeneracies, float *energies) 
+size_t RBTree::toArrays(unsigned long long int *degeneracies, float *energies) 
 {
     size_t idx = 0;
     inOrderToArrays(root, degeneracies, energies, idx);
     return idx;
 }
 
-void RBTree::inOrderToArrays(std::shared_ptr<Node> node, long long *degeneracies, float *energies, size_t &idx) 
+void RBTree::inOrderToArrays(std::shared_ptr<Node> node, 
+    unsigned long long int *degeneracies, float *energies, size_t &idx) 
 {
     if (node == nil) 
         return;

@@ -150,6 +150,22 @@ void Lattice::compress()
 
 void Lattice::compressRBTree()
 {
+    RBTree tree;
+    dosResultSize = pow(2, layerResultSize);
+    for(auto i = 0; i < dosResultSize; i++)
+    {
+        if(Gresult[i] != 0)
+            tree.insert(Gresult[i], Eresult[i]);
+    }
+    dosDeleteResult();
+    dosResultSize = tree.size();
+    std::cout << "dosResultSize = " << dosResultSize << '\n';
+    dosMallocResult(dosResultSize);
+    tree.toArrays(Gresult, Eresult);
+}
+
+void Lattice::compressRBTreeSE()
+{
     RBTreeSE tree(accuracy);
     dosResultSize = pow(2, layerResultSize);
     for(auto i = 0; i < dosResultSize; i++)

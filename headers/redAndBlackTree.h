@@ -8,11 +8,11 @@ enum class Color { RED, BLACK };
 
 // Узел дерева, хранящий пару (энергия, частота)
 struct Node {
-    double energy;       // ключ - энергия
-    int degeneracy;      // значение - вырождение
+    float energy;       // ключ - энергия
+    unsigned long long int degeneracy;      // значение - вырождение
     Color color;        // цвет узла
     std::shared_ptr<Node> left, right, parent;
-    Node(double e, int f) : energy(e), degeneracy(f), 
+    Node(float e, unsigned long long int f) : energy(e), degeneracy(f), 
                            color(Color::RED), 
                            left(nullptr), right(nullptr), parent(nullptr) {}
 };
@@ -28,14 +28,15 @@ private:
     void transplant(std::shared_ptr<Node> u, std::shared_ptr<Node> v);
     std::shared_ptr<Node> minimum(std::shared_ptr<Node> node);
     size_t sizeRecurCalc(std::shared_ptr<Node> node);
-    void inOrderToArrays(std::shared_ptr<Node> node, long long *degeneracies, float *energies, size_t &idx);
+    void inOrderToArrays(std::shared_ptr<Node> node, 
+        unsigned long long int *degeneracies, float *energies, size_t &idx);
 public:
     RBTree();
-    void insert(int degeneracy, double energy);
-    void deleteNode(double energy);
-    int search(double energy);
+    void insert(unsigned long long int degeneracy, float energy);
+    void deleteNode(float energy);
+    int search(float energy);
     size_t size();
-    size_t toArrays(long long *degeneracies, float *energies);
+    size_t toArrays(unsigned long long int *degeneracies, float *energies);
 };
 
 #endif

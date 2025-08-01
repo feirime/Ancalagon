@@ -238,6 +238,7 @@ void RBTreeSE::inOrderToArrays(std::shared_ptr<NodeSE> node, unsigned long long 
         return;
     inOrderToArrays(node->left, degeneracies, energies, spins, idx);
     energies[idx] = node->energy;
+    spins[idx] = node->spin;
     degeneracies[idx] = node->degeneration;
     idx++;
     inOrderToArrays(node->right, degeneracies, energies, spins, idx);
@@ -268,16 +269,16 @@ void RBTreeSE::insert(unsigned long long degeneration, float energy, float spin)
     {
         y = x;
         auto currentKey = std::make_pair(x->energy, x->spin);
-        
-        if (isLess(key, currentKey)) 
-        {
-            x = x->left;
-        } 
-        else if (isEqual(key, currentKey)) 
+         
+        if (isEqual(key, currentKey)) 
         {
             // Если ключ уже существует, увеличиваем частоту
             x->degeneration += degeneration;
             return;
+        }
+        else if (isLess(key, currentKey)) 
+        {
+            x = x->left;
         } 
         else 
         {

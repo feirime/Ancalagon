@@ -5,6 +5,8 @@
 #include <memory>
 #include <tuple>
 
+//TODO почему теряются ГСы в зависимости от прядка?
+
 enum class ColorSE { RED, BLACK };
 
 // Узел с составным ключом (энергия, спин) и частотой

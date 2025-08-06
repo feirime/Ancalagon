@@ -61,7 +61,7 @@ void Run::arguments(int argc, char* argv[])
     params.add_parameter(readPass, "--readpass").absent("data/Read").nargs(1).metavar("Read").help("Read J from file");
     params.add_parameter(device, "-d", "--device").absent("cpu").nargs(1).metavar("device").help("Calculate on device");
     params.add_parameter(splitSeed, "-s", "--splitSeed").absent(1).nargs(1).metavar("splitSeed").help("seed of lattice spliting");
-    params.add_parameter(iteractionRadius, "--radius").absent(2).nargs(1).metavar("iteractionRadius").help("radius of iteraction between spins");
+    params.add_parameter(iteractionRadius, "--radius").absent(1.9).nargs(1).metavar("iteractionRadius").help("radius of iteraction between spins");
     params.add_parameter(accuracy, "--accuracy").absent(1e-6).nargs(1).metavar("accuracy").help("accuracy of comparison E and M");
     params.add_parameter(calcStrategy, "--calcStrategy").absent("brutforce").nargs(1).metavar("calcStrategy").help("calculation strategy");
     auto res = parser.parse_args( argc, argv, 1 );
@@ -74,7 +74,7 @@ void Run::readIterator()
     numberOfFiles = 0;
     for(const auto& entry : std::filesystem::directory_iterator(readPass))
     {
-        std::cout << entry.path() << '\n';
+        //std::cout << entry.path() << '\n';
         numberOfFiles++;
     }
     fileName = new std::string[numberOfFiles];

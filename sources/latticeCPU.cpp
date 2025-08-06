@@ -72,7 +72,7 @@ void LatticeCPU::dosMalloc()
     Eadd = new float[dosAddSize];
     Madd = new float[dosAddSize];
     confAdd = new long long int[dosAddSize];
-    std::cout << "dosResultSize: " << dosResultSize << std::endl;
+    //std::cout << "dosResultSize: " << dosResultSize << std::endl;
     Gresult = new unsigned long long int[dosResultSize];
     Eresult = new float[dosResultSize];
     Mresult = new float[dosResultSize];
@@ -201,7 +201,7 @@ void LatticeCPU::dosMallocBrutforce()
 
 LatticeCPU::~LatticeCPU()
 {
-    std::cout << "CPU destructor\n";
+    //std::cout << "CPU destructor\n";
     delete [] Gmain;
     delete [] Emain;
     delete [] Mmain;

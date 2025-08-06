@@ -30,7 +30,8 @@ int Lattice::read(std::string fileName)
         std::exit(1);
     }
     std::string contents((std::istreambuf_iterator<char>(fileContents)), std::istreambuf_iterator<char>());
-    int count = std::count(contents.begin(), contents.end(), ' ') + std::count(contents.begin(), contents.end(), '\t') + std::count(contents.begin(), contents.end(), '\n');
+    int count = std::count(contents.begin(), contents.end(), ' ') + std::count(contents.begin(), contents.end(), '\t') 
+              + std::count(contents.begin(), contents.end(), '\n');
     if(count == 0)
     {
         std::cout << "File is empty\n";
@@ -38,7 +39,7 @@ int Lattice::read(std::string fileName)
     }
     latticeSize = (count - 4) / 4;
     std::ifstream file(fileName);
-    printf("count = %d, latticeSize = %d\n", count, latticeSize);
+    //printf("count = %d, latticeSize = %d\n", count, latticeSize);
     fileContents.close();
     latticeMalloc();
     double temp = 0;
@@ -70,8 +71,6 @@ void Lattice::init(float iteractionRadius, float accuracy, float splitSeed)
     else
         this->splitSeed = splitSeed;
     layer = 0;
-    layers = (int)(1 / this->splitSeed);
-    std::cout << "layers = " << layers << '\n';
 }
 
 void Lattice::layerPlusPlus()
@@ -158,7 +157,7 @@ void Lattice::compressRBTree()
             tree.insert(Gresult[i], Eresult[i]);
     }
     dosDeleteResult();
-    dosResultSize = tree.size();
+    //dosResultSize = tree.size();
     std::cout << "dosResultSize = " << dosResultSize << '\n';
     dosMallocResult(dosResultSize);
     tree.toArrays(Gresult, Eresult);
@@ -175,7 +174,7 @@ void Lattice::compressRBTreeSE()
     }
     dosDeleteResult();
     dosResultSize = tree.size();
-    std::cout << "dosResultSize = " << dosResultSize << '\n';
+    //std::cout << "dosResultSize = " << dosResultSize << '\n';
     dosMallocResult(dosResultSize);
     tree.toArrays(Gresult, Eresult, Mresult);
 }
@@ -266,5 +265,5 @@ void Lattice::print()
 
 Lattice::~Lattice() 
 {
-    std::cout << "Lattice destructor\n";
+    //std::cout << "Lattice destructor\n";
 }

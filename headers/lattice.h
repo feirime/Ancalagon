@@ -53,9 +53,6 @@ public:
     void generateLattice(){};
     void init(float iteractionRadius, float accuracy, float splitSeed);
     void layerPlusPlus();
-    void compress();
-    void compressRBTree();
-    void compressRBTreeSE();
     void mapMaker();
     virtual void latticeMalloc() = 0;
     virtual void latticeMainMalloc() = 0;
@@ -72,6 +69,10 @@ public:
     virtual void calculateUnified() = 0;
     virtual void dosMallocBrutforce(){};
     virtual void brutforce();
+    void compress();
+    void compressRBTree();
+    void compressRBTreeSE();
+    void compressUMap();
     void print();
     bool isStart();
     bool isEnd();

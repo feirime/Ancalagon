@@ -36,7 +36,7 @@ void Run::run(int argc, char* argv[])
         lattice->init(iteractionRadius, accuracy, splitSeed);
         lattice->dosMallocBrutforce();
         lattice->brutforce();
-        lattice->compressRBTreeSE();
+        lattice->compressUMap();
     }
     auto end_time = std::chrono::high_resolution_clock::now();
     auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);

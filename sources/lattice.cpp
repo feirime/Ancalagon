@@ -131,54 +131,6 @@ void Lattice::mapMaker() //теперь здесь насрано!
     dosMalloc();
 }
 
-void Lattice::compress()
-{
-    size_t dosResultSize = pow(2, layerResultSize);
-    for(auto i = 0; i < dosResultSize; i++)
-    {
-        for(auto j = i + 1; j < dosResultSize; j++)
-        {
-            if(Gresult[i] != 0 && Gresult[j] != 0 && abs(Eresult[i] - Eresult[j]) < 1e-6 && abs(Mresult[i] - Mresult[j]) < 1e-6)
-            {
-                Gresult[i] += Gresult[j];
-                Gresult[j] = 0;
-            }
-        }
-    }
-}
-
-void Lattice::compressRBTree()
-{
-    RBTree tree;
-    dosResultSize = pow(2, layerResultSize);
-    for(auto i = 0; i < dosResultSize; i++)
-    {
-        if(Gresult[i] != 0)
-            tree.insert(Gresult[i], Eresult[i]);
-    }
-    dosDeleteResult();
-    //dosResultSize = tree.size();
-    std::cout << "dosResultSize = " << dosResultSize << '\n';
-    dosMallocResult(dosResultSize);
-    tree.toArrays(Gresult, Eresult);
-}
-
-void Lattice::compressRBTreeSE()
-{
-    RBTreeSE tree(accuracy);
-    dosResultSize = pow(2, layerResultSize);
-    for(auto i = 0; i < dosResultSize; i++)
-    {
-        if(Gresult[i] != 0)
-            tree.insert(Gresult[i], Eresult[i], Mresult[i]);
-    }
-    dosDeleteResult();
-    dosResultSize = tree.size();
-    //std::cout << "dosResultSize = " << dosResultSize << '\n';
-    dosMallocResult(dosResultSize);
-    tree.toArrays(Gresult, Eresult, Mresult);
-}
-
 bool Lattice::isStart()
 {
     if(layer == 0)
@@ -233,6 +185,99 @@ void Lattice::brutforce()
             }
             Mresult[conf] += mxi * cosin45 + myi * cosin45; //проекция на диагональ XY
         }
+    }
+}
+
+void Lattice::compress()
+{
+    size_t dosResultSize = pow(2, layerResultSize);
+    for(auto i = 0; i < dosResultSize; i++)
+    {
+        for(auto j = i + 1; j < dosResultSize; j++)
+        {
+            if(Gresult[i] != 0 && Gresult[j] != 0 && abs(Eresult[i] - Eresult[j]) < 1e-6 && abs(Mresult[i] - Mresult[j]) < 1e-6)
+            {
+                Gresult[i] += Gresult[j];
+                Gresult[j] = 0;
+            }
+        }
+    }
+}
+
+void Lattice::compressRBTree()
+{
+    RBTree tree;
+    dosResultSize = pow(2, layerResultSize);
+    for(auto i = 0; i < dosResultSize; i++)
+    {
+        if(Gresult[i] != 0)
+            tree.insert(Gresult[i], Eresult[i]);
+    }
+    dosDeleteResult();
+    //dosResultSize = tree.size();
+    std::cout << "dosResultSize = " << dosResultSize << '\n';
+    dosMallocResult(dosResultSize);
+    tree.toArrays(Gresult, Eresult);
+}
+
+void Lattice::compressRBTreeSE()
+{
+    RBTreeSE tree(accuracy);
+    dosResultSize = pow(2, layerResultSize);
+    for(auto i = 0; i < dosResultSize; i++)
+    {
+        if(Gresult[i] != 0)
+            tree.insert(Gresult[i], Eresult[i], Mresult[i]);
+    }
+    dosDeleteResult();
+    dosResultSize = tree.size();
+    //std::cout << "dosResultSize = " << dosResultSize << '\n';
+    dosMallocResult(dosResultSize);
+    tree.toArrays(Gresult, Eresult, Mresult);
+}
+
+struct EM 
+{
+    float E;
+    float M;    
+    bool operator==(const EM& other) const 
+    {
+        return E == other.E && M == other.M;
+    }
+};
+
+template <>
+    struct std::hash<EM> 
+    {
+        size_t operator()(const EM& em) const 
+        {
+            size_t h1 = std::hash<float>{}(em.E);
+            size_t h2 = std::hash<float>{}(em.M);
+            return h1 ^ (h2 << 1);
+        }
+    };
+
+void Lattice::compressUMap()
+{
+    std::unordered_map<EM, unsigned long long> uMap;
+    uMap.reserve(dosResultSize / 2);
+    for(size_t i = 0; i < dosResultSize; i++)
+    {
+        EM em{Eresult[i], Mresult[i]};
+        if(Gresult[i] != 0)
+            uMap[em] += Gresult[i];
+    }
+    dosDeleteResult();
+    dosResultSize = uMap.size();
+    //std::cout << "dosResultSize = " << dosResultSize << '\n';
+    dosMallocResult(dosResultSize);
+    int idx = 0;
+    for(auto& pair : uMap)
+    {
+        Gresult[idx] = pair.second;
+        Eresult[idx] = pair.first.E;
+        Mresult[idx] = pair.first.M;
+        idx++;
     }
 }
 

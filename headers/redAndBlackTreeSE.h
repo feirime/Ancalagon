@@ -38,7 +38,7 @@ private:
     std::shared_ptr<NodeSE> minimum(std::shared_ptr<NodeSE> node);
     void fixDelete(std::shared_ptr<NodeSE> x);
     size_t sizeRecurCalc(std::shared_ptr<NodeSE> node);
-    void inOrderToArrays(std::shared_ptr<NodeSE> node, unsigned long long *degeneracies, 
+    void inOrderToArrays(std::shared_ptr<NodeSE> node, unsigned long long *degeneration, 
         float *energies, float *spins, size_t &idx);
 public:
     RBTreeSE(float accuracy);
@@ -46,7 +46,7 @@ public:
     void deleteNode(float energy, float spin);
     int search(float energy, float spin);
     size_t size();
-    size_t toArrays(unsigned long long *degeneracies, float *energies, float *spins);
+    size_t toArrays(unsigned long long *degeneration, float *energies, float *spins);
 };
 
 #endif

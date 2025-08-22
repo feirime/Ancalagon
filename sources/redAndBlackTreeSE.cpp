@@ -231,17 +231,17 @@ size_t RBTreeSE::sizeRecurCalc(std::shared_ptr<NodeSE> node)
     return 1 + sizeRecurCalc(node->left) + sizeRecurCalc(node->right);
 }
 
-void RBTreeSE::inOrderToArrays(std::shared_ptr<NodeSE> node, unsigned long long *degeneracies, 
+void RBTreeSE::inOrderToArrays(std::shared_ptr<NodeSE> node, unsigned long long *degeneration, 
     float *energies, float *spins, size_t &idx) 
 {
     if (node == nil) 
         return;
-    inOrderToArrays(node->left, degeneracies, energies, spins, idx);
+    inOrderToArrays(node->left, degeneration, energies, spins, idx);
+    idx++;
     energies[idx] = node->energy;
     spins[idx] = node->spin;
-    degeneracies[idx] = node->degeneration;
-    idx++;
-    inOrderToArrays(node->right, degeneracies, energies, spins, idx);
+    degeneration[idx] = node->degeneration;
+    inOrderToArrays(node->right, degeneration, energies, spins, idx);
 }
 
 //---------------------------------------------Public---------------------------------------------
@@ -408,9 +408,9 @@ size_t RBTreeSE::size()
     return sizeRecurCalc(root);
 }
 
-size_t RBTreeSE::toArrays(unsigned long long *degeneracies, float *energies, float *spins) 
+size_t RBTreeSE::toArrays(unsigned long long *degeneration, float *energies, float *spins) 
 {
     size_t idx = 0;
-    inOrderToArrays(root, degeneracies, energies, spins, idx);
+    inOrderToArrays(root, degeneration, energies, spins, idx);
     return idx;
 }

@@ -37,19 +37,20 @@ int Lattice::read(std::string fileName)
         std::cout << "File is empty\n";
         std::exit(1);
     }
-    latticeSize = (count - 4) / 4;
+    latticeSize = (count - 5) / 5;
     std::ifstream file(fileName);
     //printf("count = %d, latticeSize = %d\n", count, latticeSize);
     fileContents.close();
     latticeMalloc();
     double temp = 0;
-    for(auto i = 0; i < 4; i++)
+    for(auto i = 0; i < 5; i++)
     {
         std::string temp;
         file >> temp;
     }
     for(auto i = 0; i < latticeSize; i++)
     {
+        file >> temp;
         file >> x[i];
         file >> y[i];
         file >> mx[i];
@@ -283,13 +284,6 @@ void Lattice::compressUMap()
 
 void Lattice::print()
 {
-    //std::cout << "G " << "E " << "M " << '\n';
-    //for(int i = 0; i < dosResultSize; i++)
-    //{
-    //    if(Gresult[i] == 0)
-    //        continue;
-    //    std::cout << Gresult[i] << " " << Eresult[i] << " " << Mresult[i] << '\n';
-    //}
     float eGs = 1e7;
     for(auto i = 0; i < dosResultSize; i++)
     {

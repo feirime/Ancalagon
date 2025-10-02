@@ -300,6 +300,11 @@ void Lattice::print()
             std::cout << "G = " << Gresult[i] << ", E = " << Eresult[i] << ", M = " << Mresult[i] << "\n";
         }
     }
+    std::ofstream file("data/Write/result.txt");
+    for(auto i = 0; i < dosResultSize; i++)
+    {
+        file << Gresult[i] << ' ' << Eresult[i] << ' ' << Mresult[i] << '\n';
+    }
 }
 
 Lattice::~Lattice() 

@@ -297,7 +297,7 @@ void Lattice::print()
     printf("Egs = %f\n", eGs);
     for(auto i = 0; i < dosResultSize; i++)
     {
-        if(Gresult[i] != 0 & abs(Eresult[i] - eGs) < 1e-6)
+        if(Gresult[i] != 0 & abs(Eresult[i] - eGs) < accuracy)
         {
             std::cout << "G = " << Gresult[i] << ", E = " << Eresult[i] << ", M = " << Mresult[i] << "\n";
         }

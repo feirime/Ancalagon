@@ -173,6 +173,8 @@ void Lattice::brutforce()
                 float r = sqrt(xij * xij + yij * yij);
                 if(r > iteractionRadius)
                     continue;
+                if(conf == 0)
+                    printf("r = %f\n", r);
                 Gresult[conf] = 1;
                 float mxj = mx[j];
                 float myj = my[j];
@@ -196,7 +198,7 @@ void Lattice::compress()
     {
         for(auto j = i + 1; j < dosResultSize; j++)
         {
-            if(Gresult[i] != 0 && Gresult[j] != 0 && abs(Eresult[i] - Eresult[j]) < 1e-6 && abs(Mresult[i] - Mresult[j]) < 1e-6)
+            if(Gresult[i] != 0 && Gresult[j] != 0 && abs(Eresult[i] - Eresult[j]) < accuracy && abs(Mresult[i] - Mresult[j]) < accuracy)
             {
                 Gresult[i] += Gresult[j];
                 Gresult[j] = 0;
@@ -248,15 +250,15 @@ struct EM
 };
 
 template <>
-    struct std::hash<EM> 
+struct std::hash<EM> 
+{
+    size_t operator()(const EM& em) const 
     {
-        size_t operator()(const EM& em) const 
-        {
-            size_t h1 = std::hash<float>{}(em.E);
-            size_t h2 = std::hash<float>{}(em.M);
-            return h1 ^ (h2 << 1);
-        }
-    };
+        size_t h1 = std::hash<float>{}(em.E);
+        size_t h2 = std::hash<float>{}(em.M);
+        return h1 ^ (h2 << 1);
+    }
+};
 
 void Lattice::compressUMap()
 {

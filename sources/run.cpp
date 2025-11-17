@@ -1,22 +1,15 @@
 #include <chrono>
 #include "run.h"
 
-void Run::run(int argc, char* argv[]) 
+void Brutforce::calculate(Lattice *lattice) 
 {
-    arguments(argc, argv);
-    Lattice* lattice = LatticeFactory::createLattice(device);
-    std::cout << "Lattice created by " << device << '\n';
-    if(lattice_read)
-    {
-        readIterator();
-        latticeSize = lattice->read(fileName[0]); //TODO реализовать итерацию по всем решеткам
+        lattice->dosMallocBrutforce();
+        lattice->brutforce();
+        lattice->compressUMap();
     }
-    else
-        lattice->generateLattice();
-    auto start_time = std::chrono::high_resolution_clock::now();
-    if(calcStrategy == "unified")
-    {
-        lattice->init(iteractionRadius, accuracy, splitSeed);
+
+void Decomposition::calculate(Lattice *lattice) 
+{
         lattice->mapMaker();
         lattice->calculateMain();
         lattice->calculateAdd();
@@ -30,22 +23,25 @@ void Run::run(int argc, char* argv[])
             lattice->calculateUnified();
         }
         //lattice->compress();
-    }
-    if(calcStrategy == "brutforce")
+}
+
+void Run::run(int argc, char* argv[]) 
+{
+    arguments(argc, argv);
+    Lattice* lattice = LatticeFactory::createLattice(device);
+    std::cout << "Lattice created by " << device << '\n';
+    if(lattice_read)
     {
-        lattice->init(iteractionRadius, accuracy, splitSeed);
-        lattice->dosMallocBrutforce();
-        lattice->brutforce();
-        lattice->compressUMap();
+        readIterator();
+        latticeSize = lattice->read(fileName[0]); //TODO реализовать итерацию по всем решеткам
     }
+    else
+        lattice->generateLattice();
+    setCalcStrategy();
+    auto start_time = std::chrono::high_resolution_clock::now();
+    lattice->init(iteractionRadius, accuracy, splitSeed);
+    calcStrategy->calculate(lattice);
     auto end_time = std::chrono::high_resolution_clock::now();
-    auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    int hours = elapsed_time.count() / 3600000;
-    int minutes = (elapsed_time.count() % 3600000) / 60000;
-    int seconds = (elapsed_time.count() % 60000) / 1000;
-    int milliseconds = elapsed_time.count() % 1000;
-    std::cout << "Elapsed time: " << hours << " hours, " << minutes << " minutes, " 
-              << seconds << " seconds, " << milliseconds << " milliseconds" << std::endl;
     lattice->print();
     delete lattice;
 }
@@ -62,8 +58,8 @@ void Run::arguments(int argc, char* argv[])
     params.add_parameter(device, "-d", "--device").absent("cpu").nargs(1).metavar("device").help("Calculate on device");
     params.add_parameter(splitSeed, "-s", "--splitSeed").absent(1).nargs(1).metavar("splitSeed").help("seed of lattice spliting");
     params.add_parameter(iteractionRadius, "--radius").absent(1.3).nargs(1).metavar("iteractionRadius").help("radius of iteraction between spins");
-    params.add_parameter(accuracy, "--accuracy").absent(1e-6).nargs(1).metavar("accuracy").help("accuracy of comparison E and M");
-    params.add_parameter(calcStrategy, "--calcStrategy").absent("brutforce").nargs(1).metavar("calcStrategy").help("calculation strategy");
+    params.add_parameter(accuracy, "--accuracy").absent(1e-5).nargs(1).metavar("accuracy").help("accuracy of comparison E and M");
+    params.add_parameter(calcStrategyStr, "--calcStrategy").absent("brutforce").nargs(1).metavar("calcStrategy").help("calculation strategy");
     auto res = parser.parse_args( argc, argv, 1 );
     if( !res )
         std::exit( 1 );
@@ -84,6 +80,26 @@ void Run::readIterator()
         fileName[i] = entry.path();
         i++;
     }
+}
+
+void Run::setCalcStrategy()
+{
+    if(calcStrategyStr == "brutforce")
+        this->calcStrategy = std::move(std::make_unique<Brutforce>());
+    if(calcStrategyStr == "decomposition")
+        this->calcStrategy = std::move(std::make_unique<Decomposition>());
+}
+
+void Run::showTime(std::chrono::high_resolution_clock::time_point start_time, 
+        std::chrono::high_resolution_clock::time_point end_time)
+{
+    auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    int hours = elapsed_time.count() / 3600000;
+    int minutes = (elapsed_time.count() % 3600000) / 60000;
+    int seconds = (elapsed_time.count() % 60000) / 1000;
+    int milliseconds = elapsed_time.count() % 1000;
+    std::cout << "Elapsed time: " << hours << " hours, " << minutes << " minutes, " 
+              << seconds << " seconds, " << milliseconds << " milliseconds" << std::endl;
 }
 
 Run::~Run()

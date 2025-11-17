@@ -173,8 +173,8 @@ void Lattice::brutforce()
                 float r = sqrt(xij * xij + yij * yij);
                 if(r > iteractionRadius)
                     continue;
-                if(conf == 0)
-                    printf("r = %f\n", r);
+                //if(conf == 0)
+                //    printf("r = %f\n", r);
                 Gresult[conf] = 1;
                 float mxj = mx[j];
                 float myj = my[j];
@@ -287,6 +287,7 @@ void Lattice::compressUMap()
 void Lattice::print()
 {
     float eGs = 1e7;
+    unsigned long long int gGs = 0;
     for(auto i = 0; i < dosResultSize; i++)
     {
         if(Eresult[i] < eGs & Gresult[i] != 0)
@@ -294,14 +295,16 @@ void Lattice::print()
             eGs = Eresult[i];
         }
     }
-    printf("Egs = %f\n", eGs);
+    std::cout << "Egs = " << eGs << '\n';
     for(auto i = 0; i < dosResultSize; i++)
     {
         if(Gresult[i] != 0 & abs(Eresult[i] - eGs) < accuracy)
         {
             std::cout << "G = " << Gresult[i] << ", E = " << Eresult[i] << ", M = " << Mresult[i] << "\n";
+            gGs += Gresult[i];
         }
     }
+    std::cout << "gGs = " << gGs << '\n';
     std::ofstream file("data/Write/result.txt");
     for(auto i = 0; i < dosResultSize; i++)
     {

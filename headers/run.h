@@ -31,7 +31,7 @@ public:
 
 class Run
 {
-private:
+protected:
     int latticeSize=0;
     float splitSeed;
     float iteractionRadius;
@@ -46,13 +46,19 @@ private:
     //std::string latticeType;
     LatticeFactory *lattice;
 public:
-    void run(int argc, char* argv[]);
+    void virtual run(int argc, char* argv[]);
     void arguments(int argc, char* argv[]);
     void readIterator();
     void setCalcStrategy();
     void showTime(std::chrono::high_resolution_clock::time_point start, 
         std::chrono::high_resolution_clock::time_point end);
     ~Run();
+};
+
+class RunMultiRadiuses : public Run
+{
+public:
+    void run(int argc, char* argv[]);
 };
 
 #endif

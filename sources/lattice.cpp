@@ -313,6 +313,34 @@ void Lattice::print()
     }
 }
 
+void Lattice::print(std::string fileName)
+{
+    float eGs = 1e7;
+    unsigned long long int gGs = 0;
+    for(auto i = 0; i < dosResultSize; i++)
+    {
+        if(Eresult[i] < eGs & Gresult[i] != 0)
+        {
+            eGs = Eresult[i];
+        }
+    }
+    std::cout << "Egs = " << eGs << '\n';
+    for(auto i = 0; i < dosResultSize; i++)
+    {
+        if(Gresult[i] != 0 & abs(Eresult[i] - eGs) < accuracy)
+        {
+            std::cout << "G = " << Gresult[i] << ", E = " << Eresult[i] << ", M = " << Mresult[i] << "\n";
+            gGs += Gresult[i];
+        }
+    }
+    std::cout << "gGs = " << gGs << '\n';
+    std::ofstream file("data/Write/" + fileName);
+    for(auto i = 0; i < dosResultSize; i++)
+    {
+        file << Gresult[i] << ' ' << Eresult[i] << ' ' << Mresult[i] << '\n';
+    }
+}
+
 Lattice::~Lattice() 
 {
     //std::cout << "Lattice destructor\n";

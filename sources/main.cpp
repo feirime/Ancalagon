@@ -2,7 +2,7 @@
 
 int main(int argc, char* argv[])
 {
-    Run *run = new Run;
+    auto *run = new RunMultiRadiuses;
     run->run(argc, argv);
     return 0;
 }

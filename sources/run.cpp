@@ -106,3 +106,32 @@ Run::~Run()
 {
     delete[] fileName;
 }
+
+void RunMultiRadiuses::run(int argc, char* argv[]) 
+{
+    arguments(argc, argv);
+    Lattice* lattice = LatticeFactory::createLattice(device);
+    std::cout << "Lattice created by " << device << '\n';
+    if(lattice_read)
+    {
+        readIterator();
+        latticeSize = lattice->read(fileName[0]); //TODO реализовать итерацию по всем решеткам
+    }
+    else
+        lattice->generateLattice();
+    setCalcStrategy();
+    float radStart = iteractionRadius;
+    float radEnd = 8.0;
+    int radSteps = 20;
+    float radStep = (radEnd - radStart) / radSteps;
+    for(auto i = 0; i < radSteps; i++)
+    {
+        iteractionRadius = radStart + i * radStep;
+        auto start_time = std::chrono::high_resolution_clock::now();
+        lattice->init(iteractionRadius, accuracy, splitSeed);
+        calcStrategy->calculate(lattice);
+        auto end_time = std::chrono::high_resolution_clock::now();
+        lattice->print("radius" + std::to_string(iteractionRadius) + ".txt");
+    }
+    delete lattice;
+}

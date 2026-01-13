@@ -184,7 +184,8 @@ void Lattice::brutforce()
                     myj *= -1;
                 }
                 //float distanse = sqrt(pow(x[i] - x[j], 2) + pow(y[i] - y[j], 2));
-                Eresult[conf] += (mxi * mxj + myi * myj) / pow(r, 3) - 3 * (mxi * xij + myi * yij) * (mxj * xij + myj * yij) / pow(r, 5);
+                Eresult[conf] += (mxi * mxj + myi * myj) / pow(r, 3) 
+                - 3 * (mxi * xij + myi * yij) * (mxj * xij + myj * yij) / pow(r, 5);
             }
             Mresult[conf] += mxi * cosin45 + myi * cosin45; //проекция на диагональ XY
         }

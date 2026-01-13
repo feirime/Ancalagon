@@ -6,7 +6,7 @@ void Brutforce::calculate(Lattice *lattice)
         lattice->dosMallocBrutforce();
         lattice->brutforce();
         lattice->compressUMap();
-    }
+}
 
 void Decomposition::calculate(Lattice *lattice) 
 {

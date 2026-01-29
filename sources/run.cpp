@@ -42,6 +42,7 @@ void Run::run(int argc, char* argv[])
     lattice->init(iteractionRadius, accuracy, splitSeed);
     calcStrategy->calculate(lattice);
     auto end_time = std::chrono::high_resolution_clock::now();
+    showTime(start_time, end_time);
     lattice->print();
     delete lattice;
 }

@@ -87,7 +87,7 @@ void Lattice::mapMaker() //теперь здесь насрано!
     float maxY = *std::max_element(y, y + latticeSize);
     float leftX = (maxX - minX) * splitSeed * layer;
     float rightX = (maxX - minX) * splitSeed * (layer + 1);
-    std::cout << "leftXmain = " << leftX << " rightXmain = " << rightX << '\n';
+    std::cout << "left X main = " << leftX << " right X main = " << rightX << '\n';
     layerMainSize = 0;
     for(auto i = 0; i < latticeSize; i++)
         if(leftX >= x[i] && x[i] < rightX) 
@@ -107,7 +107,7 @@ void Lattice::mapMaker() //теперь здесь насрано!
     }
     leftX = (maxX - minX) * splitSeed * (layer + 1);
     rightX = (maxX - minX) * splitSeed * (layer + 2);
-    std::cout << "leftXadd = " << leftX << " rightXadd = " << rightX << '\n';
+    std::cout << "left X add = " << leftX << " right X add = " << rightX << '\n';
     layerAddSize = 0;
     for(auto i = 0; i < latticeSize; i++)
         if(leftX >= x[i] && x[i] < rightX) 

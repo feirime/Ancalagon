@@ -84,8 +84,8 @@ class LatticeGPU : public Lattice
 {
 public:
     void latticeMalloc();
-    virtual void latticeMainMalloc(){};
-    virtual void latticeAddMalloc(){};
+    virtual void latticeMainMalloc();
+    virtual void latticeAddMalloc();
     void dosMalloc();
     void dosMallocResult(size_t size){};
     void dosMallocMain(size_t size){};

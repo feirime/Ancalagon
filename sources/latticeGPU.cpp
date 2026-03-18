@@ -5,6 +5,16 @@ void LatticeGPU::latticeMalloc()
     latticeConstructorAdapter(x, y, mx, my, latticeSize);
 }
 
+void LatticeGPU::latticeMainMalloc()
+{
+    latticeMainConstructorAdapter(xMain, yMain, mxMain, myMain, layerMainSize);
+}
+
+void LatticeGPU::latticeAddMalloc()
+{
+    latticeAddConstructorAdapter(xAdd, yAdd, mxAdd, myAdd, layerAddSize);
+}
+
 void LatticeGPU::dosMalloc()
 {
     latticeConstructorDOSAdapter(Gmain, Emain, Mmain, 0);

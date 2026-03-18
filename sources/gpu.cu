@@ -45,25 +45,6 @@ __global__ void test()
         printf("test GPU\n");
 }
 
-void mapMaker(float *x, float *y, float *mx, float *my, int latticeSize, float seed)
-{
-    float xMin = *std::min_element(x, x + latticeSize);
-    float xMax = *std::max_element(x, x + latticeSize);
-    float yMin = *std::min_element(y, y + latticeSize);
-    float yMax = *std::max_element(y, y + latticeSize);
-    std::cout << "Seed of slit = " << seed << "\n";
-
-    for(auto i = 0; i < latticeSize; i++)
-    {
-        int j = 0;
-        double xPrevious = x[j];
-        while(x[j] == xPrevious)
-        {
-            j++;
-        }
-    }
-}
-
 __global__ void unifing(int borderMainSize, int borderAddSize, float *conections)
 {
     int x = blockIdx.x * blockDim.x + threadIdx.x;

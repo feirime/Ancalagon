@@ -17,6 +17,22 @@ void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int
     cudaMallocManaged(&my, size * sizeof(my));
 }
 
+void latticeMainConstructorAdapter(float *&xMain, float *&yMain, float *&mxMain, float *&myMain, int size)
+{
+    cudaMallocManaged(&xMain, size * sizeof(float));
+    cudaMallocManaged(&yMain, size * sizeof(float));
+    cudaMallocManaged(&mxMain, size * sizeof(float));
+    cudaMallocManaged(&myMain, size * sizeof(float));
+}
+
+void latticeAddConstructorAdapter(float *&xAdd, float *&yAdd, float *&mxAdd, float *&myAdd, int size)
+{
+    cudaMallocManaged(&xAdd, size * sizeof(float));
+    cudaMallocManaged(&yAdd, size * sizeof(float));
+    cudaMallocManaged(&mxAdd, size * sizeof(float));
+    cudaMallocManaged(&myAdd, size * sizeof(float));
+}
+
 void latticeDestructorAdapter(unsigned long long int *&Gmain, float *&Emain, float *&Mmain, 
     unsigned long long int *&Gresult, float *&Eresult, float *&Mresult,  float *&x, float *&y, float *&mx, float *&my)
 {

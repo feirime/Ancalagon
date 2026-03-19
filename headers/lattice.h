@@ -53,6 +53,9 @@ public:
     void generateLattice(){};
     void init(float iteractionRadius, float accuracy, float splitSeed);
     void layerPlusPlus();
+    bool isStart();
+    bool isEnd();
+    void mapMakerStart();
     void mapMaker();
     virtual void latticeMalloc() = 0;
     virtual void latticeMainMalloc() = 0;
@@ -75,8 +78,6 @@ public:
     void compressUMap();
     void print();
     void print(std::string fileName);
-    bool isStart();
-    bool isEnd();
     virtual ~Lattice();
 };
 

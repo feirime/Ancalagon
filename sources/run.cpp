@@ -10,7 +10,7 @@ void Brutforce::calculate(Lattice *lattice)
 
 void Decomposition::calculate(Lattice *lattice) 
 {
-        lattice->mapMaker();
+        lattice->mapMakerStart();
         lattice->calculateMain();
         lattice->calculateAdd();
         lattice->calculateUnified();
@@ -18,7 +18,7 @@ void Decomposition::calculate(Lattice *lattice)
         while(!lattice->isEnd())
         {
             lattice->layerPlusPlus();
-            lattice->mapMaker();
+            lattice->mapMakerStart();
             lattice->calculateAdd();
             lattice->calculateUnified();
             lattice->compressUMap();
@@ -57,7 +57,7 @@ void Run::arguments(int argc, char* argv[])
     params.add_parameter(lattice_read, "-r", "--read").absent(true).nargs(0).metavar("Read").help("Read J from file");
     params.add_parameter(readPass, "--readpass").absent("data/Read").nargs(1).metavar("Read").help("Read J from file");
     params.add_parameter(device, "-d", "--device").absent("gpu").nargs(1).metavar("device").help("Calculate on device");
-    params.add_parameter(splitSeed, "-s", "--splitSeed").absent(1).nargs(1).metavar("splitSeed").help("seed of lattice spliting");
+    params.add_parameter(splitSeed, "-s", "--splitSeed").absent(0).nargs(1).metavar("splitSeed").help("seed of lattice spliting");
     params.add_parameter(iteractionRadius, "--radius").absent(1.3).nargs(1).metavar("iteractionRadius").help("radius of iteraction between spins");
     params.add_parameter(accuracy, "--accuracy").absent(1e-5).nargs(1).metavar("accuracy").help("accuracy of comparison E and M");
     params.add_parameter(calcStrategyStr, "--calcStrategy").absent("decomposition").nargs(1).metavar("calcStrategy").help("calculation strategy");

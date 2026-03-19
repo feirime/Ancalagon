@@ -31,5 +31,6 @@ void LatticeGPU::calculateUnified()
 LatticeGPU::~LatticeGPU()
 {
     //std::cout << "GPU destructor\n";
-    latticeDestructorAdapter(Gmain, Emain, Mmain, Gresult, Eresult, Mresult, x, y, mx, my);
+    latticeDestructorAdapter(Gmain, Emain, Mmain, Gresult, Eresult, Mresult, x, y, mx, my, 
+        xMain, yMain, mxMain, myMain, xAdd, yAdd, mxAdd, myAdd);
 }

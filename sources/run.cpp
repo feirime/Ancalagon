@@ -1,14 +1,14 @@
 #include <chrono>
 #include "run.h"
 
-void Brutforce::calculate(Lattice *lattice) 
+void Brutforce::calculate(Lattice *lattice)
 {
         lattice->dosMallocBrutforce();
         lattice->brutforce();
         lattice->compressUMap();
 }
 
-void Decomposition::calculate(Lattice *lattice) 
+void Decomposition::calculate(Lattice *lattice)
 {
         lattice->mapMakerStart();
         lattice->calculateMain();
@@ -18,14 +18,14 @@ void Decomposition::calculate(Lattice *lattice)
         while(!lattice->isEnd())
         {
             lattice->layerPlusPlus();
-            lattice->mapMakerStart();
+            lattice->mapMaker();
             lattice->calculateAdd();
             lattice->calculateUnified();
             lattice->compressUMap();
         }
 }
 
-void Run::run(int argc, char* argv[]) 
+void Run::run(int argc, char* argv[])
 {
     arguments(argc, argv);
     Lattice* lattice = LatticeFactory::createLattice(device);

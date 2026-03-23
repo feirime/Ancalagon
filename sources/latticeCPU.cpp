@@ -24,86 +24,31 @@ void LatticeCPU::latticeAddMalloc()
     myAdd = new float[layerAddSize];
 }
 
-void LatticeCPU::dosMalloc()
+void LatticeCPU::dosMainMalloc()
 {
-    if(!isStart())
-    {
-        delete[] Gmain;
-        delete[] Emain;
-        delete[] Mmain;
-        delete[] confMain;
-    }
-    size_t dosMainSize = pow(2, layerMainSize);
     Gmain = new unsigned long long int[dosMainSize];
     Emain = new float[dosMainSize];
     Mmain = new float[dosMainSize];
     confMain = new long long int[dosMainSize];
-    size_t dosResultSize = 0;
-    if(!isStart())
-    {
-        dosResultSize = pow(2, layerResultSize);
-        for(auto i = 0; i < dosMainSize; i++)
-        {
-            Gmain[i] = Gresult[i];
-            Emain[i] = Eresult[i];
-            Mmain[i] = Mresult[i];
-        }
-        delete[] Gadd;
-        delete[] Eadd;
-        delete[] Madd;
-        delete[] confAdd;
-        delete[] Gresult;
-        delete[] Eresult;
-        delete[] Mresult;
-        delete[] confResult;
-    }
-    else
-    {
-        dosResultSize = pow(2, layerResultSize);
-        for(auto i = 0; i < dosMainSize; i++)
-        {
-            Gmain[i] = 0;
-            Emain[i] = 0;
-            Mmain[i] = 0;
-        }
-    }
-    size_t dosAddSize = pow(2, layerAddSize);
+}
+
+void LatticeCPU::dosAddMalloc()
+{
     Gadd = new unsigned long long int[dosAddSize];
     Eadd = new float[dosAddSize];
     Madd = new float[dosAddSize];
     confAdd = new long long int[dosAddSize];
-    //std::cout << "dosResultSize: " << dosResultSize << std::endl;
+}
+
+void LatticeCPU::dosResultMalloc()
+{
     Gresult = new unsigned long long int[dosResultSize];
     Eresult = new float[dosResultSize];
     Mresult = new float[dosResultSize];
     confResult = new long long int[dosResultSize];
 }
 
-void LatticeCPU::dosMallocResult(size_t size)
-{
-    Gresult = new unsigned long long int[size];
-    Eresult = new float[size];
-    Mresult = new float[size];
-    confResult = new long long int[size];
-}
-
-void LatticeCPU::dosMallocMain(size_t size)
-{
-    Gmain = new unsigned long long int[size];
-    Emain = new float[size];
-    Mmain = new float[size];
-    confMain = new long long int[size];
-}
-
-void LatticeCPU::dosMallocAdd(size_t size)
-{
-    Gadd = new unsigned long long int[size];
-    Eadd = new float[size];
-    Madd = new float[size];
-    confAdd = new long long int[size];
-}
-
-void LatticeCPU::dosDeleteResult()
+void LatticeCPU::dosResultFree()
 {
     delete[] Gresult;
     delete[] Eresult;
@@ -111,7 +56,7 @@ void LatticeCPU::dosDeleteResult()
     delete[] confResult;
 }
 
-void LatticeCPU::dosDeleteMain()
+void LatticeCPU::dosMainFree()
 {
     delete[] Gmain;
     delete[] Emain;
@@ -119,7 +64,7 @@ void LatticeCPU::dosDeleteMain()
     delete[] confMain;
 }
 
-void LatticeCPU::dosDeleteAdd()
+void LatticeCPU::dosAddFree()
 {
     delete[] Gadd;
     delete[] Eadd;

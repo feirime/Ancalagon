@@ -37,6 +37,7 @@ protected:
     float *yAdd = nullptr;
     float *mxAdd = nullptr;
     float *myAdd = nullptr;
+    std::vector<float> xUniqueVector;
     int latticeSize = 0;
     int latticeLinearSize = 0;
     float iteractionRadius = 0;
@@ -47,6 +48,8 @@ protected:
     size_t layerResultSize = 0; //колличество спинов в результирующем слое
     size_t layerMainSize = 0; //колличество спинов в крайнем слое
     size_t layerAddSize = 0; //колличество спинов в присоединяемом слое
+    size_t dosMainSize = 0;
+    size_t dosAddSize = 0;
     size_t dosResultSize = 0;
 public:
     int read(std::string readPass);
@@ -60,13 +63,12 @@ public:
     virtual void latticeMalloc() = 0;
     virtual void latticeMainMalloc() = 0;
     virtual void latticeAddMalloc() = 0;
-    virtual void dosMalloc() = 0;
-    virtual void dosMallocResult(size_t size)=0;
-    virtual void dosMallocMain(size_t size)=0;
-    virtual void dosMallocAdd(size_t size)=0;
-    virtual void dosDeleteResult() = 0;
-    virtual void dosDeleteMain() = 0;
-    virtual void dosDeleteAdd() = 0;
+    virtual void dosResultMalloc() = 0;
+    virtual void dosMainMalloc() = 0;
+    virtual void dosAddMalloc() = 0;
+    virtual void dosResultFree() = 0;
+    virtual void dosMainFree() = 0;
+    virtual void dosAddFree() = 0;
     virtual void calculateMain() = 0;
     virtual void calculateAdd() = 0;
     virtual void calculateUnified() = 0;
@@ -87,14 +89,13 @@ public:
     void latticeMalloc();
     virtual void latticeMainMalloc();
     virtual void latticeAddMalloc();
-    void dosMalloc();
-    void dosMallocResult(size_t size){};
-    void dosMallocMain(size_t size){};
-    void dosMallocAdd(size_t size){};
-    void dosDeleteResult(){};
-    void dosDeleteMain(){};
-    void dosDeleteAdd(){};
-    void calculateMain(){};
+    void dosMainMalloc();
+    void dosAddMalloc();
+    void dosResultMalloc();
+    void dosMainFree();
+    void dosAddFree();
+    void dosResultFree();
+    void calculateMain();
     void calculateAdd();
     void calculateUnified();
     ~LatticeGPU();
@@ -106,13 +107,12 @@ public:
     void latticeMalloc();
     virtual void latticeMainMalloc();
     virtual void latticeAddMalloc();
-    void dosMalloc();
-    void dosMallocResult(size_t size);
-    void dosMallocMain(size_t size);
-    void dosMallocAdd(size_t size);
-    void dosDeleteResult();
-    void dosDeleteMain();
-    void dosDeleteAdd();
+    void dosMainMalloc();
+    void dosAddMalloc();
+    void dosResultMalloc();
+    void dosMainFree();
+    void dosAddFree();
+    void dosResultFree();
     void calculateMain();
     void calculateAdd();
     void calculateUnified();
@@ -126,13 +126,12 @@ public:
     void latticeMalloc(){};
     virtual void latticeMainMalloc(){};
     virtual void latticeAddMalloc(){};
-    void dosMalloc(){};
-    void dosMallocResult(size_t size){};
-    void dosMallocMain(size_t size){};
-    void dosMallocAdd(size_t size){};
-    void dosDeleteResult(){};
-    void dosDeleteMain(){};
-    void dosDeleteAdd(){};
+    void dosMainMalloc(){};
+    void dosAddMalloc(){};
+    void dosResultMalloc(){};
+    void dosMainFree(){};
+    void dosAddFree(){};
+    void dosResultFree(){};
     void calculateMain(){};
     void calculateAdd(){};
     void calculateUnified(){};

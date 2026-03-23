@@ -89,13 +89,13 @@ bool Lattice::isStart()
 
 bool Lattice::isEnd()
 {
-    if(layer >= layers - 1)
+    if(layer >= layers - 2)
         return true;
     else
         return false;
 }
 
-void Lattice::mapMakerStart() //теперь здесь насрано!
+void Lattice::mapMakerStart()
 {
     float minX = *std::min_element(x, x + latticeSize);
     float maxX = *std::max_element(x, x + latticeSize);
@@ -108,8 +108,6 @@ void Lattice::mapMakerStart() //теперь здесь насрано!
     std::cout << "linear size : " << xLinearSize << "\n";
     if(layers == 0)
         layers = xLinearSize;
-    //std::vector<float> xUniqueVector(xUnique.begin(), xUnique.end());
-    std::vector<float> xUniqueVector;
     for(const auto& [key, value] : xUnique)
         xUniqueVector.push_back(key);
     std::sort(xUniqueVector.begin(), xUniqueVector.end());
@@ -122,8 +120,9 @@ void Lattice::mapMakerStart() //теперь здесь насрано!
     std::cout << "left X main = " << leftX << " right X main = " << rightX << '\n';
     layerMainSize = 0;
     for(auto i = 0; i < latticeSize; i++)
-        if(leftX >= x[i] && x[i] < rightX) 
+        if(x[i] >= leftX && x[i] < rightX) 
             layerMainSize++;
+    std::cout << "layer Main Size = " << layerMainSize << '\n';
     latticeMainMalloc();
     for(auto i = 0; i < latticeSize; i++)
     {
@@ -142,8 +141,9 @@ void Lattice::mapMakerStart() //теперь здесь насрано!
     std::cout << "left X add = " << leftX << " right X add = " << rightX << '\n';
     layerAddSize = 0;
     for(auto i = 0; i < latticeSize; i++)
-        if(leftX >= x[i] && x[i] < rightX) 
+        if(x[i] >= leftX && x[i] < rightX)
             layerAddSize++;
+    std::cout << "layer Add Size = " << layerAddSize << '\n';
     latticeAddMalloc();
     for(auto i = 0; i < latticeSize; i++)
     {
@@ -158,15 +158,80 @@ void Lattice::mapMakerStart() //теперь здесь насрано!
         }
     }
     layerResultSize = layerMainSize + layerAddSize;
-    std::cout << "layer Main Size = " << layerMainSize << '\n';
-    std::cout << "layer AddS ize = " << layerAddSize << '\n';
     std::cout << "layer Result Size = " << layerResultSize << '\n';
-    dosMalloc();
+    dosMainSize = pow(2, layerMainSize);
+    dosAddSize = pow(2, layerAddSize);
+    dosResultSize = pow(2, layerResultSize);
+    std::cout << "dos Main Size = " << dosMainSize << '\n';
+    std::cout << "dos Add Size = " << dosAddSize << '\n';
+    std::cout << "dos Result Size = " << dosResultSize << '\n';
+    dosMainMalloc();
+    dosAddMalloc();
+    dosResultMalloc();
 }
 
 
 void Lattice::mapMaker()
-{}
+{
+    float safeDeltaX = 1e-5; //todo сделать нормально :/
+    float leftX = xUniqueVector[layer] - safeDeltaX;
+    float rightX = xUniqueVector[layer] + safeDeltaX;
+    std::cout << "left X main = " << leftX << " right X main = " << rightX << '\n';
+    layerMainSize = 0;
+    for(auto i = 0; i < latticeSize; i++)
+        if(x[i] >= leftX && x[i] < rightX) //теперь здесь насрано! 
+            layerMainSize++;
+    std::cout << "layer Main Size = " << layerMainSize << '\n';
+    latticeMainMalloc();
+    for(auto i = 0; i < latticeSize; i++)
+    {
+        size_t j = 0;
+        if(leftX >= x[i] && x[i] < rightX)
+        {
+            xMain[j] = x[i];
+            yMain[j] = y[i];
+            mxMain[j] = mx[i];
+            myMain[j] = my[i];
+            j++;
+        }
+    }
+    leftX = xUniqueVector[layer + 1] - safeDeltaX;
+    rightX = xUniqueVector[layer + 1] + safeDeltaX;
+    std::cout << "left X add = " << leftX << " right X add = " << rightX << '\n';
+    layerAddSize = 0;
+    for(auto i = 0; i < latticeSize; i++)
+        if(x[i] >= leftX && x[i] < rightX) //теперь здесь насрано!
+            layerAddSize++;
+    std::cout << "layer Add Size = " << layerAddSize << '\n';
+    latticeAddMalloc();
+    for(auto i = 0; i < latticeSize; i++)
+    {
+        size_t j = 0;
+        if(leftX >= x[i] && x[i] < rightX)
+        {
+            xAdd[j] = x[i];
+            yAdd[j] = y[i];
+            mxAdd[j] = mx[i];
+            myAdd[j] = my[i];
+            j++;
+        }
+    }
+    layerResultSize = layerMainSize + layerAddSize;
+    std::cout << "layer Result Size = " << layerResultSize << '\n';
+    dosMainFree();
+    dosMainSize = dosResultSize; //from previous map
+    Gmain = Gresult;
+    Emain = Eresult;
+    Mmain = Mresult;
+    dosAddFree();
+    dosAddSize = pow(2, layerAddSize);
+    dosAddMalloc();
+    dosResultSize = dosMainSize * dosAddSize;
+    dosResultMalloc();
+    std::cout << "dos Main Size = " << dosMainSize << '\n';
+    std::cout << "dos Add Size = " << dosAddSize << '\n';
+    std::cout << "dos Result Size = " << dosResultSize << '\n';
+}
 
 void Lattice::brutforce()
 {
@@ -237,10 +302,10 @@ void Lattice::compressRBTree()
         if(Gresult[i] != 0)
             tree.insert(Gresult[i], Eresult[i]);
     }
-    dosDeleteResult();
+    dosResultFree();
     //dosResultSize = tree.size();
     std::cout << "dosResultSize = " << dosResultSize << '\n';
-    dosMallocResult(dosResultSize);
+    dosResultMalloc();
     tree.toArrays(Gresult, Eresult);
 }
 
@@ -253,10 +318,10 @@ void Lattice::compressRBTreeSE()
         if(Gresult[i] != 0)
             tree.insert(Gresult[i], Eresult[i], Mresult[i]);
     }
-    dosDeleteResult();
+    dosResultFree();
     dosResultSize = tree.size();
     //std::cout << "dosResultSize = " << dosResultSize << '\n';
-    dosMallocResult(dosResultSize);
+    dosResultMalloc();
     tree.toArrays(Gresult, Eresult, Mresult);
 }
 
@@ -291,10 +356,10 @@ void Lattice::compressUMap()
         if(Gresult[i] != 0)
             uMap[em] += Gresult[i];
     }
-    dosDeleteResult();
+    dosResultFree();
     dosResultSize = uMap.size();
     //std::cout << "dosResultSize = " << dosResultSize << '\n';
-    dosMallocResult(dosResultSize);
+    dosResultMalloc();
     int idx = 0;
     for(auto& pair : uMap)
     {

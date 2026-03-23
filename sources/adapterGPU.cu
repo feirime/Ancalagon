@@ -4,9 +4,43 @@
 
 void latticeConstructorDOSAdapter(unsigned long long int *&G, float *&E, float *&M, int size)
 {
+    if(G != nullptr)
+    {
+        cudaFree(G);
+        //printf("free G\n");
+    }
+    if(E != nullptr)
+    {
+        cudaFree(E);
+        //printf("free E\n");
+    }
+    if(M != nullptr)
+    {
+        cudaFree(M);
+        //printf("free M\n");
+    }
     cudaMallocManaged(&G, size * sizeof(G));
     cudaMallocManaged(&E, size * sizeof(E));
     cudaMallocManaged(&M, size * sizeof(M));
+}
+
+void latticeDestructorDOSAdapter(unsigned long long int *&G, float *&E, float *&M)
+{
+    if(G != nullptr)
+    {
+        cudaFree(G);
+        //printf("free G\n");
+    }
+    if(E != nullptr)
+    {
+        cudaFree(E);
+        //printf("free E\n");
+    }
+    if(M != nullptr)
+    {
+        cudaFree(M);
+        //printf("free M\n");
+    }
 }
 
 void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int size)
@@ -73,7 +107,7 @@ void latticeAddConstructorAdapter(float *&xAdd, float *&yAdd, float *&mxAdd, flo
     cudaMallocManaged(&myAdd, sizeAdd * sizeof(float));
 }
 
-void latticeDestructorAdapter(unsigned long long int *&Gmain, float *&Emain, float *&Mmain, 
+void latticeAllDestructorAdapter(unsigned long long int *&Gmain, float *&Emain, float *&Mmain, 
     unsigned long long int *&Gresult, float *&Eresult, float *&Mresult,  
     float *&x, float *&y, float *&mx, float *&my, 
     float *&xMain, float *&yMain, float *&mxMain, float *&myMain, 

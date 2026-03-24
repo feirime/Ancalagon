@@ -79,16 +79,16 @@ void LatticeCPU::calculateMain()
         Emain[confMain] = 0;
         Mmain[confMain] = 0;
         for(auto i = 0; i < layerMainSize; i++)
-        {    
+        {
             float mxi = mxMain[i] * (confMain >> i & 1 ? -1 : 1);
             float myi = myMain[i] * (confMain >> i & 1 ? -1 : 1);
             for(auto j = i + 1; j < layerMainSize; j++)
             {
-                float mxj = mxMain[j] * (confMain >> j & 1 ? -1 : 1);
-                float myj = myMain[j] * (confMain >> j & 1 ? -1 : 1);
                 float distance = sqrt(pow(xMain[i] - xMain[j], 2) + pow(yMain[i] - yMain[j], 2));
                 if(distance > iteractionRadius)
                     continue;
+                float mxj = mxMain[j] * (confMain >> j & 1 ? -1 : 1);
+                float myj = myMain[j] * (confMain >> j & 1 ? -1 : 1);
                 float xij = xMain[i] - xMain[j];
                 float yij = yMain[i] - yMain[j];
                 float r = sqrt(xij * xij + yij * yij);
@@ -96,33 +96,33 @@ void LatticeCPU::calculateMain()
             }
             Mmain[confMain] += (mxi + myi) * sqrt(2) / 2; //projection on 45 degree axis
         }
-        //Здесь нужен переворот спина
     }
 }
 
 void LatticeCPU::calculateAdd()
 {
-    for(auto conf = 0; conf < dosAddSize; conf++)
+    for(auto confAdd = 0; confAdd < dosAddSize; confAdd++)
     {
-        Eadd[conf] = 0;
-        Madd[conf] = 0;
+        Eadd[confAdd] = 0;
+        Madd[confAdd] = 0;
         for(auto i = 0; i < layerAddSize; i++)
         {
+            float mxi = mxAdd[i] * (confAdd >> i & 1 ? -1 : 1);
+            float myi = myAdd[i] * (confAdd >> i & 1 ? -1 : 1);
             for(auto j = i + 1; j < layerAddSize; j++)
             {
                 float distance = sqrt(pow(xAdd[i] - xAdd[j], 2) + pow(yAdd[i] - yAdd[j], 2));
                 if(distance > iteractionRadius)
                     continue;
+                float mxj = mxAdd[j] * (confAdd >> j & 1 ? -1 : 1);
+                float myj = myAdd[j] * (confAdd >> j & 1 ? -1 : 1);
                 float xij = xAdd[i] - xAdd[j];
                 float yij = yAdd[i] - yAdd[j];
                 float r = sqrt(xij * xij + yij * yij);
-                Eadd[i + j * layerAddSize] = (mxAdd[i] * mxAdd[j] + myAdd[i] * myAdd[j]) / (pow(r, 3)) 
-                                          - 3 * (mxAdd[i] * xij + myAdd[i] * yij) 
-                                          * (mxAdd[j] * xij + myAdd[j] * yij) / (pow(r, 5));
-                Madd[i + j * layerAddSize] = Madd[i] + Madd[j];
+                Eadd[confAdd] += (mxi * mxj + myi * myj) / (pow(r, 3)) - 3 * (mxi * xij + myi * yij) * (mxj * xij + myj * yij) / (pow(r, 5));
             }
+            Madd[confAdd] += (mxi + myi) * sqrt(2) / 2; //projection on 45 degree axis
         }
-        //Здесь нужен переворот спина
     }
 }
 

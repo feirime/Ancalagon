@@ -74,23 +74,27 @@ void LatticeCPU::dosAddFree()
 
 void LatticeCPU::calculateMain()
 {
-    for(auto conf = 0; conf < dosMainSize; conf++)
+    for(auto confMain = 0; confMain < dosMainSize; confMain++)
     {
+        Emain[confMain] = 0;
+        Mmain[confMain] = 0;
         for(auto i = 0; i < layerMainSize; i++)
-        {
+        {    
+            float mxi = mxMain[i] * (confMain >> i & 1 ? -1 : 1);
+            float myi = myMain[i] * (confMain >> i & 1 ? -1 : 1);
             for(auto j = i + 1; j < layerMainSize; j++)
             {
+                float mxj = mxMain[j] * (confMain >> j & 1 ? -1 : 1);
+                float myj = myMain[j] * (confMain >> j & 1 ? -1 : 1);
                 float distance = sqrt(pow(xMain[i] - xMain[j], 2) + pow(yMain[i] - yMain[j], 2));
                 if(distance > iteractionRadius)
                     continue;
                 float xij = xMain[i] - xMain[j];
                 float yij = yMain[i] - yMain[j];
                 float r = sqrt(xij * xij + yij * yij);
-                Emain[i + j * layerMainSize] = (mxMain[i] * mxMain[j] + myMain[i] * myMain[j]) / (pow(r, 3)) 
-                                          - 3 * (mxMain[i] * xij + myMain[i] * yij) 
-                                          * (mxMain[j] * xij + myMain[j] * yij) / (pow(r, 5));
-                Mmain[i + j * layerMainSize] = Mmain[i] + Mmain[j];
+                Emain[confMain] += (mxi * mxj + myi * myj) / (pow(r, 3)) - 3 * (mxi * xij + myi * yij) * (mxj * xij + myj * yij) / (pow(r, 5));
             }
+            Mmain[confMain] += (mxi + myi) * sqrt(2) / 2; //projection on 45 degree axis
         }
         //Здесь нужен переворот спина
     }
@@ -100,6 +104,8 @@ void LatticeCPU::calculateAdd()
 {
     for(auto conf = 0; conf < dosAddSize; conf++)
     {
+        Eadd[conf] = 0;
+        Madd[conf] = 0;
         for(auto i = 0; i < layerAddSize; i++)
         {
             for(auto j = i + 1; j < layerAddSize; j++)
@@ -126,6 +132,8 @@ void LatticeCPU::calculateUnified()
     {
         for(auto confAdd = 0; confAdd < dosAddSize; confAdd++)
         {
+            Eresult[confMain + confAdd * dosMainSize] = 0;
+            Mresult[confMain + confAdd * dosMainSize] = 0;
             for(auto i = 0; i < layerMainSize; i++)
             {
                 for(auto j = i + 1; j < layerAddSize; j++)
@@ -133,10 +141,10 @@ void LatticeCPU::calculateUnified()
                     float xij = xMain[i] - xAdd[j];
                     float yij = yMain[i] - yAdd[j];
                     float r = sqrt(xij * xij + yij * yij);
-                    Eresult[confMain + confAdd * dosMainSize] = (mxMain[i] * mxAdd[j] + myMain[i] * myAdd[j]) / (pow(r, 3)) 
+                    Eresult[confMain + confAdd * dosMainSize] += (mxMain[i] * mxAdd[j] + myMain[i] * myAdd[j]) / (pow(r, 3)) 
                                               - 3 * (mxMain[i] * xij + myMain[i] * yij) 
                                               * (mxAdd[j] * xij + myAdd[j] * yij) / (pow(r, 5));
-                    Mresult[confMain + confAdd * dosMainSize] = Mmain[i] + Madd[j];
+                    Mresult[confMain + confAdd * dosMainSize] += Mmain[i] + Madd[j];
                 }
             }
         }

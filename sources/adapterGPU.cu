@@ -109,9 +109,11 @@ void latticeDestructorAdapter(float *&x, float *&y, float *&mx, float *&my)
 }
 
 void kernelElementaryAdapter(float *&x, float *&y, float *&mx, float *&my, int latticeSize,
-    unsigned long long *&G, float *&E, float *&M, unsigned long long *&conf, size_t dosSize)
+    unsigned long long *&G, float *&E, float *&M, unsigned long long *&conf, size_t dosSize, float iteractionRadius)
 {
-    test<<<1, 1>>>();
+    cudaDeviceProp devProp;
+    cudaGetDeviceProperties(&devProp, 0);
+    ElementaryClalc<<<get_SP_cores(devProp), 16>>>(x, y, mx, my, latticeSize, G, E, M, conf, dosSize, iteractionRadius);
     cudaDeviceSynchronize();
 }
 
@@ -120,12 +122,15 @@ void kernelUnifyingAdapter(float *&xMain, float *&yMain, float *&mxMain, float *
     float *&xAdd, float *&yAdd, float *&mxAdd, float *&myAdd, size_t latticeAddSize,
     unsigned long long *&Gmain, float *&Emain, float *&Mmain, unsigned long long *&confMain, size_t dosMainSize,
     unsigned long long *&Gadd, float *&Eadd, float *&Madd, unsigned long long *&confAdd, size_t dosAddSize,
-    unsigned long long *&Gresult, float *&Eresult, float *&Mresult, unsigned long long *&confResult, size_t dosResultSize)
+    unsigned long long *&Gresult, float *&Eresult, float *&Mresult, unsigned long long *&confResult, size_t dosResultSize, 
+    float iteractionRadius)
 {
-    unifing<<<1, 1>>>(xMain, yMain, mxMain, myMain, latticeMainSize,
+    cudaDeviceProp devProp;
+    cudaGetDeviceProperties(&devProp, 0);
+    unifing<<<get_SP_cores(devProp), 16>>>(xMain, yMain, mxMain, myMain, latticeMainSize,
         xAdd, yAdd, mxAdd, myAdd, latticeAddSize,
         Gmain, Emain, Mmain, confMain, dosMainSize,
         Gadd, Eadd, Madd, confAdd, dosAddSize,
-        Gresult, Eresult, Mresult, confResult, dosResultSize);
+        Gresult, Eresult, Mresult, confResult, dosResultSize, iteractionRadius);
     cudaDeviceSynchronize();
 }

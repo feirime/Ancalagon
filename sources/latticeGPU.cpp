@@ -47,12 +47,12 @@ void LatticeGPU::dosResultFree()
 
 void LatticeGPU::calculateMain()
 {
-    kernelElementaryAdapter(xMain, yMain, mxMain, myMain, layerMainSize, Gmain, Emain, Mmain, confMain, dosMainSize);
+    kernelElementaryAdapter(xMain, yMain, mxMain, myMain, layerMainSize, Gmain, Emain, Mmain, confMain, dosMainSize, iteractionRadius);
 }
 
 void LatticeGPU::calculateAdd()
 {
-    kernelElementaryAdapter(xAdd, yAdd, mxAdd, myAdd, layerAddSize, Gadd, Eadd, Madd, confAdd, dosAddSize);
+    kernelElementaryAdapter(xAdd, yAdd, mxAdd, myAdd, layerAddSize, Gadd, Eadd, Madd, confAdd, dosAddSize, iteractionRadius);
 }
 
 void LatticeGPU::calculateUnified()
@@ -61,7 +61,7 @@ void LatticeGPU::calculateUnified()
         xAdd, yAdd, mxAdd, myAdd, layerAddSize,
         Gmain, Emain, Mmain, confMain, dosMainSize,
         Gadd, Eadd, Madd, confAdd, dosAddSize,
-        Gresult, Eresult, Mresult, confResult, dosResultSize);
+        Gresult, Eresult, Mresult, confResult, dosResultSize, iteractionRadius);
 }
 
 LatticeGPU::~LatticeGPU()

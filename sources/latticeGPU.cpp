@@ -46,13 +46,23 @@ void LatticeGPU::dosResultFree()
 }
 
 void LatticeGPU::calculateMain()
-{}
+{
+    kernelElementaryAdapter(xMain, yMain, mxMain, myMain, layerMainSize, Gmain, Emain, Mmain, confMain, dosMainSize);
+}
 
 void LatticeGPU::calculateAdd()
-{}
+{
+    kernelElementaryAdapter(xAdd, yAdd, mxAdd, myAdd, layerAddSize, Gadd, Eadd, Madd, confAdd, dosAddSize);
+}
 
 void LatticeGPU::calculateUnified()
-{}
+{
+    kernelUnifyingAdapter(xMain, yMain, mxMain, myMain, layerMainSize,
+        xAdd, yAdd, mxAdd, myAdd, layerAddSize,
+        Gmain, Emain, Mmain, confMain, dosMainSize,
+        Gadd, Eadd, Madd, confAdd, dosAddSize,
+        Gresult, Eresult, Mresult, confResult, dosResultSize);
+}
 
 LatticeGPU::~LatticeGPU()
 {

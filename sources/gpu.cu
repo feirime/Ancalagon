@@ -45,23 +45,9 @@ __global__ void test()
         printf("test GPU\n");
 }
 
-__global__ void unifing(int borderMainSize, int borderAddSize, float *conections)
-{
-    int x = blockIdx.x * blockDim.x + threadIdx.x;
-    int y = blockIdx.y * blockDim.y + threadIdx.y;
-    int mainConfigSize = 1 << borderMainSize;
-    int addConfigSize = 1 << borderAddSize; 
-    for(auto i = x; i < mainConfigSize; i += blockDim.x * gridDim.x)
-    {
-        for(auto j = y; j < addConfigSize; j += blockDim.y * gridDim.y)
-        {
-            for(auto k = 0; k < borderAddSize; k++)
-            {
-                for(auto l = 0; l < conections[k]; l++)
-                {}
-            }
-        }        
-    }
-}
-
-
+__global__ void unifing(float *&xMain, float *&yMain, float *&mxMain, float *&myMain, size_t latticeMainSize,
+    float *&xAdd, float *&yAdd, float *&mxAdd, float *&myAdd, size_t latticeAddSize,
+    unsigned long long *&Gmain, float *&Emain, float *&Mmain, unsigned long long *&confMain, size_t dosMainSize,
+    unsigned long long *&Gadd, float *&Eadd, float *&Madd, unsigned long long *&confAdd, size_t dosAddSize,
+    unsigned long long *&Gresult, float *&Eresult, float *&Mresult, unsigned long long *&confResult, size_t dosResultSize)
+{}

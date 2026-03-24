@@ -3,7 +3,7 @@
 #include <iostream>
 
 void dosConstructorAdapter(unsigned long long *&G, float *&E, float *&M, 
-    unsigned long long *&conf, int size)
+    unsigned long long *&conf, size_t size)
 {
     if(G != nullptr)
     {
@@ -56,7 +56,7 @@ void dosDestructorAdapter(unsigned long long *&G, float *&E, float *&M,
     }
 }
 
-void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int size)
+void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, size_t size)
 {
     if(x != nullptr)
     {
@@ -106,4 +106,26 @@ void latticeDestructorAdapter(float *&x, float *&y, float *&mx, float *&my)
         cudaFree(my);
         //printf("free my\n");
     }
+}
+
+void kernelElementaryAdapter(float *&x, float *&y, float *&mx, float *&my, int latticeSize,
+    unsigned long long *&G, float *&E, float *&M, unsigned long long *&conf, size_t dosSize)
+{
+    test<<<1, 1>>>();
+    cudaDeviceSynchronize();
+}
+
+
+void kernelUnifyingAdapter(float *&xMain, float *&yMain, float *&mxMain, float *&myMain, size_t latticeMainSize,
+    float *&xAdd, float *&yAdd, float *&mxAdd, float *&myAdd, size_t latticeAddSize,
+    unsigned long long *&Gmain, float *&Emain, float *&Mmain, unsigned long long *&confMain, size_t dosMainSize,
+    unsigned long long *&Gadd, float *&Eadd, float *&Madd, unsigned long long *&confAdd, size_t dosAddSize,
+    unsigned long long *&Gresult, float *&Eresult, float *&Mresult, unsigned long long *&confResult, size_t dosResultSize)
+{
+    unifing<<<1, 1>>>(xMain, yMain, mxMain, myMain, latticeMainSize,
+        xAdd, yAdd, mxAdd, myAdd, latticeAddSize,
+        Gmain, Emain, Mmain, confMain, dosMainSize,
+        Gadd, Eadd, Madd, confAdd, dosAddSize,
+        Gresult, Eresult, Mresult, confResult, dosResultSize);
+    cudaDeviceSynchronize();
 }

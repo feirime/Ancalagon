@@ -7,42 +7,42 @@ void LatticeGPU::latticeMalloc()
 
 void LatticeGPU::latticeMainMalloc()
 {
-    latticeMainConstructorAdapter(xMain, yMain, mxMain, myMain, layerMainSize);
+    latticeConstructorAdapter(xMain, yMain, mxMain, myMain, layerMainSize);
 }
 
 void LatticeGPU::latticeAddMalloc()
 {
-    latticeAddConstructorAdapter(xAdd, yAdd, mxAdd, myAdd, layerAddSize);
+    latticeConstructorAdapter(xAdd, yAdd, mxAdd, myAdd, layerAddSize);
 }
 
 void LatticeGPU::dosMainMalloc()
 {
-    latticeConstructorDOSAdapter(Gmain, Emain, Mmain, dosMainSize);
+    dosConstructorAdapter(Gmain, Emain, Mmain, confMain, dosMainSize);
 }
 
 void LatticeGPU::dosAddMalloc()
 {
-    latticeConstructorDOSAdapter(Gadd, Eadd, Madd, dosAddSize);
+    dosConstructorAdapter(Gadd, Eadd, Madd, confAdd, dosAddSize);
 }
 
 void LatticeGPU::dosResultMalloc()
 {
-    latticeConstructorDOSAdapter(Gresult, Eresult, Mresult, dosMainSize);
+    dosConstructorAdapter(Gresult, Eresult, Mresult, confResult, dosResultSize);
 }
 
 void LatticeGPU::dosMainFree()
 {
-    latticeDestructorDOSAdapter(Gmain, Emain, Mmain);
+    dosDestructorAdapter(Gmain, Emain, Mmain, confMain);
 }
 
 void LatticeGPU::dosAddFree()
 {
-    latticeDestructorDOSAdapter(Gadd, Eadd, Madd);
+    dosDestructorAdapter(Gadd, Eadd, Madd, confAdd);
 }
 
 void LatticeGPU::dosResultFree()
 {
-    latticeDestructorDOSAdapter(Gresult, Eresult, Mresult);
+    dosDestructorAdapter(Gresult, Eresult, Mresult, confResult);
 }
 
 void LatticeGPU::calculateMain()
@@ -57,6 +57,10 @@ void LatticeGPU::calculateUnified()
 LatticeGPU::~LatticeGPU()
 {
     //std::cout << "GPU destructor\n";
-    latticeAllDestructorAdapter(Gmain, Emain, Mmain, Gresult, Eresult, Mresult, x, y, mx, my, 
-        xMain, yMain, mxMain, myMain, xAdd, yAdd, mxAdd, myAdd);
+    latticeDestructorAdapter(x, y, mx, my);
+    latticeDestructorAdapter(xMain, yMain, mxMain, myMain);
+    latticeDestructorAdapter(xAdd, yAdd, mxAdd, myAdd);
+    dosDestructorAdapter(Gmain, Emain, Mmain, confMain);
+    dosDestructorAdapter(Gadd, Eadd, Madd, confAdd);
+    dosDestructorAdapter(Gresult, Eresult, Mresult, confResult);
 }

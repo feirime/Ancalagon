@@ -26,26 +26,26 @@ void LatticeCPU::latticeAddMalloc()
 
 void LatticeCPU::dosMainMalloc()
 {
-    Gmain = new unsigned long long int[dosMainSize];
+    Gmain = new unsigned long long[dosMainSize];
     Emain = new float[dosMainSize];
     Mmain = new float[dosMainSize];
-    confMain = new long long int[dosMainSize];
+    confMain = new unsigned long long[dosMainSize];
 }
 
 void LatticeCPU::dosAddMalloc()
 {
-    Gadd = new unsigned long long int[dosAddSize];
+    Gadd = new unsigned long long[dosAddSize];
     Eadd = new float[dosAddSize];
     Madd = new float[dosAddSize];
-    confAdd = new long long int[dosAddSize];
+    confAdd = new unsigned long long[dosAddSize];
 }
 
 void LatticeCPU::dosResultMalloc()
 {
-    Gresult = new unsigned long long int[dosResultSize];
+    Gresult = new unsigned long long[dosResultSize];
     Eresult = new float[dosResultSize];
     Mresult = new float[dosResultSize];
-    confResult = new long long int[dosResultSize];
+    confResult = new unsigned long long[dosResultSize];
 }
 
 void LatticeCPU::dosResultFree()

@@ -3,15 +3,11 @@
 
 #include "lattice.h"
 
-void latticeConstructorDOSAdapter(unsigned long long int *&G, float *&E, float *&M, int size);
-void latticeDestructorDOSAdapter(unsigned long long int *&G, float *&E, float *&M);
+void dosConstructorAdapter(unsigned long long *&G, float *&E, float *&M, 
+    unsigned long long *&conf, int size);
+void dosDestructorAdapter(unsigned long long *&G, float *&E, float *&M, 
+    unsigned long long *&conf);
 void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, int size);
-void latticeMainConstructorAdapter(float *&xMain, float *&yMain, float *&mxMain, float *&myMain, int size);
-void latticeAddConstructorAdapter(float *&xAdd, float *&yAdd, float *&mxAdd, float *&myAdd, int size);
-void latticeAllDestructorAdapter(unsigned long long int *&Gmain, float *&Emain, float *&Mmain, 
-    unsigned long long int *&Gresult, float *&Eresult, float *&Mresult,  
-    float *&x, float *&y, float *&mx, float *&my, 
-    float *&xMain, float *&yMain, float *&mxMain, float *&myMain, 
-    float *&xAdd, float *&yAdd, float *&mxAdd, float *&myAdd);
+void latticeDestructorAdapter(float *&x, float *&y, float *&mx, float *&my);
 
 #endif

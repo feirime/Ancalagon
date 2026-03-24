@@ -13,18 +13,18 @@
 class Lattice
 {
 protected:
-    unsigned long long int *Gresult = nullptr;
+    unsigned long long *Gresult = nullptr;
     float *Eresult = nullptr;
     float *Mresult = nullptr;
-    long long int *confResult = nullptr;
-    unsigned long long int *Gmain = nullptr;
+    unsigned long long *confResult = nullptr;
+    unsigned long long *Gmain = nullptr;
     float *Emain = nullptr;
     float *Mmain = nullptr;
-    long long int *confMain = nullptr;
-    unsigned long long int *Gadd = nullptr;
+    unsigned long long *confMain = nullptr;
+    unsigned long long *Gadd = nullptr;
     float *Eadd = nullptr;
     float *Madd = nullptr;
-    long long int *confAdd = nullptr;
+    unsigned long long *confAdd = nullptr;
     float *x = nullptr;
     float *y = nullptr;
     float *mx = nullptr;

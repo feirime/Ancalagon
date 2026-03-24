@@ -74,16 +74,13 @@ void LatticeCPU::dosAddFree()
 
 void LatticeCPU::calculateMain()
 {
-    for(auto conf = 0; conf < pow(2, layerMainSize); conf++)
+    for(auto conf = 0; conf < dosMainSize; conf++)
     {
         for(auto i = 0; i < layerMainSize; i++)
         {
-            for(auto j = 0; j < layerMainSize; j++)
+            for(auto j = i + 1; j < layerMainSize; j++)
             {
-                if(i == j)
-                    continue;
-                float distance = sqrt(pow(xMain[i] - xMain[j], 2) 
-                                + pow(yMain[i] - yMain[j], 2));
+                float distance = sqrt(pow(xMain[i] - xMain[j], 2) + pow(yMain[i] - yMain[j], 2));
                 if(distance > iteractionRadius)
                     continue;
                 float xij = xMain[i] - xMain[j];
@@ -101,20 +98,25 @@ void LatticeCPU::calculateMain()
 
 void LatticeCPU::calculateAdd()
 {
-    for(auto i = 0; i < layerAddSize; i++)
+    for(auto conf = 0; conf < dosAddSize; conf++)
     {
-        for(auto j = 0; j < layerAddSize; j++)
+        for(auto i = 0; i < layerAddSize; i++)
         {
-            if(i == j)
-                continue;
-            float xij = xAdd[i] - xAdd[j];
-            float yij = yAdd[i] - yAdd[j];
-            float r = sqrt(xij * xij + yij * yij);
-            Eadd[i + j * layerAddSize] = (mxAdd[i] * mxAdd[j] + myAdd[i] * myAdd[j]) / (pow(r, 3)) 
-                                      - 3 * (mxAdd[i] * xij + myAdd[i] * yij) 
-                                      * (mxAdd[j] * xij + myAdd[j] * yij) / (pow(r, 5));
-            Madd[i + j * layerAddSize] = Madd[i] + Madd[j];
+            for(auto j = i + 1; j < layerAddSize; j++)
+            {
+                float distance = sqrt(pow(xAdd[i] - xAdd[j], 2) + pow(yAdd[i] - yAdd[j], 2));
+                if(distance > iteractionRadius)
+                    continue;
+                float xij = xAdd[i] - xAdd[j];
+                float yij = yAdd[i] - yAdd[j];
+                float r = sqrt(xij * xij + yij * yij);
+                Eadd[i + j * layerAddSize] = (mxAdd[i] * mxAdd[j] + myAdd[i] * myAdd[j]) / (pow(r, 3)) 
+                                          - 3 * (mxAdd[i] * xij + myAdd[i] * yij) 
+                                          * (mxAdd[j] * xij + myAdd[j] * yij) / (pow(r, 5));
+                Madd[i + j * layerAddSize] = Madd[i] + Madd[j];
+            }
         }
+        //Здесь нужен переворот спина
     }
 }
 

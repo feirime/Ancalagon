@@ -42,29 +42,35 @@ int get_SP_cores(cudaDeviceProp devProp)
 __global__ void ElementaryClalc(float *&x, float *&y, float *&mx, float *&my, int latticeSize,
     unsigned long long *&G, float *&E, float *&M, unsigned long long *&conf, size_t dosSize, float iteractionRadius)
 {
-    for(auto confIdx = 0; confIdx < dosSize; confIdx++)
+    int globThreadIdx = blockIdx.x * blockDim.x + threadIdx.x;
+    for(int confIdx = globThreadIdx; confIdx < dosSize; confIdx += blockDim.x * gridDim.x)
     {
-        E[confIdx] = 0;
-        M[confIdx] = 0;
+        float mxi;
+        float myi;
+        float mxj;
+        float myj;
+        //E[confIdx] = 0;
+        //M[confIdx] = 0;
         for(auto i = 0; i < latticeSize; i++)
         {
-            float mxi = mx[i] * (confIdx >> i & 1 ? -1 : 1);
-            float myi = my[i] * (confIdx >> i & 1 ? -1 : 1);
+            int confBitTemp = confIdx;
+            mxi = mx[i] * (confBitTemp >> i & 1 ? -1 : 1);
+            myi = my[i] * (confBitTemp >> i & 1 ? -1 : 1);
             for(auto j = i + 1; j < latticeSize; j++)
             {
                 float distance = sqrt(pow(x[i] - x[j], 2) + pow(y[i] - y[j], 2));
                 if(distance > iteractionRadius)
                     continue;
-                float mxj = mx[j] * (confIdx >> j & 1 ? -1 : 1);
-                float myj = my[j] * (confIdx >> j & 1 ? -1 : 1);
+                mxj = mx[j] * (confBitTemp >> j & 1 ? -1 : 1);
+                myj = my[j] * (confBitTemp >> j & 1 ? -1 : 1);
                 float xij = x[i] - x[j];
                 float yij = y[i] - y[j];
                 float r = sqrt(xij * xij + yij * yij);
-                E[confIdx] += (mxi * mxj + myi * myj) / (pow(r, 3)) - 3 * (mxi * xij + myi * yij) * (mxj * xij + myj * yij) / (pow(r, 5));
+                //atomicAdd(&E[confIdx], (mxi * mxj + myi * myj) / (pow(r, 3)) - 3 * (mxi * xij + myi * yij) * (mxj * xij + myj * yij) / (pow(r, 5)));
             }
-            M[confIdx] += (mxi + myi) * sqrtf(2) / 2; //projection on 45 degree axis
+            //atomicAdd(&M[confIdx], (mxi + myi) * sqrtf(2) / 2); //projection on 45 degree axis
         }
-        conf[confIdx] = confIdx;
+        //conf[confIdx] = confIdx;
     }
 }
 
@@ -75,6 +81,7 @@ __global__ void unifing(float *&xMain, float *&yMain, float *&mxMain, float *&my
     unsigned long long *&Gresult, float *&Eresult, float *&Mresult, unsigned long long *&confResult, size_t dosResultSize, 
     float iteractionRadius)
 {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
     for(auto confMainIdx = 0; confMainIdx < dosMainSize; confMainIdx++)
     {
         for(auto confAddIdx = 0; confAddIdx < dosAddSize; confAddIdx++)

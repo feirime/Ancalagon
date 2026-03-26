@@ -25,10 +25,12 @@ void dosConstructorAdapter(unsigned long long *&G, float *&E, float *&M,
         cudaFree(conf);
         //printf("free conf\n");
     }
-    cudaMallocManaged(&G, size * sizeof(G));
-    cudaMallocManaged(&E, size * sizeof(E));
-    cudaMallocManaged(&M, size * sizeof(M));
-    cudaMallocManaged(&conf, size * sizeof(conf));
+    cudaMallocManaged(&G, size * sizeof(*G));
+    cudaMallocManaged(&E, size * sizeof(*E));
+    printf("e has %lu bytes\n", size * sizeof(*E));
+    printf("e in address %p\n", E);
+    cudaMallocManaged(&M, size * sizeof(*M));
+    cudaMallocManaged(&conf, size * sizeof(*conf));
 }
 
 void dosDestructorAdapter(unsigned long long *&G, float *&E, float *&M, 
@@ -78,10 +80,10 @@ void latticeConstructorAdapter(float *&x, float *&y, float *&mx, float *&my, siz
         cudaFree(my);
         //printf("free my\n");
     }
-    cudaMallocManaged(&x, size * sizeof(x));
-    cudaMallocManaged(&y, size * sizeof(y));
-    cudaMallocManaged(&mx, size * sizeof(mx));
-    cudaMallocManaged(&my, size * sizeof(my));
+    cudaMallocManaged(&x, size * sizeof(*x));
+    cudaMallocManaged(&y, size * sizeof(*y));
+    cudaMallocManaged(&mx, size * sizeof(*mx));
+    cudaMallocManaged(&my, size * sizeof(*my));
 }
 
 void latticeDestructorAdapter(float *&x, float *&y, float *&mx, float *&my)
@@ -113,7 +115,9 @@ void kernelElementaryAdapter(float *&x, float *&y, float *&mx, float *&my, int l
 {
     cudaDeviceProp devProp;
     cudaGetDeviceProperties(&devProp, 0);
-    ElementaryClalc<<<get_SP_cores(devProp), 16>>>(x, y, mx, my, latticeSize, G, E, M, conf, dosSize, iteractionRadius);
+    static size_t block_dim = 128;
+    static size_t grid_dim = get_SP_cores(devProp) / block_dim;
+    ElementaryClalc<<<grid_dim, block_dim>>>(x, y, mx, my, latticeSize, G, E, M, conf, dosSize, iteractionRadius);
     cudaDeviceSynchronize();
 }
 
@@ -127,7 +131,9 @@ void kernelUnifyingAdapter(float *&xMain, float *&yMain, float *&mxMain, float *
 {
     cudaDeviceProp devProp;
     cudaGetDeviceProperties(&devProp, 0);
-    unifing<<<get_SP_cores(devProp), 16>>>(xMain, yMain, mxMain, myMain, latticeMainSize,
+    static size_t block_dim = 128;
+    static size_t grid_dim = get_SP_cores(devProp) / block_dim;
+    unifing<<<grid_dim, block_dim>>>(xMain, yMain, mxMain, myMain, latticeMainSize,
         xAdd, yAdd, mxAdd, myAdd, latticeAddSize,
         Gmain, Emain, Mmain, confMain, dosMainSize,
         Gadd, Eadd, Madd, confAdd, dosAddSize,

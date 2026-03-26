@@ -49,7 +49,7 @@ __global__ void ElementaryClalc(float *&x, float *&y, float *&mx, float *&my, in
         float myi;
         float mxj;
         float myj;
-        //E[confIdx] = 0;
+        E[confIdx] = 0;
         //M[confIdx] = 0;
         for(auto i = 0; i < latticeSize; i++)
         {

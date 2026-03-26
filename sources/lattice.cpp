@@ -159,9 +159,9 @@ void Lattice::mapMakerStart()
     }
     layerResultSize = layerMainSize + layerAddSize;
     std::cout << "layer Result Size = " << layerResultSize << '\n';
-    dosMainSize = pow(2, layerMainSize);
-    dosAddSize = pow(2, layerAddSize);
-    dosResultSize = pow(2, layerResultSize);
+    dosMainSize = 1 << layerMainSize;
+    dosAddSize = 1 << layerAddSize;
+    dosResultSize = 1 << layerResultSize;
     std::cout << "dos Main Size = " << dosMainSize << '\n';
     std::cout << "dos Add Size = " << dosAddSize << '\n';
     std::cout << "dos Result Size = " << dosResultSize << '\n';
@@ -224,7 +224,7 @@ void Lattice::mapMaker()
     Emain = Eresult;
     Mmain = Mresult;
     dosAddFree();
-    dosAddSize = pow(2, layerAddSize);
+    dosAddSize = 1 << layerAddSize;
     dosAddMalloc();
     dosResultSize = dosMainSize * dosAddSize;
     dosResultMalloc();

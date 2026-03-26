@@ -39,8 +39,8 @@ int get_SP_cores(cudaDeviceProp devProp)
     return cores;
 }
 
-__global__ void ElementaryClalc(float *&x, float *&y, float *&mx, float *&my, int latticeSize,
-    unsigned long long *&G, float *&E, float *&M, unsigned long long *&conf, size_t dosSize, float iteractionRadius)
+__global__ void ElementaryClalc(float *x, float *y, float *mx, float *my, int latticeSize,
+    unsigned long long *G, float *E, float *M, unsigned long long *conf, size_t dosSize, float iteractionRadius)
 {
     int globThreadIdx = blockIdx.x * blockDim.x + threadIdx.x;
     for(int confIdx = globThreadIdx; confIdx < dosSize; confIdx += blockDim.x * gridDim.x)
@@ -50,7 +50,7 @@ __global__ void ElementaryClalc(float *&x, float *&y, float *&mx, float *&my, in
         float mxj;
         float myj;
         E[confIdx] = 0;
-        //M[confIdx] = 0;
+        M[confIdx] = 0;
         for(auto i = 0; i < latticeSize; i++)
         {
             int confBitTemp = confIdx;
@@ -66,19 +66,19 @@ __global__ void ElementaryClalc(float *&x, float *&y, float *&mx, float *&my, in
                 float xij = x[i] - x[j];
                 float yij = y[i] - y[j];
                 float r = sqrt(xij * xij + yij * yij);
-                //atomicAdd(&E[confIdx], (mxi * mxj + myi * myj) / (pow(r, 3)) - 3 * (mxi * xij + myi * yij) * (mxj * xij + myj * yij) / (pow(r, 5)));
+                atomicAdd(&E[confIdx], (mxi * mxj + myi * myj) / (pow(r, 3)) - 3 * (mxi * xij + myi * yij) * (mxj * xij + myj * yij) / (pow(r, 5)));
             }
-            //atomicAdd(&M[confIdx], (mxi + myi) * sqrtf(2) / 2); //projection on 45 degree axis
+            atomicAdd(&M[confIdx], (mxi + myi) * sqrtf(2) / 2); //projection on 45 degree axis
         }
-        //conf[confIdx] = confIdx;
+        conf[confIdx] = confIdx;
     }
 }
 
-__global__ void unifing(float *&xMain, float *&yMain, float *&mxMain, float *&myMain, size_t layerMainSize,
-    float *&xAdd, float *&yAdd, float *&mxAdd, float *&myAdd, size_t layerAddSize,
-    unsigned long long *&Gmain, float *&Emain, float *&Mmain, unsigned long long *&confMain, size_t dosMainSize,
-    unsigned long long *&Gadd, float *&Eadd, float *&Madd, unsigned long long *&confAdd, size_t dosAddSize,
-    unsigned long long *&Gresult, float *&Eresult, float *&Mresult, unsigned long long *&confResult, size_t dosResultSize, 
+__global__ void unifing(float *xMain, float *yMain, float *mxMain, float *myMain, size_t layerMainSize,
+    float *xAdd, float *yAdd, float *mxAdd, float *myAdd, size_t layerAddSize,
+    unsigned long long *Gmain, float *Emain, float *Mmain, unsigned long long *confMain, size_t dosMainSize,
+    unsigned long long *Gadd, float *Eadd, float *Madd, unsigned long long *confAdd, size_t dosAddSize,
+    unsigned long long *Gresult, float *Eresult, float *Mresult, unsigned long long *confResult, size_t dosResultSize,
     float iteractionRadius)
 {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;

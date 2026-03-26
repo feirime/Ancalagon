@@ -2,6 +2,18 @@
 #include "gpu.h"
 #include <iostream>
 
+namespace
+{
+    void checkCuda(cudaError_t status, const char *context)
+    {
+        if(status != cudaSuccess)
+        {
+            std::cerr << context << ": " << cudaGetErrorString(status) << '\n';
+            std::exit(1);
+        }
+    }
+}
+
 void dosConstructorAdapter(unsigned long long *&G, float *&E, float *&M, 
     unsigned long long *&conf, size_t size)
 {
@@ -110,27 +122,28 @@ void latticeDestructorAdapter(float *&x, float *&y, float *&mx, float *&my)
     }
 }
 
-void kernelElementaryAdapter(float *&x, float *&y, float *&mx, float *&my, int latticeSize,
-    unsigned long long *&G, float *&E, float *&M, unsigned long long *&conf, size_t dosSize, float iteractionRadius)
+void kernelElementaryAdapter(float *x, float *y, float *mx, float *my, int latticeSize,
+    unsigned long long *G, float *E, float *M, unsigned long long *conf, size_t dosSize, float iteractionRadius)
 {
     cudaDeviceProp devProp;
-    cudaGetDeviceProperties(&devProp, 0);
+    checkCuda(cudaGetDeviceProperties(&devProp, 0), "cudaGetDeviceProperties failed in kernelElementaryAdapter");
     static size_t block_dim = 128;
     static size_t grid_dim = get_SP_cores(devProp) / block_dim;
     ElementaryClalc<<<grid_dim, block_dim>>>(x, y, mx, my, latticeSize, G, E, M, conf, dosSize, iteractionRadius);
-    cudaDeviceSynchronize();
+    checkCuda(cudaGetLastError(), "ElementaryClalc launch failed");
+    checkCuda(cudaDeviceSynchronize(), "ElementaryClalc execution failed");
 }
 
 
-void kernelUnifyingAdapter(float *&xMain, float *&yMain, float *&mxMain, float *&myMain, size_t latticeMainSize,
-    float *&xAdd, float *&yAdd, float *&mxAdd, float *&myAdd, size_t latticeAddSize,
-    unsigned long long *&Gmain, float *&Emain, float *&Mmain, unsigned long long *&confMain, size_t dosMainSize,
-    unsigned long long *&Gadd, float *&Eadd, float *&Madd, unsigned long long *&confAdd, size_t dosAddSize,
-    unsigned long long *&Gresult, float *&Eresult, float *&Mresult, unsigned long long *&confResult, size_t dosResultSize, 
+void kernelUnifyingAdapter(float *xMain, float *yMain, float *mxMain, float *myMain, size_t latticeMainSize,
+    float *xAdd, float *yAdd, float *mxAdd, float *myAdd, size_t latticeAddSize,
+    unsigned long long *Gmain, float *Emain, float *Mmain, unsigned long long *confMain, size_t dosMainSize,
+    unsigned long long *Gadd, float *Eadd, float *Madd, unsigned long long *confAdd, size_t dosAddSize,
+    unsigned long long *Gresult, float *Eresult, float *Mresult, unsigned long long *confResult, size_t dosResultSize,
     float iteractionRadius)
 {
     cudaDeviceProp devProp;
-    cudaGetDeviceProperties(&devProp, 0);
+    checkCuda(cudaGetDeviceProperties(&devProp, 0), "cudaGetDeviceProperties failed in kernelUnifyingAdapter");
     static size_t block_dim = 128;
     static size_t grid_dim = get_SP_cores(devProp) / block_dim;
     unifing<<<grid_dim, block_dim>>>(xMain, yMain, mxMain, myMain, latticeMainSize,
@@ -138,5 +151,6 @@ void kernelUnifyingAdapter(float *&xMain, float *&yMain, float *&mxMain, float *
         Gmain, Emain, Mmain, confMain, dosMainSize,
         Gadd, Eadd, Madd, confAdd, dosAddSize,
         Gresult, Eresult, Mresult, confResult, dosResultSize, iteractionRadius);
-    cudaDeviceSynchronize();
+    checkCuda(cudaGetLastError(), "unifing launch failed");
+    checkCuda(cudaDeviceSynchronize(), "unifing execution failed");
 }

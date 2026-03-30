@@ -42,21 +42,22 @@ int get_SP_cores(cudaDeviceProp devProp)
 __global__ void ElementaryClalc(float *x, float *y, float *mx, float *my, int latticeSize,
     unsigned long long *G, float *E, float *M, unsigned long long *conf, size_t dosSize, float iteractionRadius)
 {
-    int globThreadIdx = blockIdx.x * blockDim.x + threadIdx.x;
-    for(int confIdx = globThreadIdx; confIdx < dosSize; confIdx += blockDim.x * gridDim.x)
+    size_t globThreadIdx = blockIdx.x * blockDim.x + threadIdx.x;
+    for(size_t confIdx = globThreadIdx; confIdx < dosSize; confIdx += blockDim.x * gridDim.x)
     {
         float mxi;
         float myi;
         float mxj;
         float myj;
+        G[confIdx] = 1;
         E[confIdx] = 0;
         M[confIdx] = 0;
-        for(auto i = 0; i < latticeSize; i++)
+        for(size_t i = 0; i < latticeSize; i++)
         {
             int confBitTemp = confIdx;
             mxi = mx[i] * (confBitTemp >> i & 1 ? -1 : 1);
             myi = my[i] * (confBitTemp >> i & 1 ? -1 : 1);
-            for(auto j = i + 1; j < latticeSize; j++)
+            for(size_t j = i + 1; j < latticeSize; j++)
             {
                 float distance = sqrt(pow(x[i] - x[j], 2) + pow(y[i] - y[j], 2));
                 if(distance > iteractionRadius)
@@ -66,7 +67,8 @@ __global__ void ElementaryClalc(float *x, float *y, float *mx, float *my, int la
                 float xij = x[i] - x[j];
                 float yij = y[i] - y[j];
                 float r = sqrt(xij * xij + yij * yij);
-                atomicAdd(&E[confIdx], (mxi * mxj + myi * myj) / (pow(r, 3)) - 3 * (mxi * xij + myi * yij) * (mxj * xij + myj * yij) / (pow(r, 5)));
+                atomicAdd(&E[confIdx], (mxi * mxj + myi * myj) / (r * r * r) 
+                                              - 3 * (mxi * xij + myi * yij) * (mxj * xij + myj * yij) / (r * r * r * r * r));
             }
             atomicAdd(&M[confIdx], (mxi + myi) * sqrtf(2) / 2); //projection on 45 degree axis
         }
@@ -82,28 +84,30 @@ __global__ void unifing(float *xMain, float *yMain, float *mxMain, float *myMain
     float iteractionRadius)
 {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    for(auto confMainIdx = 0; confMainIdx < dosMainSize; confMainIdx++)
+    for(size_t confMainIdx = blockIdx.x; confMainIdx < dosMainSize; confMainIdx += gridDim.x)
     {
-        for(auto confAddIdx = 0; confAddIdx < dosAddSize; confAddIdx++)
+        for(size_t confAddIdx = threadIdx.x; confAddIdx < dosAddSize; confAddIdx += blockDim.x)
         {
+            Gresult[confMainIdx + confAddIdx * dosMainSize] = 1;
+            printf("G[%lu] = %lu\n", confMainIdx + confAddIdx * dosMainSize, Gresult[confMainIdx + confAddIdx * dosMainSize]);
             Eresult[confMainIdx + confAddIdx * dosMainSize] = 0;
             Mresult[confMainIdx + confAddIdx * dosMainSize] = 0;
-            for(auto i = 0; i < layerMainSize; i++)
+            for(size_t i = 0; i < layerMainSize; i++)
             {
-                for(auto j = i + 1; j < layerAddSize; j++)
+                for(size_t j = 0; j < layerAddSize; j++)
                 {
-                    float distance = sqrt(pow(xAdd[i] - xAdd[j], 2) + pow(yAdd[i] - yAdd[j], 2));
+                    float distance = sqrt((xMain[i] - xAdd[j]) * (xMain[i] - xAdd[j]) + (yMain[i] - yAdd[j]) * (yMain[i] - yAdd[j]));
                     if(distance > iteractionRadius)
                         continue;
                     float xij = xMain[i] - xAdd[j];
                     float yij = yMain[i] - yAdd[j];
                     float r = sqrt(xij * xij + yij * yij);
-                    Eresult[confMainIdx + confAddIdx * dosMainSize] += (mxMain[i] * mxAdd[j] + myMain[i] * myAdd[j]) / (pow(r, 3)) 
-                                              - 3 * (mxMain[i] * xij + myMain[i] * yij) 
-                                              * (mxAdd[j] * xij + myAdd[j] * yij) / (pow(r, 5));
-                    Mresult[confMainIdx + confAddIdx * dosMainSize] += Mmain[i] + Madd[j];
+                    atomicAdd(&Eresult[confMainIdx + confAddIdx * dosMainSize], (mxMain[i] * mxAdd[j] + myMain[i] * myAdd[j]) / (r * r * r) 
+                                              - 3 * (mxMain[i] * xij + myMain[i] * yij) * (mxAdd[j] * xij + myAdd[j] * yij) / (r * r * r * r * r));
+                    atomicAdd(&Mresult[confMainIdx + confAddIdx * dosMainSize], Mmain[i] + Madd[j]);
                 }
             }
+            confResult[confMainIdx + confAddIdx * dosMainSize] = confAdd[confAddIdx];
         }
     }
 }

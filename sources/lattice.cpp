@@ -160,13 +160,13 @@ void Lattice::mapMakerStart()
     layerResultSize = layerMainSize + layerAddSize;
     std::cout << "layer Result Size = " << layerResultSize << '\n';
     dosMainSize = 1 << layerMainSize;
-    dosAddSize = 1 << layerAddSize;
-    dosResultSize = 1 << layerResultSize;
     std::cout << "dos Main Size = " << dosMainSize << '\n';
-    std::cout << "dos Add Size = " << dosAddSize << '\n';
-    std::cout << "dos Result Size = " << dosResultSize << '\n';
     dosMainMalloc();
+    dosAddSize = 1 << layerAddSize;
+    std::cout << "dos Add Size = " << dosAddSize << '\n';
     dosAddMalloc();
+    dosResultSize = 1 << layerResultSize;
+    std::cout << "dos Result Size = " << dosResultSize << '\n';
     dosResultMalloc();
 }
 
@@ -358,7 +358,7 @@ void Lattice::compressUMap()
     }
     dosResultFree();
     dosResultSize = uMap.size();
-    //std::cout << "dosResultSize = " << dosResultSize << '\n';
+    std::cout << "dosResultSize = " << dosResultSize << '\n';
     dosResultMalloc();
     int idx = 0;
     for(auto& pair : uMap)

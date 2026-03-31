@@ -5,23 +5,25 @@ void Brutforce::calculate(Lattice *lattice)
 {
         lattice->dosMallocBrutforce();
         lattice->brutforce();
-        lattice->compressUMap();
+        lattice->compressUMapResult();
 }
 
 void Decomposition::calculate(Lattice *lattice)
 {
         lattice->mapMakerStart();
         lattice->calculateMain();
+        lattice->compressUMapMain();
         lattice->calculateAdd();
+        lattice->compressUMapAdd();
         lattice->calculateUnified();
-        lattice->compressUMap();
+        lattice->compressUMapResult();
         //while(!lattice->isEnd())
         //{
         //    lattice->layerPlusPlus();
         //    lattice->mapMaker();
         //    lattice->calculateAdd();
         //    lattice->calculateUnified();
-        //    lattice->compressUMap();
+        //    lattice->compressUMapResult();
         //}
 }
 

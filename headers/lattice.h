@@ -77,7 +77,9 @@ public:
     void compress();
     void compressRBTree();
     void compressRBTreeSE();
-    void compressUMap();
+    void compressUMapResult();
+    void compressUMapMain();
+    void compressUMapAdd();
     void print();
     void print(std::string fileName);
     virtual ~Lattice();

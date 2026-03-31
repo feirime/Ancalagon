@@ -49,7 +49,7 @@ __global__ void ElementaryClalc(float *x, float *y, float *mx, float *my, int la
         float myi;
         float mxj;
         float myj;
-        G[confIdx] = 1;
+        G[confIdx] = 0;
         E[confIdx] = 0;
         M[confIdx] = 0;
         for(size_t i = 0; i < latticeSize; i++)
@@ -69,6 +69,7 @@ __global__ void ElementaryClalc(float *x, float *y, float *mx, float *my, int la
                 float r = sqrt(xij * xij + yij * yij);
                 atomicAdd(&E[confIdx], (mxi * mxj + myi * myj) / (r * r * r) 
                                               - 3 * (mxi * xij + myi * yij) * (mxj * xij + myj * yij) / (r * r * r * r * r));
+                G[confIdx] = 1;
             }
             atomicAdd(&M[confIdx], (mxi + myi) * sqrtf(2) / 2); //projection on 45 degree axis
         }
@@ -88,8 +89,7 @@ __global__ void unifing(float *xMain, float *yMain, float *mxMain, float *myMain
     {
         for(size_t confAddIdx = threadIdx.x; confAddIdx < dosAddSize; confAddIdx += blockDim.x)
         {
-            Gresult[confMainIdx + confAddIdx * dosMainSize] = 1;
-            printf("G[%lu] = %lu\n", confMainIdx + confAddIdx * dosMainSize, Gresult[confMainIdx + confAddIdx * dosMainSize]);
+            Gresult[confMainIdx + confAddIdx * dosMainSize] = 0;
             Eresult[confMainIdx + confAddIdx * dosMainSize] = 0;
             Mresult[confMainIdx + confAddIdx * dosMainSize] = 0;
             for(size_t i = 0; i < layerMainSize; i++)
@@ -104,9 +104,13 @@ __global__ void unifing(float *xMain, float *yMain, float *mxMain, float *myMain
                     float r = sqrt(xij * xij + yij * yij);
                     atomicAdd(&Eresult[confMainIdx + confAddIdx * dosMainSize], (mxMain[i] * mxAdd[j] + myMain[i] * myAdd[j]) / (r * r * r) 
                                               - 3 * (mxMain[i] * xij + myMain[i] * yij) * (mxAdd[j] * xij + myAdd[j] * yij) / (r * r * r * r * r));
-                    atomicAdd(&Mresult[confMainIdx + confAddIdx * dosMainSize], Mmain[i] + Madd[j]);
+                    Gresult[confMainIdx + confAddIdx * dosMainSize] = 1;
                 }
+
             }
+            atomicAdd(&Mresult[confMainIdx + confAddIdx * dosMainSize], Mmain[confMainIdx] + Madd[confAddIdx]);
+            printf("G[%llu] = %llu E[%llu] = %f\n", confMainIdx + confAddIdx * dosMainSize, Gresult[confMainIdx + confAddIdx * dosMainSize], 
+                confMainIdx + confAddIdx * dosMainSize, Eresult[confMainIdx + confAddIdx * dosMainSize]);
             confResult[confMainIdx + confAddIdx * dosMainSize] = confAdd[confAddIdx];
         }
     }

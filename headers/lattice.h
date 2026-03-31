@@ -51,6 +51,9 @@ protected:
     size_t dosMainSize = 0;
     size_t dosAddSize = 0;
     size_t dosResultSize = 0;
+    size_t confMainSize = 0;
+    size_t confAddSize = 0;
+    size_t confResultSize = 0;
 public:
     int read(std::string readPass);
     void generateLattice(){};

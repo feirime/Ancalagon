@@ -168,6 +168,9 @@ void Lattice::mapMakerStart()
     dosResultSize = 1 << layerResultSize;
     std::cout << "dos Result Size = " << dosResultSize << '\n';
     dosResultMalloc();
+    confMainSize = dosMainSize;
+    confAddSize = dosAddSize;
+    confResultSize = dosResultSize;
 }
 
 
@@ -228,6 +231,9 @@ void Lattice::mapMaker()
     dosAddMalloc();
     dosResultSize = dosMainSize * dosAddSize;
     dosResultMalloc();
+    confMainSize = dosMainSize;
+    confAddSize = dosAddSize;
+    confResultSize = dosResultSize;
     std::cout << "dos Main Size = " << dosMainSize << '\n';
     std::cout << "dos Add Size = " << dosAddSize << '\n';
     std::cout << "dos Result Size = " << dosResultSize << '\n';
@@ -369,29 +375,6 @@ void Lattice::compressUMapResult()
         idx++;
     }
 }
-void Lattice::compressUMapResult()
-{
-    std::unordered_map<EM, unsigned long long> uMap;
-    uMap.reserve(dosResultSize / 2);
-    for(size_t i = 0; i < dosResultSize; i++)
-    {
-        EM em{Eresult[i], Mresult[i]};
-        if(Gresult[i] != 0)
-            uMap[em] += Gresult[i];
-    }
-    dosResultFree();
-    dosResultSize = uMap.size();
-    std::cout << "dosResultSize = " << dosResultSize << '\n';
-    dosResultMalloc();
-    int idx = 0;
-    for(auto& pair : uMap)
-    {
-        Gresult[idx] = pair.second;
-        Eresult[idx] = pair.first.E;
-        Mresult[idx] = pair.first.M;
-        idx++;
-    }
-}
 
 void Lattice::compressUMapMain()
 {
@@ -406,14 +389,17 @@ void Lattice::compressUMapMain()
     dosMainFree();
     dosMainSize = uMap.size();
     std::cout << "dosMainSize = " << dosMainSize << '\n';
-    dosMainMalloc();
-    int idx = 0;
-    for(auto& pair : uMap)
+    if(dosMainSize > 0)
     {
-        Gmain[idx] = pair.second;
-        Emain[idx] = pair.first.E;
-        Mmain[idx] = pair.first.M;
-        idx++;
+        dosMainMalloc();
+        int idx = 0;
+        for(auto& pair : uMap)
+        {
+            Gmain[idx] = pair.second;
+            Emain[idx] = pair.first.E;
+            Mmain[idx] = pair.first.M;
+            idx++;
+        }
     }
 }
 
@@ -430,14 +416,17 @@ void Lattice::compressUMapAdd()
     dosAddFree();
     dosAddSize = uMap.size();
     std::cout << "dosAddSize = " << dosAddSize << '\n';
-    dosAddMalloc();
-    int idx = 0;
-    for(auto& pair : uMap)
+    if(dosAddSize > 0)
     {
-        Gadd[idx] = pair.second;
-        Eadd[idx] = pair.first.E;
-        Madd[idx] = pair.first.M;
-        idx++;
+        dosAddMalloc();
+        int idx = 0;
+        for(auto& pair : uMap)
+        {
+            Gadd[idx] = pair.second;
+            Eadd[idx] = pair.first.E;
+            Madd[idx] = pair.first.M;
+            idx++;
+        }
     }
 }
 

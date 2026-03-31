@@ -124,10 +124,10 @@ void Lattice::mapMakerStart()
             layerMainSize++;
     std::cout << "layer Main Size = " << layerMainSize << '\n';
     latticeMainMalloc();
+    size_t j = 0;
     for(auto i = 0; i < latticeSize; i++)
     {
-        size_t j = 0;
-        if(leftX >= x[i] && x[i] < rightX)
+        if(x[i] >= leftX && x[i] < rightX)
         {
             xMain[j] = x[i];
             yMain[j] = y[i];
@@ -145,10 +145,10 @@ void Lattice::mapMakerStart()
             layerAddSize++;
     std::cout << "layer Add Size = " << layerAddSize << '\n';
     latticeAddMalloc();
+    j = 0;
     for(auto i = 0; i < latticeSize; i++)
     {
-        size_t j = 0;
-        if(leftX >= x[i] && x[i] < rightX)
+        if(x[i] >= leftX && x[i] < rightX)
         {
             xAdd[j] = x[i];
             yAdd[j] = y[i];
@@ -183,10 +183,10 @@ void Lattice::mapMaker()
             layerMainSize++;
     std::cout << "layer Main Size = " << layerMainSize << '\n';
     latticeMainMalloc();
+    size_t j = 0;
     for(auto i = 0; i < latticeSize; i++)
     {
-        size_t j = 0;
-        if(leftX >= x[i] && x[i] < rightX)
+        if(x[i] >= leftX && x[i] < rightX)
         {
             xMain[j] = x[i];
             yMain[j] = y[i];
@@ -204,10 +204,10 @@ void Lattice::mapMaker()
             layerAddSize++;
     std::cout << "layer Add Size = " << layerAddSize << '\n';
     latticeAddMalloc();
+    j = 0;
     for(auto i = 0; i < latticeSize; i++)
     {
-        size_t j = 0;
-        if(leftX >= x[i] && x[i] < rightX)
+        if(x[i] >= leftX && x[i] < rightX)
         {
             xAdd[j] = x[i];
             yAdd[j] = y[i];

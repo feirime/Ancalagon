@@ -12,9 +12,9 @@ void Decomposition::calculate(Lattice *lattice)
 {
         lattice->mapMakerStart();
         lattice->calculateMain();
-        lattice->compressUMapMain();
+        //lattice->compressUMapMain();
         lattice->calculateAdd();
-        lattice->compressUMapAdd();
+        //lattice->compressUMapAdd();
         lattice->calculateUnified();
         lattice->compressUMapResult();
         //while(!lattice->isEnd())

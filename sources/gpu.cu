@@ -108,7 +108,16 @@ __global__ void unifing(float *xMain, float *yMain, float *mxMain, float *myMain
                 }
 
             }
-            atomicAdd(&Mresult[confMainIdx + confAddIdx * confMainSize], Mmain[confMainIdx] + Madd[confAddIdx]);
+            if(Gmain[confMainIdx] == 1)//жопа когда main сжимается
+            {
+                atomicAdd(&Eresult[confMainIdx + confAddIdx * confMainSize], Emain[confMainIdx]);
+                atomicAdd(&Mresult[confMainIdx + confAddIdx * confMainSize], Mmain[confMainIdx]);
+            }
+            if(Gadd[confAddIdx] == 1)//жопа когда add сжимается
+            {
+                atomicAdd(&Eresult[confMainIdx + confAddIdx * confMainSize], Eadd[confAddIdx]);
+                atomicAdd(&Mresult[confMainIdx + confAddIdx * confMainSize], Madd[confAddIdx]);
+            }
             printf("G[%llu] = %llu E[%llu] = %f\n", confMainIdx + confAddIdx * confMainSize, Gresult[confMainIdx + confAddIdx * confMainSize], 
                 confMainIdx + confAddIdx * confMainSize, Eresult[confMainIdx + confAddIdx * confMainSize]);
             confResult[confMainIdx + confAddIdx * confMainSize] = confAdd[confAddIdx];

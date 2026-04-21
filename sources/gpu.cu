@@ -108,12 +108,12 @@ __global__ void unifing(float *xMain, float *yMain, float *mxMain, float *myMain
                 }
 
             }
-            if(Gmain[confMainIdx] == 1)//жопа когда main сжимается
+            if(Gmain[confMainIdx] != 0)//жопа когда main сжимается
             {
                 atomicAdd(&Eresult[confMainIdx + confAddIdx * confMainSize], Emain[confMainIdx]);
                 atomicAdd(&Mresult[confMainIdx + confAddIdx * confMainSize], Mmain[confMainIdx]);
             }
-            if(Gadd[confAddIdx] == 1)//жопа когда add сжимается
+            if(Gadd[confAddIdx] != 0)//жопа когда add сжимается
             {
                 atomicAdd(&Eresult[confMainIdx + confAddIdx * confMainSize], Eadd[confAddIdx]);
                 atomicAdd(&Mresult[confMainIdx + confAddIdx * confMainSize], Madd[confAddIdx]);
@@ -124,3 +124,11 @@ __global__ void unifing(float *xMain, float *yMain, float *mxMain, float *myMain
         }
     }
 }
+
+__global__ void unifingCompressed(float *xMain, float *yMain, float *mxMain, float *myMain, size_t layerMainSize,
+    float *xAdd, float *yAdd, float *mxAdd, float *myAdd, size_t layerAddSize,
+    unsigned long long *Gmain, float *Emain, float *Mmain, unsigned long long *confMain, size_t dosMainSize, size_t confMainSize,
+    unsigned long long *Gadd, float *Eadd, float *Madd, unsigned long long *confAdd, size_t dosAddSize, size_t confAddSize,
+    unsigned long long *Gresult, float *Eresult, float *Mresult, unsigned long long *confResult, size_t dosResultSize, size_t confResultSize,
+    float iteractionRadius)
+{}

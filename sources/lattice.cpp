@@ -41,7 +41,10 @@ int Lattice::read(std::string fileName)
     std::ifstream file(fileName);
     //printf("count = %d, latticeSize = %d\n", count, latticeSize);
     fileContents.close();
-    latticeMalloc();
+    x.resize(latticeSize);
+    y.resize(latticeSize);
+    mx.resize(latticeSize);
+    my.resize(latticeSize);
     double temp = 0;
     for(auto i = 0; i < 5; i++)
     {
@@ -95,85 +98,6 @@ bool Lattice::isEnd()
         return false;
 }
 
-void Lattice::mapMakerStart()
-{
-    float minX = *std::min_element(x, x + latticeSize);
-    float maxX = *std::max_element(x, x + latticeSize);
-    float minY = *std::min_element(y, y + latticeSize);
-    float maxY = *std::max_element(y, y + latticeSize);
-    std::unordered_map<float, int> xUnique;
-    for (size_t i = 0;  i < latticeSize; i++)
-        xUnique[x[i]]++;
-    size_t xLinearSize = xUnique.size();
-    std::cout << "linear size : " << xLinearSize << "\n";
-    if(layers == 0)
-        layers = xLinearSize;
-    for(const auto& [key, value] : xUnique)
-        xUniqueVector.push_back(key);
-    std::sort(xUniqueVector.begin(), xUniqueVector.end());
-    for(auto xUn : xUniqueVector)
-        std::cout << xUn << " ";
-    std::cout << '\n' << "layer = " << layer << '\n';
-    float safeDeltaX = 1e-5; //todo сделать нормально :/
-    float leftX = xUniqueVector[layer] - safeDeltaX;
-    float rightX = xUniqueVector[layer] + safeDeltaX;
-    std::cout << "left X main = " << leftX << " right X main = " << rightX << '\n';
-    layerMainSize = 0;
-    for(auto i = 0; i < latticeSize; i++)
-        if(x[i] >= leftX && x[i] < rightX) 
-            layerMainSize++;
-    std::cout << "layer Main Size = " << layerMainSize << '\n';
-    latticeMainMalloc();
-    size_t j = 0;
-    for(auto i = 0; i < latticeSize; i++)
-    {
-        if(x[i] >= leftX && x[i] < rightX)
-        {
-            xMain[j] = x[i];
-            yMain[j] = y[i];
-            mxMain[j] = mx[i];
-            myMain[j] = my[i];
-            j++;
-        }
-    }
-    leftX = xUniqueVector[layer + 1] - safeDeltaX;
-    rightX = xUniqueVector[layer + 1] + safeDeltaX;
-    std::cout << "left X add = " << leftX << " right X add = " << rightX << '\n';
-    layerAddSize = 0;
-    for(auto i = 0; i < latticeSize; i++)
-        if(x[i] >= leftX && x[i] < rightX)
-            layerAddSize++;
-    std::cout << "layer Add Size = " << layerAddSize << '\n';
-    latticeAddMalloc();
-    j = 0;
-    for(auto i = 0; i < latticeSize; i++)
-    {
-        if(x[i] >= leftX && x[i] < rightX)
-        {
-            xAdd[j] = x[i];
-            yAdd[j] = y[i];
-            mxAdd[j] = mx[i];
-            myAdd[j] = my[i];
-            j++;
-        }
-    }
-    layerResultSize = layerMainSize + layerAddSize;
-    std::cout << "layer Result Size = " << layerResultSize << '\n';
-    dosMainSize = 1 << layerMainSize;
-    std::cout << "dos Main Size = " << dosMainSize << '\n';
-    dosMainMalloc();
-    dosAddSize = 1 << layerAddSize;
-    std::cout << "dos Add Size = " << dosAddSize << '\n';
-    dosAddMalloc();
-    dosResultSize = 1 << layerResultSize;
-    std::cout << "dos Result Size = " << dosResultSize << '\n';
-    dosResultMalloc();
-    confMainSize = dosMainSize;
-    confAddSize = dosAddSize;
-    confResultSize = dosResultSize;
-}
-
-
 void Lattice::mapMaker()
 {
     float safeDeltaX = 1e-5; //todo сделать нормально :/
@@ -181,46 +105,150 @@ void Lattice::mapMaker()
     float rightX = xUniqueVector[layer] + safeDeltaX;
     std::cout << "left X main = " << leftX << " right X main = " << rightX << '\n';
     layerMainSize = 0;
-    for(auto i = 0; i < latticeSize; i++)
+    for(size_t i = 0; i < latticeSize; ++i)
         if(x[i] >= leftX && x[i] < rightX) //теперь здесь насрано! 
             layerMainSize++;
     std::cout << "layer Main Size = " << layerMainSize << '\n';
-    latticeMainMalloc();
+    xMainAll.resize(layerMainSize);
+    yMainAll.resize(layerMainSize);
+    mxMainAll.resize(layerMainSize);
+    myMainAll.resize(layerMainSize);
     size_t j = 0;
-    for(auto i = 0; i < latticeSize; i++)
+    for(size_t i = 0; i < latticeSize; ++i)
     {
         if(x[i] >= leftX && x[i] < rightX)
         {
-            xMain[j] = x[i];
-            yMain[j] = y[i];
-            mxMain[j] = mx[i];
-            myMain[j] = my[i];
+            xMainAll[j] = x[i];
+            yMainAll[j] = y[i];
+            mxMainAll[j] = mx[i];
+            myMainAll[j] = my[i];
             j++;
         }
     }
+    layerMainElementarySize = 0;
+    for(size_t i = 0; i < layerMainSize; ++i)
+    {
+        float distance = sqrt((xMainAll[i] - xMainAll[i + 1]) * (xMainAll[i] - xMainAll[i + 1])
+        + (yMainAll[i] - yMainAll[i + 1]) * (yMainAll[i] - yMainAll[i + 1]));
+        if(distance < iteractionRadius)
+        {
+            ++layerMainElementarySize;
+        }
+    }
+    latticeMainMalloc();
+    j = 0;
+    for(size_t i = 0; i < layerMainSize; ++i)
+    {
+        float distance = sqrt((xMainAll[i] - xMainAll[i + 1]) * (xMainAll[i] - xMainAll[i + 1])
+                       + (yMainAll[i] - yMainAll[i + 1]) * (yMainAll[i] - yMainAll[i + 1]));
+        if(distance < iteractionRadius)
+        {
+            xMainElementaryA[j] = xMainAll[i];
+            xMainElementaryB[j] = xMainAll[i + 1];
+            yMainElementaryB[j] = yMainAll[i];
+            yMainElementaryB[j] = yMainAll[i + 1];
+            mxMainElementaryA[j] = mxMainAll[i];
+            mxMainElementaryB[j] = mxMainAll[i + 1];
+            myMainElementaryA[j] = myMainAll[i];
+            myMainElementaryB[j] = myMainAll[i + 1];
+            j++;
+        }
+    }
+
     leftX = xUniqueVector[layer + 1] - safeDeltaX;
     rightX = xUniqueVector[layer + 1] + safeDeltaX;
     std::cout << "left X add = " << leftX << " right X add = " << rightX << '\n';
     layerAddSize = 0;
-    for(auto i = 0; i < latticeSize; i++)
+    for(size_t i = 0; i < latticeSize; ++i)
         if(x[i] >= leftX && x[i] < rightX) //теперь здесь насрано!
             layerAddSize++;
     std::cout << "layer Add Size = " << layerAddSize << '\n';
-    latticeAddMalloc();
+    xAddAll.resize(layerAddSize);
+    yAddAll.resize(layerAddSize);
+    mxAddAll.resize(layerAddSize);
+    myAddAll.resize(layerAddSize);
     j = 0;
-    for(auto i = 0; i < latticeSize; i++)
+    for(size_t i = 0; i < latticeSize; ++i)
     {
         if(x[i] >= leftX && x[i] < rightX)
         {
-            xAdd[j] = x[i];
-            yAdd[j] = y[i];
-            mxAdd[j] = mx[i];
-            myAdd[j] = my[i];
+            xAddAll[j] = x[i];
+            yAddAll[j] = y[i];
+            mxAddAll[j] = mx[i];
+            myAddAll[j] = my[i];
             j++;
         }
     }
-    layerResultSize = layerMainSize + layerAddSize;
+    layerAddElementarySize = 0;
+    for(size_t i = 0; i < layerAddSize; ++i)
+    {
+        float distance = sqrt((xAddAll[i] - xAddAll[i + 1]) * (xAddAll[i] - xAddAll[i + 1])
+                       + (yAddAll[i] - yAddAll[i + 1]) * (yAddAll[i] - yAddAll[i + 1]));
+        if(distance < iteractionRadius)
+        {
+            ++layerAddElementarySize;
+        }
+    }
+    latticeAddMalloc();
+    j = 0;
+    for(size_t i = 0; i < layerAddSize; ++i)
+    {
+        float distance = sqrt((xAddAll[i] - xAddAll[i + 1]) * (xAddAll[i] - xAddAll[i + 1])
+                       + (yAddAll[i] - yAddAll[i + 1]) * (yAddAll[i] - yAddAll[i + 1]));
+        if(distance < iteractionRadius)
+        {
+            xAddElementaryA[j] = xAddAll[i];
+            xAddElementaryB[j] = xAddAll[i + 1];
+            yAddElementaryB[j] = yAddAll[i];
+            yAddElementaryB[j] = yAddAll[i + 1];
+            mxAddElementaryA[j] = mxAddAll[i];
+            mxAddElementaryB[j] = mxAddAll[i + 1];
+            myAddElementaryA[j] = myAddAll[i];
+            myAddElementaryB[j] = myAddAll[i + 1];
+            j++;
+        }
+    }
+
+    layerResultSize = 0;
+    for(size_t i = 0; i < layerMainSize; ++i)
+    {
+        for(size_t j = 0; j < layerAddSize; ++j)
+        {
+            float distance = sqrt((xMainAll[i] - xAddAll[j]) * (xMainAll[i] - xAddAll[j])
+                           + (yMainAll[i] - yAddAll[j]) * (yMainAll[i] - yAddAll[j]));
+            if(distance < iteractionRadius)
+            {
+                ++layerResultSize;
+            }
+        }
+    }
+    latticeResultMalloc();
+    for(size_t i = 0; i < layerMainSize; ++i)
+    {
+        for(size_t j = 0; j < layerAddSize; ++j)
+        {
+            float distance = sqrt((xMainAll[i] - xAddAll[j]) * (xMainAll[i] - xAddAll[j])
+                           + (yMainAll[i] - yAddAll[j]) * (yMainAll[i] - yAddAll[j]));
+            if(distance < iteractionRadius)
+            {
+                xMainUnifying[j + i * layerAddSize] = xMainAll[i];
+                yMainUnifying[j + i * layerAddSize] = yMainAll[i];
+                mxMainUnifying[j + i * layerAddSize] = mxMainAll[i];
+                myMainUnifying[j + i * layerAddSize] = myMainAll[i];
+                yAddUnifying[j + i * layerAddSize] = yAddAll[j];
+                xAddUnifying[j + i * layerAddSize] = xAddAll[j];
+                mxAddUnifying[j + i * layerAddSize] = mxAddAll[j];
+                myAddUnifying[j + i * layerAddSize] = myAddAll[j];
+            }
+        }
+    }
+
+    std::cout << "layer Main Size = " << layerMainSize << '\n';
+    std::cout << "layer Main Elementary Size = " << layerMainElementarySize << '\n';
+    std::cout << "layer Add Size = " << layerAddSize << '\n';
+    std::cout << "layer Add Elementary Size = " << layerAddElementarySize << '\n';
     std::cout << "layer Result Size = " << layerResultSize << '\n';
+
     dosMainFree();
     dosMainSize = dosResultSize; //from previous map
     Gmain = Gresult;

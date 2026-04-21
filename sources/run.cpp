@@ -10,7 +10,7 @@ void Brutforce::calculate(Lattice *lattice)
 
 void Decomposition::calculate(Lattice *lattice)
 {
-        lattice->mapMakerStart();
+        lattice->mapMaker();
         lattice->calculateMain();
         //lattice->compressUMapMain();
         lattice->calculateAdd();

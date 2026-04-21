@@ -1,13 +1,5 @@
 #include "lattice.h"
 
-void LatticeCPU::latticeMalloc()
-{
-    x = new float[latticeSize];
-    y = new float[latticeSize];
-    mx = new float[latticeSize];
-    my = new float[latticeSize];
-}
-
 void LatticeCPU::latticeMainMalloc()
 {
     xMain = new float[layerMainSize];
@@ -177,10 +169,6 @@ LatticeCPU::~LatticeCPU()
     delete [] Gadd;
     delete [] Eadd;
     delete [] Madd;
-    delete [] x;
-    delete [] y;
-    delete [] mx;
-    delete [] my;
     delete [] xMain;
     delete [] yMain;
     delete [] mxMain;

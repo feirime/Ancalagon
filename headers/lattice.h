@@ -25,18 +25,43 @@ protected:
     float *Eadd = nullptr;
     float *Madd = nullptr;
     unsigned long long *confAdd = nullptr;
-    float *x = nullptr;
-    float *y = nullptr;
-    float *mx = nullptr;
-    float *my = nullptr;
-    float *xMain = nullptr;
-    float *yMain = nullptr;
-    float *mxMain = nullptr;
-    float *myMain = nullptr;
-    float *xAdd = nullptr;
-    float *yAdd = nullptr;
-    float *mxAdd = nullptr;
-    float *myAdd = nullptr;
+    std::vector<float> x;
+    std::vector<float> y;
+    std::vector<float> mx;
+    std::vector<float> my;
+    std::vector<float> xMainAll;
+    std::vector<float> yMainAll;
+    std::vector<float> mxMainAll;
+    std::vector<float> myMainAll;
+    std::vector<float> xAddAll;
+    std::vector<float> yAddAll;
+    std::vector<float> mxAddAll;
+    std::vector<float> myAddAll;
+    float *xMainElementaryA = nullptr;
+    float *xMainElementaryB = nullptr;
+    float *yMainElementaryA = nullptr;
+    float *yMainElementaryB = nullptr;
+    float *mxMainElementaryA = nullptr;
+    float *mxMainElementaryB = nullptr;
+    float *myMainElementaryA = nullptr;
+    float *myMainElementaryB = nullptr;
+    float *xAddElementaryA = nullptr;
+    float *xAddElementaryB = nullptr;
+    float *yAddElementaryA = nullptr;
+    float *yAddElementaryB = nullptr;
+    float *mxAddElementaryA = nullptr;
+    float *mxAddElementaryB = nullptr;
+    float *myAddElementaryA = nullptr;
+    float *myAddElementaryB = nullptr;
+    float *xMainUnifying = nullptr;
+    float *yMainUnifying = nullptr;
+    float *mxMainUnifying = nullptr;
+    float *myMainUnifying = nullptr;
+    float *xAddUnifying = nullptr;
+    float *yAddUnifying = nullptr;
+    float *mxAddUnifying = nullptr;
+    float *myAddUnifying = nullptr;
+    std::vector<float> xUnique;
     std::vector<float> xUniqueVector;
     int latticeSize = 0;
     int latticeLinearSize = 0;
@@ -45,9 +70,14 @@ protected:
     float splitSeed = 0;
     int layer = 0;
     int layers = 0;
-    size_t layerResultSize = 0; //колличество спинов в результирующем слое
     size_t layerMainSize = 0; //колличество спинов в крайнем слое
+    size_t layerMainElementarySize = 0; //колличество спинов взаимодействующих между
+                                        //собой в крайнем слое
     size_t layerAddSize = 0; //колличество спинов в присоединяемом слое
+    size_t layerAddElementarySize = 0; //колличество спинов взаимодействующих между
+                                       //собой в присоединяемом слое
+    size_t layerResultSize = 0; //колличество спинов взаимодейстующих
+                                //между слоями
     size_t dosMainSize = 0;
     size_t dosAddSize = 0;
     size_t dosResultSize = 0;
@@ -61,11 +91,10 @@ public:
     void layerPlusPlus();
     bool isStart();
     bool isEnd();
-    void mapMakerStart();
     void mapMaker();
-    virtual void latticeMalloc() = 0;
     virtual void latticeMainMalloc() = 0;
     virtual void latticeAddMalloc() = 0;
+    virtual void latticeResultMalloc() = 0;
     virtual void dosResultMalloc() = 0;
     virtual void dosMainMalloc() = 0;
     virtual void dosAddMalloc() = 0;
@@ -91,9 +120,9 @@ public:
 class LatticeGPU : public Lattice
 {
 public:
-    void latticeMalloc();
     virtual void latticeMainMalloc();
     virtual void latticeAddMalloc();
+    virtual void latticeResultMalloc();
     void dosMainMalloc();
     void dosAddMalloc();
     void dosResultMalloc();
@@ -109,9 +138,9 @@ public:
 class LatticeCPU : public Lattice
 {
 public:
-    void latticeMalloc();
     virtual void latticeMainMalloc();
     virtual void latticeAddMalloc();
+    virtual void latticeResultMalloc();
     void dosMainMalloc();
     void dosAddMalloc();
     void dosResultMalloc();
@@ -128,9 +157,9 @@ public:
 class LatticeGibrid : public Lattice
 {
 public:
-    void latticeMalloc(){};
     virtual void latticeMainMalloc(){};
     virtual void latticeAddMalloc(){};
+    virtual void latticeResultMalloc(){};
     void dosMainMalloc(){};
     void dosAddMalloc(){};
     void dosResultMalloc(){};
